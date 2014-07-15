@@ -1,7 +1,7 @@
 --Netmap--
 
 make mrproper
-cp /boot/config-$(uname -r) .config   nebo  zcat /proc/config.gz > .config
+cp /boot/config-\$(uname -r) .config   nebo  zcat /proc/config.gz > .config
 make oldconfig
 make prepare
 make scripts - netmap vyzaduje scripts z linux-source
@@ -12,3 +12,5 @@ make KSRC=/scratch/linux-source-3.2
 
 
 At 10 Gbit/s the packet rate is 14.88 Mpps (one packet every 67.2 ns).
+
+Line-rate at 10 Gig in userspace is possible without any magic~\cite{netmap-slides}.
