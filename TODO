@@ -1,4 +1,4 @@
 - netmap - vyzkouset na jine verzi jadra (debian/centos/freebsd)
-- quagga - zprovoznit s konfiguraci a pak importovat BGP tabulku
-- bird - vyzkouset
+- quagga - zprovoznit s konfiguraci a pak importovat BGP tabulku - routeviews.org
+- bird - vyzkouset - birdc - zjist jake to umi prikazy (ze zdrojaku) - http://wp.mindless.gr/2011/07/dual_stack_bgp_configuration_bird/
 - porovnat quagga a bird
