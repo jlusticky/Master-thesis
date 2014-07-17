@@ -1,0 +1,4 @@
+- netmap - vyzkouset na jine verzi jadra (debian/centos/freebsd)
+- quagga - zprovoznit s konfiguraci a pak importovat BGP tabulku
+- bird - vyzkouset
+- porovnat quagga a bird

@@ -1,14 +1,30 @@
---Netmap--
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\chapter{Netmap - Archlinux - kernel 3.15}
+git clone
+git checkout next - prepnuti branche
+\\
 
 make mrproper
 cp /boot/config-\$(uname -r) .config   nebo  zcat /proc/config.gz > .config
 make oldconfig
 make prepare
 make scripts - netmap vyzaduje scripts z linux-source
+nainstalovat linux-headers a zkopirovat Module.symvers ke zdrojovym kodum jadra, aby bylo k dispozici informace o zavislostech
 
+\\
 
 - ve slozce s netmap build ovladacu sitovych karet s podporou netmap
 make KSRC=/scratch/linux-source-3.2
+rmmod e1000
+insmod netmap_lin.ko
+insmod e1000/e1000.ko
+
+make KSRC=/scratch/linux-source-3.2 apps
+cd examples/
+./pkt-gen -i enp0s8 -f tx -n 500 -l 60 -w 1 -d 4.0.0.1 -s 4.0.0.2 -D 0a:00:27:00:00:00 -S 08:00:27:78:80:3c
+\\
 
 
 At 10 Gbit/s the packet rate is 14.88 Mpps (one packet every 67.2 ns).
