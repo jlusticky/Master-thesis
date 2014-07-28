@@ -5,13 +5,8 @@
 
 - bgpdump - autoconf, autoheader, ./configure --disable-ipv6, make, make example, make install
 
-- import bgp do quagga
-
-- bgpsimple - umi import
-
-
-TODO:
-prozkoumat bgpsimple - jak importuje,
+DONE:
+prozkoumat bgpsimple - jak importuje -> z textoveho souboru, ktery vygeneruje bgpdump
 prozkoumat MRT format
 prozkoumat jak do Quagga nasypat routy pro bpgd z configuracniho souboru a pak z vtysh
 
@@ -24,3 +19,5 @@ prozkoumat jak do Quagga nasypat routy pro bpgd z configuracniho souboru a pak z
 C-BGP, libgds
 
 BGP table - http://wherethebitsroam.com/blogs/jeffw/getting-full-bgp-table-processing
+
+BGP4+ - pro IPv6 - http://what-when-how.com/ipv6-advanced-protocols-implementation/introduction-to-bgp4-ipv6-unicast-routing-protocols-part-1/
