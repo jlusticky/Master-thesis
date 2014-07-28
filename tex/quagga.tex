@@ -1,0 +1,9 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\chapter{Quagga}
+Building quagga with patch:
+\\
+libtoolize, aclocal, autoconf, autoheader, automake --add-missing,
+./configure --disable-doc --enable-user=root --enable-group=root --enable-vty-group=root --enable-vtysh
+make, make install

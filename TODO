@@ -7,7 +7,7 @@
 
 DONE:
 prozkoumat bgpsimple - jak importuje -> z textoveho souboru, ktery vygeneruje bgpdump
-prozkoumat MRT format
+prozkoumat MRT format -> RFC 6396, draft 13
 prozkoumat jak do Quagga nasypat routy pro bpgd z configuracniho souboru a pak z vtysh
 
 
@@ -21,3 +21,4 @@ C-BGP, libgds
 BGP table - http://wherethebitsroam.com/blogs/jeffw/getting-full-bgp-table-processing
 
 BGP4+ - pro IPv6 - http://what-when-how.com/ipv6-advanced-protocols-implementation/introduction-to-bgp4-ipv6-unicast-routing-protocols-part-1/
+      - occaid.org tutorial ipv6bgp
