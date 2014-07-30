@@ -22,3 +22,5 @@ BGP table - http://wherethebitsroam.com/blogs/jeffw/getting-full-bgp-table-proce
 
 BGP4+ - pro IPv6 - http://what-when-how.com/ipv6-advanced-protocols-implementation/introduction-to-bgp4-ipv6-unicast-routing-protocols-part-1/
       - occaid.org tutorial ipv6bgp
+
+NAPI (New API - polling packetu misto irq) - linuxfoundation.org napi, driver ixgbe_main.c
