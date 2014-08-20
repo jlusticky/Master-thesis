@@ -1,3 +1,10 @@
+Linux:
+ - http://www.linuxfoundation.org/collaborate/workgroups/networking/group
+ - https://www.usenix.org/legacy/publications/library/proceedings/als01/full_papers/jamal/jamal.pdf
+ - http://ramirose.wix.com/ramirosen
+ - http://lwn.net/images/pdf/LDD3/ch17.pdf - Hardware Information
+ - http://www.haifux.org/lectures/172/netLec.pdf - 17
+
 Mellanox ConnectX-3:
  - http://www.mellanox.com/page/products_dyn?product_family=27
  - http://www.mellanox.com/related-docs/prod_software/MLNX_EN_Linux_README.txt
