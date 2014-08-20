@@ -1,3 +1,7 @@
+Mellanox ConnectX-3:
+ - http://www.mellanox.com/page/products_dyn?product_family=27
+ - http://www.mellanox.com/related-docs/prod_software/MLNX_EN_Linux_README.txt
+
 Quagga-import:
  - zjistit delku souboru, kolik nacist do streamu
  - zjistit jak aplikovat nactene cesty (zaneseni do routing table / rib)
