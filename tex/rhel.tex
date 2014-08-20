@@ -1,0 +1,16 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\chapter{RHEL}
+Examine source rpm package:
+\\
+yumdownloader --source kernel # from yum-utils
+BUD: rpm2cpio kernel-xxx.src.rpm | cpio -it
+NEBO:  mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+echo '%_topdir %(echo $HOME)/rpmbuild' > ~/.rpmmacros
+rpm -ivh kernel-xxx.src.rpm
+yum-builddep kernel # from yum-utils
+rpmbuild -bp kernel.spec # from rpm-build
+\\
+rpmbuild/BUILD/kernel-xxx/ <- source code
+
