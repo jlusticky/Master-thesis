@@ -1,0 +1,27 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\chapter{Routing subsystem}
+---
+Forwarding information base.
+There are two routing tables by default (in case of non policy routing):
+local FIB table
+main FIB table
+
+include/net/ip_fib.h
+
+
+Routes can be introduced to the main routing table in one of three ways:
+by system administrator command ('ip route add' or 'route add' which is obsolete)
+by routing daemons
+as a result of ICMP Redirect
+
+A routing table is implemented by struct fib_table.
+There is one routing cache, regardless of how many routing tables there are.
+The routing cache can be viewed by running 'ip route show cache' or 'route -C' (/proc/net/rt_cache).
+
+The routing cache consists of rtable elements.
+
+
+---
+http://www.haifux.org/lectures/172/netLec.pdf
