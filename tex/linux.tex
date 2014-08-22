@@ -22,6 +22,11 @@ The packets to be lost are not fed into the network stack, so they take no CPU t
 http://www.haifux.org/lectures/172/netLec.pdf
 
 
+TCP Segment Offload - kernel is not dealing with segmenting.
+ethtool -K eth1 tso on
+ethtool -k eth1
+
+
 \section{NAPI}
 
 NAPI is a proven (www.cyberus.ca/~hadi/usenix-paper.tgz) technique
@@ -69,3 +74,5 @@ netperf
 http://www.linuxplumbersconf.org/2012/wp-content/uploads/2012/09/2012-lpc-Low-Latency-Sockets-slides-brandeburg.pdf
 
 ----
+
+It is also possible to use NAPI in wireless 802.11 drivers.

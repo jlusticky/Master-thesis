@@ -1,3 +1,18 @@
+RDMA, IB:
+ - http://en.wikipedia.org/wiki/IWARP
+ - http://www.ethernetalliance.org/wp-content/uploads/2011/10/document_files_RoCE_Intro_and_Update_100716.pdf
+ - http://en.wikipedia.org/wiki/Remote_direct_memory_access
+ - http://www.chelsio.com/roce/
+ - http://www.mellanox.com/page/products_dyn?product_family=79
+ - rdma over converged ethernet
+
+I/OAT:
+ - http://www.linuxfoundation.org/collaborate/workgroups/networking/i/oat
+ - http://download.intel.com/support/network/sb/98856.pdf
+ - http://www.linuxsymposium.org/archives/OLS/Reprints-2005/leech-Reprint.pdf
+
+ - http://timetobleed.com/useful-kernel-and-driver-performance-tweaks-for-your-linux-server/
+
 Linux:
  - http://www.linuxfoundation.org/collaborate/workgroups/networking/group
  - https://www.usenix.org/legacy/publications/library/proceedings/als01/full_papers/jamal/jamal.pdf
