@@ -4,11 +4,14 @@
 \chapter{Routing subsystem}
 ---
 Forwarding information base.
+Linux kernel supports multiple routing tables.
 There are two routing tables by default (in case of non policy routing):
 local FIB table
 main FIB table
 
 include/net/ip_fib.h
+
+Regardless of how many there are routing tables, there is always one routing cache ("route -C").
 
 
 Routes can be introduced to the main routing table in one of three ways:
@@ -25,3 +28,17 @@ The routing cache consists of rtable elements.
 
 ---
 http://www.haifux.org/lectures/172/netLec.pdf
+
+
+---
+
+Linux routing can be manipulated using netlink interface.
+This interface provides easier use than ioctl(2).
+This interface provides traditional socket-based messages.
+socket(AF_NETLINK, ...);
+send(..);
+
+Rtnetlink allows the kernel's routing tables to be read and altered.
+
+netlink(3) - system call - netlink family NETLINK_ROUTE
+libnetlink
