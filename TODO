@@ -1,5 +1,6 @@
 Offload:
  - ack offload
+ - http://wiki.networksecuritytoolkit.org/nstwiki/index.php/LAN_Ethernet_Maximum_Rates,_Generation,_Capturing_&_Monitoring
 
 Kernel networking:
  - http://www.cubrid.org/blog/dev-platform/understanding-tcp-ip-network-stack/

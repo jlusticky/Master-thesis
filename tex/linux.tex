@@ -30,6 +30,9 @@ TCP Segment Offload - kernel is not dealing with segmenting.
 ethtool -K eth1 tso on
 ethtool -k eth1
 
+TSO is well supported in Linux; for systems which are engaged mainly in the sending of data, it's sufficient to make 10GB work at full speed.
+https://lwn.net/Articles/358910/
+
 
 While TSO and other simple tasks implemented in hardware help reducing the CPU load,
 the kernel still has to deal the TCP states and ACKs.
