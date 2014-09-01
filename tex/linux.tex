@@ -22,9 +22,41 @@ The packets to be lost are not fed into the network stack, so they take no CPU t
 http://www.haifux.org/lectures/172/netLec.pdf
 
 
+The kernel already supports TCP segmentation offloading (TSO), where an adapter can create TCP packets out of a large array of data.
+TSO reduces the necessary CPU power, bus overhead, and cache impact to send a series of packets,
+but it still does not require that the adapter actually know anything about specific TCP connections.
+http://lwn.net/Articles/148697/
 TCP Segment Offload - kernel is not dealing with segmenting.
 ethtool -K eth1 tso on
 ethtool -k eth1
+
+
+While TSO and other simple tasks implemented in hardware help reducing the CPU load,
+the kernel still has to deal the TCP states and ACKs.
+
+To mitigate CPU load spent on TCP overhead completely, the TCP Offload Engine (TOE) is implemented in several NICs.
+TOE features a full TCP/IP implementation in adapter.
+However, Linux has never supported the TOE features of any network cards~\cite{http://lwn.net/Articles/148697/}.
+
+Vendors have made modifications to Linux to support TOE, and these changes have been submitted changes for kernel inclusion but were rejected.
+The reasons why Linux engineers currently feel that full network stack offload (TCP Offload Engine, TOE) has little merit.
+http://www.linuxfoundation.org/collaborate/workgroups/networking/toe
+
+TOE shorts out much of the Linux networking code.
+In the process, it cuts out features like netfilter, traffic control, and more.
+The Linux networking stack is easy to fix when a bug or security issue comes up. If a security problem turns up in a TOE adapter, instead, there is very little which can be done to fix it.
+A long-term maintaince burden. http://lwn.net/Articles/148697/
+
+Jeff Garzik claims that 100Mb/s TOE adaptors
+(which used to be the bleeding-edge high speed)
+are now slower than the Linux networking stack.
+So any performance advantage from TOE is a temporary thing, but, once it is merged, the code must be supported forever.
+
+David Miller: There are ways to obtain TOE's performance without
+necessitating stateful support in the cards, everything that's
+worthwhile can be done with stateless offloads.
+
+---
 
 
 \section{NAPI}
@@ -72,7 +104,3 @@ Jitter is unpredictable by default
 netperf
 
 http://www.linuxplumbersconf.org/2012/wp-content/uploads/2012/09/2012-lpc-Low-Latency-Sockets-slides-brandeburg.pdf
-
-----
-
-It is also possible to use NAPI in wireless 802.11 drivers.
