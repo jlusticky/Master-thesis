@@ -1,0 +1,9 @@
+http://xillybus.com/tutorials/pci-express-tlp-pcie-primer-tutorial-guide-2
+
+MSI - interrupt by writing to the specified address -> no 
+Signaling an interrupt merely consists of sending a TLP over the bus,
+which is simply a posted Write Request, with a special address,
+which the host has written into the peripheral’s configuration space during initialization.
+Any modern operating system (Linux included, of course) can then call the correct interrupt routine,
+without the need to guess who generated the interrupt.
+Neither is it really necessary to “clear” the interrupt, if the peripheral doesn’t need the acknowledgment.

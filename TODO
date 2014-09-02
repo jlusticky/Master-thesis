@@ -1,3 +1,17 @@
+Offload:
+ - ack offload
+ - http://wiki.networksecuritytoolkit.org/nstwiki/index.php/LAN_Ethernet_Maximum_Rates,_Generation,_Capturing_&_Monitoring
+
+Kernel networking:
+ - http://www.cubrid.org/blog/dev-platform/understanding-tcp-ip-network-stack/
+ - http://linux-ip.net/html/routing-tables.html#id-rtrt-unspec-text
+ - http://linux-ip.net/html/routing-selection.html#tb-routing-selection-adv
+ - http://www.linuxjournal.com/article/7356
+ - http://linux-development-for-fresher.blogspot.cz/2012/05/understanding-netlink-socket.html
+
+Kernel profiling, debugging:
+ - http://lwn.net/Articles/551314/
+
 RDMA, IB:
  - http://en.wikipedia.org/wiki/IWARP
  - http://www.ethernetalliance.org/wp-content/uploads/2011/10/document_files_RoCE_Intro_and_Update_100716.pdf
