@@ -38,7 +38,8 @@ NAPI ("New API", though it is not so new anymore, since linux kernel 2.6) is an 
 
 NAPI works through:
 
-Interrupt mitigation 
+Interrupt mitigation (coalescing)
+ Improves throughput but degrades latency.
     High-speed networking can create thousands of interrupts per second, all of which tell the system something it already knew: it has lots of packets to process. NAPI allows drivers to run with (some) interrupts disabled during times of high traffic, with a corresponding decrease in system load.
 
 Packet throttling 

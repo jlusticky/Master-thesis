@@ -2,10 +2,33 @@
 % (c) 2014, 2015 Josef Lusticky
 
 \chapter{Introduction}
+
+40Gbit and 100Gbit over Ethernet - IEEE 802.3ba ratified in 2010.
+10GBASE-T (4-pair copper Cat.8 twisted-pair) ratified in 2013.
+8P8C modular connector (RJ45).
+
+Then you have QSFP, which is a quad SFP [connection]. So to get to 40 GbE today, you take four lanes of [10 Gbps] and run them together. You can get to 100 GbE by taking 10 lanes of 10 Gbps.
+
+---
 Network packet -> NIC buffer -> OS kernel -> app
 
 Linux - packet processing,
 Routing - RIB
+
+----
+
+Protocol offload engines (ISO/OSI layers 2-4 implemented in HW)
+on Ethernet - http://www.ics.uci.edu/~ccgrid11/files/ccgrid11-ib-hse_last.pdf
+Interrupt coalescing, Jumbo frames, HW checksum engines, Segmentation Offload engines
+
+Accelerators:
+TCP Offload Engine - HW acceleration of the entire TCP/IP stack
+Internet Wide-Area RDMA Protocol (iWARP)
+
+Converged Ethernet - lossless ethernet for datacenters
+
+
+----
 
 TCP Segmentation Offload
 Zero-copy principle
