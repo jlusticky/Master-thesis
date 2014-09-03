@@ -348,12 +348,12 @@ Práce je chráněna autorským zákonem a její užití bez udělení oprávně
 
 \mktxt{11}{BRNO \@year}
 
-\ifPrint
+%\ifPrint
   % empty page for print
   \newpage
   \thispagestyle{empty}
   \mbox{}
-\fi
+%\fi
 
 % original task
 %\newpage

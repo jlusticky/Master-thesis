@@ -1,0 +1,41 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\chapter{Analysis}
+To measure Linux routing speed %TODO
+
+\section{Hardware equipment}
+40GBASE-SR vs. 40GBASE-LR,
+QSPF connectors,
+cabling
+
+
+\section{Routing speed limitations}
+PCI-Express 3.0 provides up to, % TODO cite,
+message signaled interrupt (MSI)
+
+cpu speed,
+%Measurements shown that CPU speed is not the main factor influencing packet processing speed~\cite{} RADIM ROSKA.
+processing by different cores %TODO cite.
+
+network interface card,
+
+linux distribution and kernel version
+
+
+\section{Generating 40 Gigabit traffic}
+% - selecting packet generator and how to measure
+Generating 40 Gigabit traffic is not an easy task.
+Basicaly, there are two choices how to generate such a traffic.
+Either by using traditional software packet generator,
+limited by the CPU speed and the optimisation level of the software,
+or use a specialised hardware packet generator.
+
+Software packet generators:
+the most known pktgen,
+netmap with VALE framework.
+
+Spirent Communications is a hardware packet generator vendor,
+oriented in network testing for enterprises and data centres. % TODO ~\cite{spirent}.
+Among their products, a hardware packet generator called Spirent % TODO
+can be found.

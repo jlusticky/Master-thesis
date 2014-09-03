@@ -1,0 +1,29 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\chapter{Setup}
+
+Mellanox ConnectX-3 EN is an adapter that can run 10~Gigabit Ethernet, 40~Gigabit Ethernet,
+or Infiniband at up to 56~Gbps~\cite{mellanox-product-brief}.
+56~Gbps link speed can be achieved while connected to Mellanox switches.
+
+By default, the driver uses adaptive interrupt moderation for the receive path, which adjusts the mod-
+eration time to the traffic pattern~\cite{mellanox-user-manual}.
+
+
+server with PCI-Express 3.0,
+MSI - interrupt by writing to the specified address -> no 
+Signaling an interrupt merely consists of sending a TLP over the bus,
+which is simply a posted Write Request, with a special address,
+which the host has written into the peripheral’s configuration space during initialization.
+Any modern operating system (Linux included, of course) can then call the correct interrupt routine,
+without the need to guess who generated the interrupt.
+Neither is it really necessary to clear the interrupt,
+if the peripheral doesn’t need the acknowledgment~\cite{pcie-tutorial-1}.
+
+
+Red Hat Enterprise Linux 7 with Linux kernel version 3.10.
+
+Cabling - connecting, Spirent screenshots, etc.
+
+Photos

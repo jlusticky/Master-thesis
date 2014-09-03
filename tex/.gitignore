@@ -1,0 +1,12 @@
+*~
+*.aux
+*.log
+projekt.pdf
+desky.pdf
+*.bbl
+*.blg
+*.toc
+*.out
+*.acn
+*.glo
+*.ist
