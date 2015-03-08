@@ -1,6 +1,8 @@
-Offload:
- - ack offload
- - http://wiki.networksecuritytoolkit.org/nstwiki/index.php/LAN_Ethernet_Maximum_Rates,_Generation,_Capturing_&_Monitoring
+Extended Abstract v cestine na A4
+Kapitola Analysis-Software settings,
+irqbalancer
+mq fronta misto pfifo_fast
+
 
 Kernel networking:
  - http://www.cubrid.org/blog/dev-platform/understanding-tcp-ip-network-stack/
@@ -12,21 +14,6 @@ Kernel networking:
 Kernel profiling, debugging:
  - http://lwn.net/Articles/551314/
 
-RDMA, IB:
- - http://en.wikipedia.org/wiki/IWARP
- - http://www.ethernetalliance.org/wp-content/uploads/2011/10/document_files_RoCE_Intro_and_Update_100716.pdf
- - http://en.wikipedia.org/wiki/Remote_direct_memory_access
- - http://www.chelsio.com/roce/
- - http://www.mellanox.com/page/products_dyn?product_family=79
- - rdma over converged ethernet
-
-I/OAT:
- - http://www.linuxfoundation.org/collaborate/workgroups/networking/i/oat
- - http://download.intel.com/support/network/sb/98856.pdf
- - http://www.linuxsymposium.org/archives/OLS/Reprints-2005/leech-Reprint.pdf
-
- - http://timetobleed.com/useful-kernel-and-driver-performance-tweaks-for-your-linux-server/
-
 Linux:
  - http://www.linuxfoundation.org/collaborate/workgroups/networking/group
  - https://www.usenix.org/legacy/publications/library/proceedings/als01/full_papers/jamal/jamal.pdf
@@ -34,38 +21,5 @@ Linux:
  - http://lwn.net/images/pdf/LDD3/ch17.pdf - Hardware Information
  - http://www.haifux.org/lectures/172/netLec.pdf - 17
 
-Mellanox ConnectX-3:
- - http://www.mellanox.com/page/products_dyn?product_family=27
- - http://www.mellanox.com/related-docs/prod_software/MLNX_EN_Linux_README.txt
-
-Quagga-import:
- - zjistit delku souboru, kolik nacist do streamu
- - zjistit jak aplikovat nactene cesty (zaneseni do routing table / rib)
- - zjistit jak nacitat cely soubor nebo jen po castech... / jak se nacitaji jine soubory? napr. config
-------------------
-- netmap - vyzkouset na jine verzi jadra (debian/centos/freebsd)
-- quagga - zprovoznit s konfiguraci a pak importovat BGP tabulku - routeviews.org
-- bird - vyzkouset - birdc - zjist jake to umi prikazy (ze zdrojaku) - http://wp.mindless.gr/2011/07/dual_stack_bgp_configuration_bird/
-- porovnat quagga a bird
 
 - bgpdump - autoconf, autoheader, ./configure --disable-ipv6, make, make example, make install
-
-DONE:
-prozkoumat bgpsimple - jak importuje -> z textoveho souboru, ktery vygeneruje bgpdump
-prozkoumat MRT format -> RFC 6396, draft 13
-prozkoumat jak do Quagga nasypat routy pro bpgd z configuracniho souboru a pak z vtysh
-
-
-
-4-byte ASN
-  http://www.nanog.org/meetings/nanog45/presentations/Tuesday/Hankins_4byteASN_N45.pdf
-  http://www.networkworld.com/article/2233273/cisco-subnet/understanding-4-byte-autonomous-system-numbers.html
-
-C-BGP, libgds
-
-BGP table - http://wherethebitsroam.com/blogs/jeffw/getting-full-bgp-table-processing
-
-BGP4+ - pro IPv6 - http://what-when-how.com/ipv6-advanced-protocols-implementation/introduction-to-bgp4-ipv6-unicast-routing-protocols-part-1/
-      - occaid.org tutorial ipv6bgp
-
-NAPI (New API - polling packetu misto irq) - linuxfoundation.org napi, driver ixgbe_main.c
