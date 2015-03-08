@@ -2,40 +2,17 @@
 % (c) 2014, 2015 Josef Lusticky
 
 \chapter{Analysis}
-To measure Linux routing speed %TODO
+Basically, there are three important parts needed to perform network benchmarks at full 40 Gbit speeds -
+a network interface card with 40Gb Ethernet support, a server compatible with the card and a packet generator.
+A chosen distribution of the GNU/Linux operating system should contain a stable and
+recent kernel that supports the 40 Gigabit Ethernet protocol and the network interface card.
 
-\section{Hardware equipment}
-40GBASE-SR vs. 40GBASE-LR,
-QSPF connectors,
-cabling
+\input{analysis/hardware.tex}
 
+\input{analysis/software.tex}
 
-\section{Routing speed limitations}
-PCI-Express 3.0 provides up to, % TODO cite,
-message signaled interrupt (MSI)
+\input{analysis/metodology.tex}
 
-cpu speed,
-%Measurements shown that CPU speed is not the main factor influencing packet processing speed~\cite{} RADIM ROSKA.
-processing by different cores %TODO cite.
+\input{analysis/settings.tex}
 
-network interface card,
-
-linux distribution and kernel version
-
-
-\section{Generating 40 Gigabit traffic}
-% - selecting packet generator and how to measure
-Generating 40 Gigabit traffic is not an easy task.
-Basicaly, there are two choices how to generate such a traffic.
-Either by using traditional software packet generator,
-limited by the CPU speed and the optimisation level of the software,
-or use a specialised hardware packet generator.
-
-Software packet generators:
-the most known pktgen,
-netmap with VALE framework.
-
-Spirent Communications is a hardware packet generator vendor,
-oriented in network testing for enterprises and data centres. % TODO ~\cite{spirent}.
-Among their products, a hardware packet generator called Spirent % TODO
-can be found.
+%TODO - describe BGP

@@ -1,0 +1,131 @@
+%=========================================================================
+% (c) 2011, 2012 Josef Lusticky
+
+\section{Routing subsystem}\label{sec:linux-routing}
+Routing takes place on L3, so it is entirely kernel's responsibility to forward packets to their destination.
+For each packet, incoming or outgoing, a lookup in the routing subsystem is performed~\cite{linux-kernel-networking}.
+The decision about whether a packet should be forwarded and which interface it should be sent on is done based on the result of
+the lookup in the routing subsystem.
+The routing subsystem is a component of the kernel's IP stack and is responsible for forwarding packets and maintaining
+the forwarding information base (FIB)~\cite{linux-kernel-networking}.
+
+Familiar routing daemons, such as Quagga or Bird, are entirely user-space applications.
+They are not responsible for routing any packet.
+Instead, these routing daemons manipulate the kernel's FIB to
+contain the selected routes based on
+the routing protocol and algorithm they use (OSPF link-state, BGP best path, etc.).
+To use these protocols and algorithms,
+these user-space daemons usually maintain routing tables of their own, which should not be confused with the
+FIB used by the kernel~\cite{linux-kernel-networking}.
+The kernel's FIB is manipulated from user-space
+either by {\it{ioctl()}} or by modern {\it{Netlink sockets}}~\cite{networking-subsystem-configuration-interface}.
+
+Advanced routing topics, such as multipath and multicast routing are not covered in this thesis.
+Multipath routing provides ability to add more than one nexthop to a route~\cite{linux-kernel-networking}.
+Otherwise only one nexthop can be specified for a destination.
+Multicast routing provides ability to route packets destined to multicast addresses~\cite{linux-kernel-networking}.
+
+The Linux kernel supports up to 255 routing tables that can be used for policy routing~\cite{linux-kernel-networking}.
+%The compile-time configuration option {\it{CONFIG\_IP\_MULTIPLE\_TABLES}} enables support for multiple routing tables.
+However, the use of multiple routing tables can make a router very complex and therefore
+policy routing is beyond the scope of this thesis.
+With no policy routing, there are two routing tables created by the kernel while booting - the {\it{local}} FIB table
+and the {\it{main}} FIB table~\cite{linux-kernel-networking}.
+The {\it{local}} table contains routing entries of local addresses.
+Routing entries can be added to the local table only by the kernel.
+Adding routing entries to the {\it{main}} table is done by a system
+administrator or by routing daemons or as a result of an ICMP Redirect message~\cite{linux-kernel-networking}.
+
+The routing entries of the kernel's FIB table are organised as a Trie structure~\cite{linux-kernel-networking}.
+The routing lookup in the Linux kernel uses longest matching prefix lookup algorithm
+called FIB TRIE (also known as LC-trie), which performs good for large routing tables~\cite{linux-kernel-networking}.
+The routing lookup can consume much of CPU time, depending on the size of the FIB table.
+It can also consume much of the memory as the algorithm is rather complex~\cite{linux-kernel-networking}.
+
+A lookup is done by the {\it{fib\_lookup()}} function, defined in the {\it{include/net/ip\_fib.h}} file
+of the kernel source code~\cite{kernel-source}.
+When the {\it{fib\_lookup()}} function finds a proper entry in the FIB table,
+it builds a {\it{fib\_result}} object, which consists of various routing parameters,
+including the next hop associated with the outgoing interface~\cite{linux-kernel-networking}.
+Listing~\ref{lst:linux-fib-lookup} shows implementation of {\it{fib\_lookup}} when
+multiple routing tables configuration is disabled.
+%compile-time option CONFIG\_IP\_MULTIPLE\_TABLES is disabled.
+
+\bigskip
+\begin{lstlisting}[caption={Implementation of the fib\_lookup() function},label={lst:linux-fib-lookup}]
+int fib_lookup(struct net *net, const struct flowi4 *flp, struct fib_result *res)
+{
+  struct fib_table *table;
+
+  table = fib_get_table(net, RT_TABLE_LOCAL);
+  if (!fib_table_lookup(table, flp, res, FIB_LOOKUP_NOREF))
+    return 0;
+
+  table = fib_get_table(net, RT_TABLE_MAIN);
+  if (!fib_table_lookup(table, flp, res, FIB_LOOKUP_NOREF))
+    return 0;
+
+  return -ENETUNREACH;
+}
+\end{lstlisting}
+
+The {\it{flowi4}} object consists of fields that are important to the IPv4 routing lookup process, including the
+destination address, source address, Type of Service (TOS), and more~\cite{linux-kernel-networking}.
+In fact the {\it{flowi4}} object defines the key to the lookup in the routing tables.
+For IPv6 there is a parallel object named {\it{flowi6}}.
+Both are defined in the {\it{include/net/flow.h}} file of the kernel source code~\cite{kernel-source}.
+The {\it{fib\_lookup()}} function first searches the {\it{local}} FIB table.
+If the lookup fails, it performs a lookup in the {\it{main}} FIB table~\cite{linux-kernel-networking}.
+If that fails as well, an error code representing network unreachable is returned.
+
+After a lookup is successfully done, a destination entry
+object is built and associated with the {\it{skb}}~\cite{linux-kernel-networking}.
+The destination entry object is implemented by {\it{struct dst\_entry}}, defined in the {\it{include/net/dst.h}} file of
+the kernel source code~\cite{kernel-source}.
+The result of the lookup is referenced by the {\it{struct fib\_result *res}} pointer,
+which indirectly references the created {\it{dst\_entry}} object.
+
+The most important members of the {\it{dst\_entry}} structure are two callbacks named {\it{input}} and {\it{output}}.
+These callbacks are assigned to be proper handlers according to the routing lookup result.
+For incoming unicast packets destined to the local host, the {\it{input}} callback is set to
+{\it{ip\_local\_deliver()}}, and for incoming packets that should be forwarded,
+this input callback is set to {\it{ip\_forward()}}.
+For a packet generated on the local machine and sent away,
+the output callback is set to {\it{ip\_output()}}~\cite{linux-kernel-networking}.
+Listing~\ref{lst:linux-dst} shows a part of the {\it{struct dst\_entry}} definition.
+\bigskip
+\begin{lstlisting}[caption={Destination callback members of struct dst\_entry},label={lst:linux-dst}]
+struct dst_entry {
+  . . .
+  int (*input)(struct sk_buff *);
+  int (*output)(struct sk_buff *);
+  . . .
+}
+\end{lstlisting}
+
+A reference to the {\it{dst\_entry}}, which was created as a result of the routing decision,
+is assigned to the {\it{skb$\rightarrow$\_skb\_refdst}} member.
+The {\it{ip\_rcv\_finish()}} function further calls the {\it{input}} callback
+which passes the {\it{skb}} either to the local host processing or to forwarding, as described in section~\ref{sec:linux-ip}.
+In case of forwarding, the {\it{output}} callback is further set to the {\it{ip\_output}} function by the
+{\it{ip\_forward\_finish()}}, as described in section~\ref{sec:linux-ip},
+
+In terms of performance, there is currently not much space for improvements as
+each {\it{skb}} must be handled separately and must be passed to the described functions of the IP stack.
+In kernels prior to 3.6, there was an IPv4 routing cache with a garbage collector~\cite{linux-kernel-networking}.
+The IPv4 routing cache was removed in kernel 3.6 (released in July 2012),
+as it proven to be inefficient and vulnerable to DoS attacks~\cite{linux-cache-removing}.
+
+There used to be a feature called Fastroute that allowed device drivers to route incoming traffic during
+interrupt context using a small cache.
+The packets were forwarded to the outgoing interface
+without having to pass through the higher layer (IP)~\cite{linux-kernel-networking}.
+However, this feature is not compatible with other important features, such as Netfilter firewall or advanced routing,
+for the simple reason that this low-level forwarding would bypass them.
+Starting with the 2.6.8 kernel, Fastroute is no longer supported and
+its implementation was removed from the Linux kernel~\cite{linux-kernel-networking}.
+
+As discussed above, the L3 packet processing and routing handle packets associated with their own {\it{skb}}.
+However, the lower-layer part of the networking code can provide significant improvements
+before the {\it{skb}} enters the {\it{ip\_rcv()}} function.
+The improvements depend on how this code handles the ingress frames.

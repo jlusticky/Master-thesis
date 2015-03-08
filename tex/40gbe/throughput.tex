@@ -1,0 +1,48 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\section{Throughput}\label{sec:40gbe-throughput}
+With 40~GbE, not only the per frame processing became a concern.
+In case of the maximum sized frames,
+40~Gbps Ethernet NIC transfers $3~259~452 \times 1514 \doteq 4.6$~GB/s of L2 data
+(Ethernet header and Payload) to the host CPU.
+Since the frame overhead is independent from its size,
+the efficiency of Ethernet drops significantly with smaller frames.
+In case of the minimum sized frames, the transfer rate drops to $59~523~809 \times 60 \doteq 2.6$~GB/s
+while still operating at 40~Gbps rate.
+Such data rates require appropriate bus between the NIC and the CPU to operate at full speed.
+
+A single PCI-Express 2.0 lane provides throughput of 5~Gigatransfers per second in each direction~\cite{pcie-specification}.
+In this case, Gigatransfer per second is the same as gigabit per second,
+but it also includes the bits that are lost as a result of the interface overhead.
+PCI-Express 2.0 uses 8b/10b coding, that is, 8 bits of data cost 10 bits to transfer (the same as in SATA case)~\cite{pcie-bandwidth}.
+Therefore, the actual bandwidth is 500~MB/s per lane.
+A PCI-Express 2.0 link with 8 lanes provides 4~GB/s throughput,
+which is not enough to transfer the 40~GbE traffic between the NIC and the CPU.
+The widest 16-lanes link doubles the throughput to 8~GB/s, which is sufficient for 40~GbE adapter.
+
+PCI-Express 3.0 increases throughput to 8~Gigatransfers/s in each direction for a single lane~\cite{pcie-specification}.
+Additionally, it uses more efficient 128b/130b coding.
+This way, a bandwidth of 984.6~MB/s per lane is achieved, almost twice the PCI-Express 2.0.
+An 8-lane PCI-Express 3.0 link provides 7~876.8~MB/s bandwidth which is sufficient to handle 40~GbE traffic.
+
+The above calculations do not include additional overhead of the link for signalling interrupts.
+The PCI-Express devices are required to support Message Signalled Interrupts (MSI) feature~\cite{pcie-specification}.
+MSI is a technique to generate interrupts by writing to a specified address,
+which the kernel has written into the peripheral's configuration during initialisation.
+The interrupt signalling consists of sending a Write request over the PCI-Express link
+to the specified address~\cite{pcie-tutorial-1}.
+There can be up to 32 MSI interrupts assigned to a single device,
+but the number of interrupts the device uses must be a power of 2~\cite{msi-driver-guide}.
+
+MSI-X is an extension to the MSI mechanism, which introduces various new features.
+MSI-X provides support for signalling an interrupt directly to a particular CPU
+and it allows to use up to 2048 interrupts and the number of interrupts is not restricted to a power of 2.
+This feature is used by modern 40~GbE adapters to spread
+the work related to traffic processing among multiple CPUs.
+The device can use either MSI or MSI-X, but not both simultaneously~\cite{msi-driver-guide}.
+
+Although both PCI-Express 2.0 x16 and PCI-Express 3.0 x8 links can be used for 40~GbE cards,
+NIC vendors tend to produce 40~GbE PCI 3.0 x8 adapters,
+because a PCI-Express x8 adapter can be plugged into a x16 slot, but not the other way round~\cite{pcie-specification}.
+An adapter with less lanes saves both costs and troubles finding an empty x16 slot.

@@ -1,0 +1,109 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\section{Ingress traffic processing}\label{sec:linux-ingress}
+The traditional way of processing frames from NIC is interrupt-driven~\cite{linux-kernel-networking}.
+Each incoming frame is an asynchronous event which raises a hardware interrupt.
+Interrupt handlers run asynchronously with either the current interrupt level disabled or with all
+interrupts disabled~\cite{lkd2}.
+The handlers could interrupt other potentially important code, therefore they need to run as quickly as possible.
+Interrupt handlers immediately respond to hardware and perform time-critical actions,
+however, other less critical work should be deferred to a later point when interrupts are enabled~\cite{lkd2}.
+
+Upon frame reception, the hardware interrupt handler of the network adpater
+performs the following immediate tasks:~\cite{understanding-internals}
+\begin{enumerate}
+\item Copies the frame into an {\it{sk\_buff}} data structure.
+If DMA is used by the device, the kernel needs only to initialise a buffer and pass its descriptors to the driver,
+which instructs the device to use DMA.
+The received frame is then copied by a DMA transfer.
+\item Initialises some of the {\it{sk\_buff}} members for later usage by upper network layers,
+notably the {\it{protocol}} member, which identifies the higher-layer protocol handler and will play a major role later.
+\item Updates some other parameters private to the device, such as variables for statistical purposes.
+\item Signals the kernel about the new frame by scheduling the NET\_RX\_SOFTIRQ softirq for execution.
+\end{enumerate}
+
+To keep the execution of the handler as short as possible,
+further frame processing is performed later in the NET\_RX\_SOFTIRQ routine.
+This softirq routine actually performs an interrupt-related work
+not performed in the hardware interrupt handler~\cite{understanding-internals}.
+The routine further passes the received frame
+to the corresponding L3 protocol handler according to the {\it{protocol}} member of the {\it{skb}}~\cite{lkd2}.
+In case of IPv4, this is the {\it{ip\_rcv()}} function described in section~\ref{sec:linux-routing}.
+Moreover, the softirq routine is threaded and can run concurrently on different CPUs~\cite{lkd2}.
+
+However, such method of packet processing became insufficient with the emerge of high-speed network cards.
+Even a moderately busy interface can handle thousands of packets per second
+and per-packet interrupts quickly overwhelm the processor with interrupt-handling work~\cite{low-latency-ethernet-device-polling}.
+On the way towards high-speed packet processing on the host CPU,
+packet processing in the network stack must have been adapted.
+
+NAPI ("New API", though not so new anymore)
+is an interrupt mitigation mechanism used with network devices~\cite{reworking-napi}.
+NAPI mixes interrupts with polling and gives higher performance under high traffic load
+than the old approach, by reducing significantly the load on the CPU~\cite{understanding-internals}.
+
+\input{linux/ingress-napi.tex}
+
+\input{linux/ingress-offloads.tex}
+
+%-----
+
+%There are a number of advantages to doing things this way:
+%vast numbers of interrupts can be avoided, incoming packets can be more efficiently processed in batches,
+%and, if packets must be dropped in response to load, they can be discarded in
+%the interface before they ever hit the network stack. Polling is thus a win for
+%almost all situations where there is any significant amount of traffic at all~\cite{low-latency-ethernet-device-polling}.
+
+
+%---
+
+
+
+
+
+%quota is an integer that represents the maximum number of buffers that can be
+%dequeued by the poll virtual function in one shot. Its value is incremented in
+%units of weight
+%For devices associated with non-NAPI drivers, the default value of weight is 64,
+%stored in weight\_p at the top of net/core/dev.c. The value of weight\_p can be
+%changed via /proc.
+%For devices associated with NAPI drivers, the default value is chosen by the driv-
+%ers. The most common value is 64, but 16 and 32 are used, too. Its value can be
+%tuned via sysfs~\cite{understanding-internals}.
+
+
+%%The input queue is managed by softnet_data->input_pkt_queue. Each input queue
+%%has a maximum length given by the global variable netdev_max_backlog, whose value
+%%is 300. This means that each CPU can have up to 300 frames in its input queue wait-
+%%ing to be processed, regardless of the number of devices in the system.
+%%sysctl -w net.core.netdev_max_backlog=250000
+%NAPI devices use private queues, the devices can select the maximum length they prefer~\cite{understanding-internals}.
+
+
+
+%%Similarly every complete transmission of an outgoing packet causes interrupt.
+
+%---
+
+
+%softirq - http://lwn.net/Articles/520076/
+%the priority of network softirq handling to be raised on systems where networking needed realtime response
+
+
+%-----
+
+
+%---
+%Jitter is unpredictable by default
+
+%netperf
+
+%---
+
+%Protocol offload engines (ISO/OSI layers 2-4 implemented in HW)
+%on Ethernet - %http://www.ics.uci.edu/~ccgrid11/files/ccgrid11-ib-hse_last.pdf
+%Interrupt coalescing, Jumbo frames, HW checksum engines, Segmentation Offload engines
+
+%Timestamp represents the time the frame was received and has a significant CPU cost~\cite{understanding-internals}.
+

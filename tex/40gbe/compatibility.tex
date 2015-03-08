@@ -1,0 +1,34 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\section{Compatibility}\label{sec:40gbe-compatibility}
+The previous 10~Gigabit Ethernet standard was ratified by the IEEE 802.3 Working Group in 2002~\cite{ieee-802.3ae}.
+As opposed to 40~GbE, the cabling plant of 10~GbE uses just a single pair of fiber.
+In 2013, Cisco introduced a replacement that does not require a change to the cabling plant
+and makes it possible to run 40~GbE over a single pair of multimode fiber~\cite{40gbe-mmf}.
+
+Since its ratification in 2002,
+it took four years to standardise 10~GbE over copper twisted pair 10GBASE-T in 2006~\cite{ieee-802.3an}.
+10GBASE-T can run over a Category~6 cable within the range of 55m.
+For full 100m range, a Category~6a cable is required~\cite{ieee-802.3an}.
+One of the previous barriers to 10GBASE-T adoption was the power consumption per port compared to other 10 GbE options.
+However, improvements in semiconductor manufacturing technology
+significantly decreased power use to the point where it is no longer a concern.
+Nowadays, 10GBASE-T and Category~6A cabling costs less than optical fiber technology~\cite{belden-10g-40g}.
+
+The 40~GbE over Category~8 copper twisted pair
+is currently being discussed by the IEEE P802.3bq 40GBASE-T Task Force~\cite{ieee-802.3bq}.
+The maximum range for 40GBASE-T is planned to be just 30 meters.
+Such range should be sufficient for most switch-to-server connections in data centres~\cite{ieee-802.3bq}.
+Because of the shorter distance, the power consumption of 40GBASE-T should be less than of 10GBASE-T~\cite{belden-10g-40g}.
+
+40~Gigabit Ethernet is backward compatible with its predecessor.
+Due to concerns around vendor and equipment interoperability,
+IEEE has determined they will not support or define Jumbo frames~\cite{ea-jumbo-frames}.
+Modern 100Mbps or higher Ethernet also uses constant signalling, which avoids the need for the preamble~\cite{anatomy-frame}.
+However, the frame format is preserved for today's Ethernet transmission speeds to avoid making any changes.
+With the upcoming 40GBASE-T variant, 10M/100M/1G/10G/40G link speed auto-negotiation can be expected in the future.
+
+The 40~Gigabit Ethernet protocol support was introduced in the Linux kernel by various NIC vendors.
+Red Hat Enterprise Linux 7 supports 40 Gigabit network interface controllers since its initial release~\cite{rhel-7-announce}.
+Additional support was also introduced in RHEL 6.6~\cite{rhel-66-announce}.

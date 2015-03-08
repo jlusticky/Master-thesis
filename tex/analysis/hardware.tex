@@ -1,0 +1,45 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\section{Hardware equipment}\label{sec:analysis-hardware}
+The network interface card used in the experiments is
+Mellanox ConnectX-3 EN QSPF dual-port PCI-E 3.0 x8 MCX314A-BCBT~\cite{mellanox-product-brief}.
+The card was provided by the Faculty of Information Technology, Brno University of Technology.
+Mellanox ConnectX-3 EN is an adapter that can run 10~Gigabit Ethernet and 40~Gigabit Ethernet.
+It also supports nonstandard 56~Gbps link speed while connected to Mellanox switches.
+The card is PCI-Express 3.0 x8 compatible with support of previous PCI-Express versions.
+Mellanox ConnectX-3 EN is a multiqueue NIC with MSI-X support %TODO up to 16 receive queues per port
+and it features Receive Side Scaling with hashing support for both IPv4/IPv6 and TCP/UDP flows~\cite{mellanox-user-manual}.
+
+The Mellanox NIC requires PCI-Express 3.0 x8 slot to take full advantage of its speed.
+Faculty of Information Technology, Brno University of Technology provided a server with
+the Supermicro X9DRW-iF motherboard, which
+features PCI-Express 3.0 slots compatible with the Mellanox Connect-X 3 EN adapter~\cite{supermicro-board}.
+The server is further equipped with a single Intel Xeon E5-2630 v2 at 2600MHz with 6 physical cores
+and 12 logical cores when Hyper-Threading is enabled.
+The CPU features 15MB shared cache and PCI Express 3.0 support with up to 40 lanes~\cite{intel-xeon-cpu}.
+
+There are various software frameworks for high-speed packet generation.
+Kernel-space frameworks are expected to outperform user-space tools, which would always introduce some necessary delays.
+The pktgen project is an upstream component of the Linux kernel.
+At the time of writing, Pktgen itself is not capable of generating even full 10~GbE frame rates~\cite{netmap}.
+However, it can be combined with other frameworks for fast packet processing, such as
+Intel's Data Plane Development Kit~\cite{dpdk}.
+
+Another kernel-space packet generator is Netmap,
+which is not an upstream part but provides patches to the Linux kernel~\cite{netmap}.
+Netmap claims to generate 14.88~million frames per second, which is a full frame rate of 10~Gigabit Ethernet,
+however it was not tested against 40~GbE full frame rate of 59.5~million frames per second,
+as calculated in section~\ref{sec:40gbe-frame-rates}.
+Although both above mentioned frameworks seem promising, their benchmarking and description
+are outside the scope of this thesis.
+Moreover, to perform the measurements using a software-based packet generation,
+another GNU/Linux server and a 40~GbE NIC is needed.
+
+Another solution is to use a hardware-based packet generator such as Spirent~\cite{spirent}.
+With kind permission of CESNET, the Czech national research and education network operator,
+the Spirent SPT-3U equipped with a combined 100Gb / 2x40Gb Ethernet module was used to perform the measurements.
+The Spirent supports generation of custom Layer 2-7 traffic, custom frame length and various
+predefined traffic patterns with variable frame length called Internet Mix (iMix).
+These patterns represent a typical distribution of frame lengths found in the Internet traffic
+and they can be further customised~\cite{spirent}.

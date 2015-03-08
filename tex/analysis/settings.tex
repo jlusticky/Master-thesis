@@ -1,0 +1,229 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\section{Software settings}\label{sec:analysis-settings}
+The CentOS 7 operating system features various components that influence forwarding performance.
+To measure a pure routing performance of the Linux kernel,
+the Netfilter and SELinux components should be disabled.
+If disabling the netfilter is not appropriate, the iptables utility must be used to configure netfilter to allow forwarding,
+because the default rules do not allow packet forwarding.
+SELinux in the CentOS~7 operating system uses enforcing policy by default.
+Similarly to netfilter, the SELinux component should be disabled to prevent performance decrease.
+Influence of both the components on forwarding performance can be measured.
+
+The Linux kernel features dynamic CPU frequency scaling.
+The CPUFreq governors are policies that decide what frequency should be used.
+The CPUfreq governor {\it{performance}} should be used during the measurements, as it sets the CPU statically to the
+highest frequency avaliable~\cite{cpufreq-governors}. %, which is 2.6~GHz in case of Intel Xeon E5-2630 v2.
+
+Packet processing by the Linux kernel can be configured in different ways.
+To change the Linux kernel compile-time configuration, the kernel must be recompiled.
+The CentOS~7 kernel provides a fair amount of features that could break existing setups when disabled.
+The default kernel compile-time configuration does not have to provide the best routing performance,
+however, it is usually used in most scenarious and hence its benchmark results are of interests for most people.
+The features configured during compile-time of the Linux kernel introduce
+just a negligible overhead when they are not used.
+For example, the MULTIPLE\_IP\_TABLES support is enabled in the CentOS 7 distribution kernel, however,
+since the measurements presented in this thesis use no policy routing,
+the FIB lookup principle described in section~\ref{sec:linux-routing} is still performed.
+
+Apart from compile-time options, the Linux kernel configuration can be changed during run-time.
+The proc and sys filesystems provide access to the kernel variables that influence packet processing.
+Tuning of these variables can provide significant amount of routing performance improvement when configured properly.
+
+\subsection{Procfs settings}
+The variables exported via procfs are accessible in CentOS~7 as read-write files in /proc.
+The variables in the /proc/sys directory can be changed by the sysctl utility as well.
+The files in the /proc/sys/net directory are of interest for the experiments.
+This directory includes the following subdirectories:
+\begin{itemize}
+\item /proc/sys/net/ipv4 - variables influencing the IPv4 protocol settings
+\item /proc/sys/net/ipv6 - variables influencing the IPv6 protocol settings
+\item /proc/sys/net/netfilter - variables influencing the netfilter settings, not discussed in this thesis
+\item /proc/sys/net/unix - variables influencing communication over unix sockets, not discussed in this thesis
+\item /proc/sys/net/core - variables influencing low-level network settings, including parameters of NAPI, Low Latency Sockets, etc.
+\end{itemize}
+
+The most important setting for the routing performance measurements of the Linux kernel is IPv4 forwarding.
+It can be enabled by writing "1" to the /proc/sys/net/ipv4/ip\_forward file.
+This variable is special - its change resets all IPv4 configuration parameters to their default state~\cite{kernel-doc-ip-sysctl}.
+The /proc/sys/net/ipv4/conf/{\it{ifname}}/forwarding file can be used
+to further selectively enable or disable forwarding on a particular interface.
+Historically, some of the files in /proc/sys/net/ipv4 also influence settings of L4 protocols.
+Although these files are located in the ipv4 subdirectory, the L4 settings are independent on the underlying protocol.
+
+Files in the ipv6 directory influence the IPv6 protocol settings only.
+The IPv6 protocol is disabled in CentOS 7 on all interfaces by default.
+The variable accessible via /proc/sys/net/ipv6/conf/all/disable\_ipv6 must be changed to "0" to
+enable the IPv6 protocol on all interfaces.
+Similarly, the /proc/sys/net/ipv6/conf/all/forwarding variable must changed to "1" to enable IPv6 forwarding on all interfaces.
+Both settings can be changed on per-interface basis as well.
+
+The /proc/sys/net/ipv4/route.max\_size sets the maximum number of IPv4 routes allowed in the kernel.
+This is 2~147~483~647 by default in CentOS~7, which is enough for a full BGP table,
+which contains approx.~538~000 prefixes at the time of writing. %TODO cite
+The /proc/sys/net/ipv6/route.max\_size sets the maximum number of IPv6 routes allowed in the kernel.
+This is 4096 by default in CentOS~7, which must be raised for the measurements involving BGP routes.
+The number of IPv6 prefixes announced in the Internet is approx.~22~000 at the time of writing. %TODO cite
+
+The source IPv4 address validation is enabled by default in CentOS 7.
+This feature is called Reverse path filtering (rp\_filter) in the Linux kernel and it prevents IP spoofing.
+However, it introduces additonal processing and thus it should be disabled during the experiments.
+The rp\_filter can be disabled on a particular interface
+by writing "0" to /proc/sys/net/ipv4/conf/{\it{ifname}}/rp\_filter~\cite{kernel-doc-ip-sysctl}.
+The rp\_filter for IPv6 was implemented in the netfilter subsystem of the Linux kernel and
+thus it can be configured by iptables~\cite{kernel-source}.
+
+Files in core directory provide access to low-level variables of the networking code.
+There are two parameters that influence NAPI processing.
+The /proc/sys/net/core/dev\_weight file sets the maximum number of packets that a single device
+can feed to the kernel in its {\it{poll()}} function.
+The default value is 64 in CentOS 7.
+This value can be increased to allow the device to feed more packets at once.
+However, most of the drivers provide their own limit which cannot be overwritten unless the code of the driver is changed.
+This is the case of the mlx4 driver as well~\cite{kernel-source}.
+The /proc/sys/net/core/netdev\_budget file sets the
+maximum number of packets taken from all interfaces by a single {\it{net\_rx\_action()}} run.
+The interfaces which are registered to polling are
+probed in a round-robin manner, as described in subsection~\ref{subsec:linux-ingress-napi}.
+To allow the kernel to spend more time on packet processing, the netdev\_budget value can be increased.
+
+Apart from settings, the proc filesystem provides access to several statistics as well.
+The network statistics exported via proc filesystem can be found in the /proc/net directory.
+The files in this directory are read-only and cannot be manipulated using the sysctl utility.
+There are 2 important files for the measurements - the fib\_trie and fib\_triestat.
+The fib\_trie file exports the kernel's Forwarding Information Base overview.
+The file describes both the Main and Local FIBs, as described in section~\ref{sec:linux-routing}.
+The fib\_triestat file exports metadata of the FIB trie structures,
+such as average depth, maximum depth, number of leaves, etc.
+
+\subsection{Sysfs settings}
+Apart from the proc filesystem, the Linux kernel provides another virtual filesystem found in /sys.
+Every interface is represented by a symlink in the /sys/class/net/ directory.
+The symlinks point to the corresponding network device, which is represented as a directory in sysfs.
+
+The scaling mechanisms described in section~\ref{sec:linux-scaling} can be set
+using files exported in /sys/class/net/{\it{ifname}}/queues.
+Each rx-{\it{xx}} subdirectory represents a single hardware receive queue.
+The rx-{\it{xx}}/rps_cpus file can be used to set a mask of CPUs serving the particular queue.
+Since the Mellanox ConnectX-3 NIC supports RSS, the RPS feature is disabled by default.
+
+%XPS
+
+The sysfs further exports information about loaded modules, including the parameters if a particular module takes any.
+The /sys/modules/mxl4\_core/parameters directory contains parameters used by the mlx4\_core module.
+The msi\_x parameter is set to 1 by default, which means attempt to use MSI-X.
+The /sys/modules/mxl4\_en/parameters directory contains parameters used by the mlx4\_en module.
+The udp\_rss parameter is set to 1 by default, which enables RSS for incoming UDP traffic.
+There are more parameters taken by both modules, but they are not discussed in this thesis.
+Further description of the parameters can be found
+in the drivers/net/ethernet/mellanox/mlx4 directory of the Linux kernel source code~\cite{kernel-source}.
+
+\subsection{Ethtool settings}
+Ethernet devices can be also configured using ethtool.
+Ethtool is a standard Linux utility for controlling network drivers and hardware, particularly for
+wired Ethernet devices.
+Supported offload features can be displayed using ethtool -{}-show-offload {\it{devname}}.
+Listing~\ref{lst:analysis-ethtool-offload} shows output of ethtool -{}-show-offload eth0,
+where eth0 is the Mellanox ConnectX-3 adpater.
+
+\begin{lstlisting}[caption={Output of ethtool -{}-show-offload for Mellanox ConnectX3 adapter},label={lst:analysis-ethtool-offload}]
+rx-checksumming: on
+tx-checksumming: on
+	tx-checksum-ipv4: on
+	tx-checksum-ip-generic: off [fixed]
+	tx-checksum-ipv6: on
+	tx-checksum-fcoe-crc: off [fixed]
+	tx-checksum-sctp: off [fixed]
+scatter-gather: on
+	tx-scatter-gather: on
+	tx-scatter-gather-fraglist: off [fixed]
+tcp-segmentation-offload: on
+	tx-tcp-segmentation: on
+	tx-tcp-ecn-segmentation: off [fixed]
+	tx-tcp6-segmentation: on
+udp-fragmentation-offload: off [fixed]
+generic-segmentation-offload: on
+generic-receive-offload: on
+large-receive-offload: off [fixed]
+rx-vlan-offload: on [fixed]
+tx-vlan-offload: on [fixed]
+ntuple-filters: off [fixed]
+receive-hashing: on
+highdma: on [fixed]
+rx-vlan-filter: on [fixed]
+vlan-challenged: off [fixed]
+tx-lockless: off [fixed]
+netns-local: off [fixed]
+tx-gso-robust: off [fixed]
+tx-fcoe-segmentation: off [fixed]
+tx-gre-segmentation: off [fixed]
+tx-ipip-segmentation: off [fixed]
+tx-sit-segmentation: off [fixed]
+tx-udp_tnl-segmentation: off [fixed]
+tx-mpls-segmentation: off [fixed]
+fcoe-mtu: off [fixed]
+tx-nocache-copy: on
+loopback: off
+rx-fcs: off [fixed]
+rx-all: off [fixed]
+tx-vlan-stag-hw-insert: off [fixed]
+rx-vlan-stag-hw-parse: off [fixed]
+rx-vlan-stag-filter: off [fixed]
+\end{lstlisting}
+
+Selected offload features can be enabled by issuing ethtool -{}-offload {\it{devname}} {\it{feature}} on,
+or disabled by issuing ethtool -{}-offload {\it{devname}} {\it{feature}} off.
+The features listed as [fixed] cannot be changed on this paricular NIC.
+The rest of the features can be changed, but the feature name differs when issuing ethtool -{}-offload.
+For example, the rx-checksumming feature is turned on by issuing ethtool -{}-offload eth0 rx on.
+Similarly, the scatter-gather feature is turned on by ethtool -{}-offload eth0 sg on.
+For more information about using ethtool, the man page of ethool(8) should be consulted.
+
+Listing~\ref{lst:analysis-ethtool-offload} shows that all supported offload features that are not [fixed], are enabled.
+
+
+%Interrupt coalescence tunning:
+%-C eth0 rx-usecs 50
+
+%Ring buffer tunning:
+%-G eth0 rx 1024
+
+%\subsection{Neighboring}
+%The destination link layer address must be present in the ARP cache to avoid aditional delay of packet transmission.
+%The description of the neighboring implementation is outside the scope of this thesis.
+%The amount of ARP and Neighbor Discovery messages is negligible compared to the
+%amount of the actual traffic and it is not considered by the measurements.
+%However, their processing is not.
+
+
+%MLX4 driver -  mlx4_en_add - rounddown_pow_of_two
+% num_tx_rings_p_up , MLX4_EN_MAX_TX_RING_P_UP
+% pocet_TX_rings = pocet_cpu * pocet_RX_rings
+
+
+TX,RX RING buffer sizes:
+Bufferbloat is a phenomenon in packet-switched networks generally,
+in which excess buffering of packets causes high latency and packet delay variation (also known as jitter),
+as well as reducing the overall network throughput.
+When a router device is configured to use excessively large buffers,
+even very high-speed networks can become practically unusable for many interactive applications like voice calls,
+chat, and even web surfing. %cite http://en.wikipedia.org/wiki/Network_scheduler
+
+
+
+
+
+%When the Linux kernel is compiled with support for symmetric multiprocessing
+%(SMP) and runs on a multiprocessor system, the code for receiving and
+%transmitting packets takes full advantage of that power~\cite{understanding-internals}.
+
+%Frames forwarded can be dropped for variety of reasons - no memory in input queue, no mmory in the output queue,
+%no route to destination, failed sanity checks, etc~\cite{understanding-internals}.
+
+
+%Note that ip route show displays the main table.
+%For displaying the local table, you should run ip route show table local~\cite{linux-kernel-networking}.
+
+
+

@@ -1,29 +1,67 @@
 %=========================================================================
 % (c) 2014, 2015 Josef Lusticky
 
-\chapter{Setup}
+\chapter{Setup}\label{chap:setup}
 
-Mellanox ConnectX-3 EN is an adapter that can run 10~Gigabit Ethernet, 40~Gigabit Ethernet,
-or Infiniband at up to 56~Gbps~\cite{mellanox-product-brief}.
-56~Gbps link speed can be achieved while connected to Mellanox switches.
+\input{setup/hardware.tex}
 
-By default, the driver uses adaptive interrupt moderation for the receive path, which adjusts the mod-
-eration time to the traffic pattern~\cite{mellanox-user-manual}.
+\input{setup/networking.tex}
 
+\input{setup/software.tex}
 
-server with PCI-Express 3.0,
-MSI - interrupt by writing to the specified address -> no 
-Signaling an interrupt merely consists of sending a TLP over the bus,
-which is simply a posted Write Request, with a special address,
-which the host has written into the peripheral’s configuration space during initialization.
-Any modern operating system (Linux included, of course) can then call the correct interrupt routine,
-without the need to guess who generated the interrupt.
-Neither is it really necessary to clear the interrupt,
-if the peripheral doesn’t need the acknowledgment~\cite{pcie-tutorial-1}.
+\section{Software settings}
+Change the scaling governor for each CPU present in the system to performance (default is powersave):
+\begin{lstlisting}
+echo performance | tee /sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_governor
+\end{lstlisting}
+Disable SELinux by editing SELINUX variable in /etc/sysconfig/selinux
+(default is enforcing) and reboot the computer to apply:
+\begin{lstlisting}
+vi /etc/sysconfig/selinux
+	SELINUX=disabled
+reboot
+\end{lstlisting}
+%To disable the netfilter completely execute systemctl stop firewalld.
+%If disabling the netfilter is not appropriate, flush all chains iptables -F,
+%delete all user-defined chains iptables -X (which can be checked again by iptables -L).
+Disable netfilter completely:
+\begin{lstlisting}[language=TeX]
+systemctl stop firewalld
+systemctl disable firewalld  # do not execute firewalld on boot
+\end{lstlisting}
+Enable IPv6 on all interfaces (or at least on the forwarding interfaces):
+\begin{lstlisting}
+echo 0 > /proc/sys/net/ipv6/conf/all/disable\_ipv6
+\end{lstlisting}
+Enable IPv4 forwarding:
+\begin{lstlisting}
+echo 1 > /proc/sys/net/ipv4/ip\_forward
+\end{lstlisting}
+Enable IPv6 forwarding on all interfaces (or at least on the forwarding interfaces):
+\begin{lstlisting}
+echo 1 > /proc/sys/net/ipv6/conf/all/forwarding
+\end{lstlisting}
 
+IPv4 neighbours:
+\begin{lstlisting}
+ip neigh add 192.0.2.2 lladdr 00:10:94:00:00:01 dev enp6s0d1
+ip neigh add 192.0.2.6 lladdr 00:10:94:00:00:02 dev enp6s0
+\end{lstlisting}
+IPv6 neighbours:
+\begin{lstlisting}
+ip -6 neigh add 2001:db8:1::2 lladdr 00:10:94:00:00:03 dev enp6s0d1
+ip -6 neigh add 2001:db8:2::6 lladdr 00:10:94:00:00:04 dev enp6s0
+\end{lstlisting}
 
-Red Hat Enterprise Linux 7 with Linux kernel version 3.10.
+Assign IPv4 addresses:
+\begin{lstlisting}
+ip addr add 192.0.2.1/30 broadcast 192.0.2.3 dev enp6s0d1
+ip addr add 192.0.2.5/30 broadcast 192.0.2.7 dev enp6s0
+\end{lstlisting}
+Assign IPv6 addresses:
+\begin{lstlisting}
+ip -6 addr add 2001:db8:1::1/64 dev enp6s0d1
+ip -6 addr add 2001:db8:2::5/64 dev enp6s0
+\end{lstlisting}
 
-Cabling - connecting, Spirent screenshots, etc.
-
-Photos
+%Additional system settings for a particular measurement are described.

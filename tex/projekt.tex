@@ -25,6 +25,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1, IL2]{fontenc}
 \usepackage{url}
+%\usepackage{rotating}
 \usepackage{listings}
 %\lstset{language=C}
 \DeclareUrlCommand\url{\def\UrlLeft{<}\def\UrlRight{>} \urlstyle{tt}}
@@ -89,8 +90,8 @@ morekeywords={*,...}               % if you want to add more keywords to the set
   year=2015,             %rok
   date=\today,           %datum odevzdani
   %Nazev prace
-  title.cs={Směrování 40Gbit v Linuxu},  %nazev prace v cestine
-  title.en={Towards 40Gbit Linux Router}, %nazev prace v anglictine
+  title.cs={40GbE směrovač pro operační systém GNU/Linux},  %nazev prace v cestine
+  title.en={Towards 40GbE GNU/Linux Router}, %nazev prace v anglictine
   %Autor
   author={Josef Luštický},   %jmeno prijmeni autora
   author.title.p=Bc., %titul pred jmenem (nepovinne)
@@ -107,12 +108,16 @@ morekeywords={*,...}               % if you want to add more keywords to the set
   %bud pomoci nasledujicich parametru nebo pomoci vyhrazenych maker (viz dale)
   %===========================================================================
   %Klicova slova
-  keywords.cs={směrovač, Linux, software, IP síť}, %klicova slova v ceskem jazyce
-  keywords.en={router, Linux, software, IP network}, %klicova slova v anglickem jazyce
+  keywords.cs={GNU, Linux, ethernet, směrovač, software, IP, síť, měření, propustnost, operační systém}, %klicova slova v ceskem jazyce
+  keywords.en={GNU, Linux, ethernet, router, software, IP, network, measurement, throughput, operating system}, %klicova slova v anglickem jazyce
   %Abstract
-  abstract.cs={Účelem této práce je.
+  abstract.cs={Účelem této práce je popis protokolu 40Gb Ethernet, popis směrovacího procesu v jádře Linux
+  a navrhnout a provést testování výkonnosti směrování se síťovým adaptérem pro 40Gb Ethernet.
+  Výsledky a nastavení pro získání maximální výkonnosti směrování jsou dále popsány v této práci.
   }, % abstrakt v ceskem jazyce
-  abstract.en={The purpose of this thesis is to.
+  abstract.en={The purpose of this thesis is to describe 40Gb Ethernet, describe routing process in the Linux kernel
+  and to design and perform benchmark of routing performance with a 40Gb Ethernet network interface card.
+  The results and system settings for achieving maximum routing performance are further described in the thesis.
   }, % abstrakt v anglickem jazyce
   %Prohlaseni
   declaration={Prohlašuji, že jsem tuto diplomovou práci vypracoval samostatně pod vedením pana Ing. Matěje Grégra.

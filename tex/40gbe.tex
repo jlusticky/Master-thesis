@@ -1,57 +1,61 @@
 %=========================================================================
 % (c) 2014, 2015 Josef Lusticky
 
-\chapter{40 Gigabit Ethernet}
+\chapter{40 Gigabit Ethernet}\label{chap:40gbe}
+The 40 and 100~Gigabit Ethernet were ratified in 2010 as the IEEE 802.3ba standard~\cite{ieee-802.3ba}.
+These speeds open doors to significantly higher-capacity networks
+and enable networks to scale in ways that were previously impossible.
+The 40 and 100~GbE operate in full duplex mode only.
+This is also the first time two speeds have been included in an Ethernet standard.
 
-The growth of Ethernet from 10 Mbit/s to 10 Gbit/s has surpassed
+A rough estimate of the CPU processing required to handle a given Ethernet link speed is that
+one hertz of CPU processing is required to send or receive one bit.
+This general rule of thumb was first stated by PC Magazine in the mid 1990's,
+and it is still used as a rule of thumb today~\cite{10gea-toe}.
+
+The core networking doubles its speed approximately every 18 months, whereas
+CPU I/O performance doubles every 24 months.
+The growth of Ethernet speed has already surpassed
 the growth of microprocessor performance~\cite{10gea-toe}.
-A fundamental obstacle to improving network performance is that servers were designed
-for computing rather than input and output (I/O).
-The Internet revolution has drastically changed server requirements,
-and I/O is becoming a major bottleneck in delivering high-speed computing.
-The main reason for the bottleneck is the TCP/IP stack being processed at a rate less than the network speed.
-The processing of TCP/IP over Ethernet is traditionally accomplished by software running on the CPUs of the server.
-
-As network connections scale beyond Gigabit Ethernet speeds,
-the CPU becomes burdened with the large amount of TCP/IP protocol processing required.
-Reassembling out-of-order packets, resource-intensive memory copies, and interrupts put a tremendous load on the host CPU.
-In high-speed networks, the CPU has to dedicate more processing to handle the network traffic than to the applications it is running.
-A rough estimate of the CPU processing required to handle a given Ethernet link speed is,
-for every one bit per second of network data processed, one hertz of CPU processing is required.
-This general rule of thumb was first stated by PC Magazine in the mid 1990’s,
-and is still used as a rule of thumb today~\cite{10gea-toe}.
-
-
-
-
-
-%Previous Ethernet versions could use standard Cat 6 copper cable and RJ-45 connectors , %~\cite{10gbase-t}
-%whereas 40 Gigabit runs on Quad Small Form Factor Pluggable (QSPF) - a high-density fiber connector with 12 strands of fiber.
-%http://searchdatacenter.techtarget.com/feature/40-GbE-technology-Hurry-up-and-wait
-
-
-The channel layout is shown in figure~\ref{fig:40gbit-ethernet-layout}.
-
+Figure~\ref{fig:40gbe-performance-gap} shows,
+that the 802.3ba Ethernet standard further extends the performance gap.
 \begin{figure}
 	\centering
-	\includegraphics[width=13cm,keepaspectratio]{fig/ethernet-layout.jpg}
-	\caption{IEEE 802.3 Ethernet Channel Layout (source: Cisco Systems Inc.)}
-	\label{fig:40gbit-ethernet-layout}
+	\includegraphics[width=13cm,keepaspectratio]{fig/performance-gap.png}
+	\caption{Network and CPU performance gap (source:~\cite{cisco-market-need})}
+	\label{fig:40gbe-performance-gap}
 	\bigskip
 \end{figure}
 
+The 802.3ba standard specifies the physical coding sublayer that is common to both
+40 and 100~Gb/s physical layer implementations~\cite{ieee-802.3ba}.
+This physical coding sublayer is known as 40GBASE-R and 100GBASE-R.
+802.3ba further specifies the following 40~GbE port types.
+All of them use 4 fiber pairs and 40GBASE-R physical coding.
+\begin{itemize}
+\item 40GBASE-SR4 runs over multimode fiber with Short reach for at least 100~m range
+\item 40GBASE-LR4 runs over single mode fiber with Long reach, with the required operating range at least 10~km
+\item 40GBASE-CR4 is a Copper type over twinaxial cable
+\item 40GBASE-KR4 is a port type for bacKplanes
+\item 40GBASE-ER4 with an Extended operating range at least 30~km, which
+is currently under discussion by the IEEE P802.3bm 40GBASE-ER4 Task Force~\cite{ieee-802.3bm}.
+\end{itemize}
 
-40Gbit Ethernet is still Etherneth underneath - it is an old technology
-with a lot of compatibility issues for high speed networking~\cite{jls2009-gro}.
-The biggest of them being the 1500-byte maximum transfer unit (MTU).
-There are some extensions to transfer larger frames, known as Jumbo frames,
-but IEEE has determined they will not support or define Jumbo frames
-due to concerns around vendor and equipment interoperability~\cite{ethernetalliance-jumbo-frames}.
+The 40GBASE-SR4 runs on Quad (4-channel) Small Form Factor Pluggable (abbreviated as QSPF or QSPF+).
+QSPF is a high-density fiber connector with 12 strands of fiber.
+Each channel has a dedicated transmit fiber and a dedicated receive fiber.
+The middle four fibers remain unused~\cite{cisco-market-need}.
+The channel layout is shown in figure~\ref{fig:40gbe-ethernet-layout}.
+\begin{figure}
+	\centering
+	\includegraphics[width=13cm,keepaspectratio]{fig/ethernet-layout.png}
+	\caption{IEEE 802.3 Ethernet Channel Layout (source:~\cite{cisco-market-need})}
+	\label{fig:40gbe-ethernet-layout}
+	\bigskip
+\end{figure}
 
+\input{40gbe/frame-rates.tex}
 
-a 10G network link running at full speed will be transferring over 700 000 packets per seconds
+\input{40gbe/throughput.tex}
 
-Most connections of interest go across the Internet, and those are all bound by the lowest MTU in the entire path
-and sometimes that MTU is even less than 1500 bytes.
-So, while Jumbo frames might work well for local networks, there is still a limit of 1500 bytes on the wider Internet~\cite{jls2009-gro}.
-
+\input{40gbe/compatibility.tex}

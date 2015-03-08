@@ -1,0 +1,23 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\section{Software equipment}\label{sec:analysis-software}
+The Red Hat Enterprise Linux 7 operating system features 40 Gb Ethernet support and
+the kernel based on upstream version 3.10~\cite{rhel-7-announce}.
+To avoid licensing fees, CentOS 7 was chosen for experiments.
+CentOS 7 provides support for the 40 Gigabit Ethernet protocol and a binary compatible kernel with RHEL 7~\cite{centos-7-announce}.
+
+Mellanox ConnectX-3 EN is supported by the mlx4 driver found in the
+{\it{drivers/net/ethernet/mellanox/mlx4}} directory of the Linux kernel source code~\cite{kernel-source}.
+It is the low level driver implementation for the Connect-X adapters designed by Mellanox Technologies.
+Some Connect-X adpaters can operate as an InfiniBand adapter and as an Ethernet NIC~\cite{mellanox-user-manual}.
+To accommodate the two flavors, the driver is split into modules mlx4\_core, mlx4\_en and mlx4\_ib.
+The mlx4\_core module handles low-level functions like device initialisation and firmware commands processing.
+The mlx4\_en module handles Ethernet specific functions and
+plugs into the network device layer of the Linux kernel.
+Similarly, the mlx4\_ib module handles Infiniband specific functions~\cite{mellanox-user-manual}.
+
+%Vanilla upstream Linux kernel 3.18.1 released on 16th December 2014.
+Spirent TestCenter Application version 4.46 is provided to use the Spirent hardware packet generator.
+The application allows to create virtual devices connected to selected ports.
+The devices can use a full-featured IPv4 or IPv6 stack, including ARP/ND, ICMP, TCP/UDP etc~\cite{spirent-app}.

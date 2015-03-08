@@ -2,5 +2,500 @@
 % (c) 2014, 2015 Josef Lusticky
 
 \chapter{Measurements}
-Configuration - graph
-etc.
+
+\section{Networking performance}
+Measurement 1 - single, unidirectional IPv4/UDP stream.
+\begin{tabular}{ | l | l | l | l | }
+\hline
+Frame size & \% of link & bandwidth & frame rate \\
+\hline
+64     & 0.8\%   & 0.32~Gb/s & 476 190 \\ %DONE
+594    & 6.5\%   & 2.6~Gb/s  & 529 315 \\ %DONE
+1518   & 16.25\% & 6.5~Gb/s  & 528 283 \\ %DONE
+AMS-IX & 8\%     & 3.2~Gb/s  & 525 792 \\ %DONE
+\hline
+\end{tabular}
+
+Interrupt mapping:
+\begin{lstlisting}
+   CPU0 CPU1 CPU2 CPU3 CPU4 CPU5 CPU6 CPU7 CPU8 CPU9 CPU10 CPU11
+ 638382    0    0    0    0    0    0    0    0    0     0     0  enp6s0-0
+      0    0    0    0    0    0    0    0    0    0     0     0  enp6s0-1
+      0    0    0    0    0    0    0    0    0    0     0     0  enp6s0-2
+      0    0    0    0    0    0    0    0    0    0     0     0  enp6s0-3
+      0    0    0    0    0    0    0    0    0    0     0     0  enp6s0-4
+      0    0    0    0    0    0    0    0    0    0     0     0  enp6s0-5
+      0    0    0    0    0    0    0    0    0    0     0     0  enp6s0-6
+      0    0    0    0    0    0    0    0    0    0     0     0  enp6s0-7
+
+      0    0    0    0    0    0    0    0    0    0     0     0  enp6s0d1-0
+      0    0    0    0    0    0    0    0    0    0     0     0  enp6s0d1-1
+      0    0    0    0    0    0    0    0    0    0     0     0  enp6s0d1-2
+      0    0    0    0    0    0    0    0    0    0     0     0  enp6s0d1-3
+      0    0    0    0    0    0    0    0    0    0     0     0  enp6s0d1-4
+9106795    0    0    0    0    0    0    0    0    0     0     0  enp6s0d1-5
+      0    0    0    0    0    0    0    0    0    0     0     0  enp6s0d1-6
+      0    0    0    0    0    0    0    0    0    0     0     0  enp6s0d1-7
+\end{lstlisting}
+
+All packets are assigned to a single queue, in this case the queue number 5.
+
+
+\newpage
+Measurement 2 - 32 independent IPv4/UDP flows.
+
+\begin{tabular}{ | l | l | l | l | }
+\hline
+Frame size & \% of link & bandwidth & frame rate \\
+\hline
+64     & 0.6\%   & 0.24~Gb/s & 357 142 \\ %DONE
+594    & 5\%     & 2~Gb/s    & 407 166 \\ %DONE
+1518   & 12.25\% & 4.9~Gb/s  & 398 244 \\ %DONE
+AMS-IX & 5.75\%  & 2.3~Gb/s  & 377 913 \\ %DONE
+\hline
+\end{tabular}
+
+Interrupt mapping:
+\begin{lstlisting}
+   CPU0 CPU1 CPU2 CPU3 CPU4 CPU5 CPU6 CPU7 CPU8 CPU9CPU10CPU11 
+1265732    0    0    0    0    0    0    0    0    0    0    0  enp6s0d1-0
+1265764    0    0    0    0    0    0    0    0    0    0    0  enp6s0d1-1
+1265255    0    0    0    0    0    0    0    0    0    0    0  enp6s0d1-2
+1265381    0    0    0    0    0    0    0    0    0    0    0  enp6s0d1-3
+1265408    0    0    0    0    0    0    0    0    0    0    0  enp6s0d1-4
+1265253    0    0    0    0    0    0    0    0    0    0    0  enp6s0d1-5
+1265719    0    0    0    0    0    0    0    0    0    0    0  enp6s0d1-6
+1265796    0    0    0    0    0    0    0    0    0    0    0  enp6s0d1-7
+
+ 634470    0    0    0    0    0    0    0    0    0    0    0  enp6s0-0
+      0    0    0    0    0    0    0    0    0    0    0    0  enp6s0-1
+      0    0    0    0    0    0    0    0    0    0    0    0  enp6s0-2
+      0    0    0    0    0    0    0    0    0    0    0    0  enp6s0-3
+      0    0    0    0    0    0    0    0    0    0    0    0  enp6s0-4
+      0    0    0    0    0    0    0    0    0    0    0    0  enp6s0-5
+      0    0    0    0    0    0    0    0    0    0    0    0  enp6s0-6
+      0    0    0    0    0    0    0    0    0    0    0    0  enp6s0-7
+\end{lstlisting}
+The packets are evenly distributed among all hardware queues.
+However, the interrupts are not distributed among CPUs.
+
+
+\newpage
+Measurement 3 - 32 IPv4 flows with irqbalance daemon
+
+\begin{tabular}{ | l | l | l | l | }
+\hline
+Frame size & \% of link & bandwidth & frame rate \\
+\hline
+64     & 2.75\% & 1.12~Gb/s & 1 666 666 \\ %DONE
+594    & 21\%   & 8.4~Gb/s  & 1 710 097 \\ %DONE
+1518   & 52.5\% & 21~Gb/s   & 1 706 762 \\ %DONE
+AMS-IX & 26\%   & 10.4~Gb/s & 1 708 826 \\ %DONE
+\hline
+\end{tabular}
+
+\begin{lstlisting}[basicstyle=\tiny]
+  CPU0   CPU1  CPU2   CPU3  CPU4   CPU5   CPU6   CPU7   CPU8   CPU9   CPU10  CPU11
+     0      0     1      0     0      0      0      0      0      0      0      0  enp6s0-0
+     0      0     0   9113     0      0      0      0      0      0      0      0  enp6s0-1
+     0      0     0      0 52451  93474      0      0  24253      0      0      0  enp6s0-2
+     0      0     0      0 27286 239426      0      0      0      0      0      0  enp6s0-3
+ 40703      0     0  27811     0      0      0      0      0      0      0      0  enp6s0-4
+     0 115464     0      0     0      0      0      0      0      0      0      0  enp6s0-5
+     0      0     0      0     0      0      0      0 136833      0      0      0  enp6s0-6
+     0      0     0      0     0      0      0      0      0  58708      0      0  enp6s0-7
+
+     0      0     0      0     0      0      0      0      0      0 127936      0  enp6s0d1-0
+     0      0     0      0     0      0      0      0      0      0      0 127932  enp6s0d1-1
+     0      0     0      0     0      0 115624  12126      0      0      0      0  enp6s0d1-2
+     0      0 24926      0 37054      0      0  65657      0      0      0      0  enp6s0d1-3
+     0      0 15885      0     0      0  99709      0      0  12126      0      0  enp6s0d1-4
+     0      0     0 127622     0      0      0      0      0      0      0      0  enp6s0d1-5
+     0      0     0      0 41024      0      0      0      0      0      0  86906  enp6s0d1-6
+     0      0 12125      0     0 115808      0      0      0      0      0      0  enp6s0d1-7
+\end{lstlisting}
+Irqbalance moves the interrupts between CPUs.
+Heavily depends on the dynamic IRQ mappings.
+Executing the hardware interrupt handler on new CPU that has not served the interrupt yet causes cache miss.
+
+%Changes TX queues using Transmit Packet Steering (XPS) - cat /sys/class/net/enp6s0/queues/tx-?/xps_cpus
+
+
+%\begin{lstlisting}
+%for i in `seq 99 114`; do cat /proc/irq/$i/smp_affinity ; done
+%\end{lstlisting}
+
+
+\newpage
+
+Measurement 4 - 32 IPv4 flows with custom IRQ affinity mappings:
+\begin{lstlisting}
+echo f00 > /proc/irq/default_smp_affinity   # only for new registered irqs
+for i in `seq 0 98`; do echo f00 > /proc/irq/$i/smp_affinity; done
+for i in `seq 115 124`; do echo f00 > /proc/irq/$i/smp_affinity; done
+
+echo 001 > /proc/irq/99/smp_affinity
+echo 002 > /proc/irq/100/smp_affinity
+echo 004 > /proc/irq/101/smp_affinity
+echo 008 > /proc/irq/102/smp_affinity
+echo 010 > /proc/irq/103/smp_affinity
+echo 020 > /proc/irq/104/smp_affinity
+echo 040 > /proc/irq/105/smp_affinity
+echo 080 > /proc/irq/106/smp_affinity
+
+echo 001 > /proc/irq/107/smp_affinity
+echo 002 > /proc/irq/108/smp_affinity
+echo 004 > /proc/irq/109/smp_affinity
+echo 008 > /proc/irq/110/smp_affinity
+echo 010 > /proc/irq/111/smp_affinity
+echo 020 > /proc/irq/112/smp_affinity
+echo 040 > /proc/irq/113/smp_affinity
+echo 080 > /proc/irq/114/smp_affinity
+\end{lstlisting}
+
+\begin{tabular}{ | l | l | l | l |}
+\hline
+Frame size & \% of link & bandwidth & frame rate \\
+\hline
+64     & 5.25\% & 2.1~Gb/s  & 3 125 000 \\ %DONE
+594    & 38\%   & 15.2~Gb/s & 3 094 462 \\ %DONE
+1518   & 96\%   & 38.4~Gb/s & 3 120 936 \\ %DONE
+AMS-IX & 47\%   & 18.8~Gb/s & 3 089 032 \\ %DONE
+%2018 & 99.9\% & 39.96~Gb/s & \\ 
+%9018 & 99.9\% & 39.96~Gb/s & \\ 
+\hline
+\end{tabular}
+
+(up to MTU 9600)
+
+\begin{lstlisting}[basicstyle=\tiny]
+  CPU0   CPU1   CPU2   CPU3   CPU4   CPU5   CPU6   CPU7  CPU8   CPU9   CPU10  CPU11
+ 30455      0      0      0      0      0      0      0     0      0      0      0  enp6s0-0
+     0  30292      0      0      0      0      0      0     0      0      0      0  enp6s0-1
+     0      0  33714      0      0      0      0      0     0      0      0      0  enp6s0-2
+     0      0      0  33157      0      0      0      0     0      0      0      0  enp6s0-3
+     0      0      0      0  33246      0      0      0     0      0      0      0  enp6s0-4
+     0      0      0      0      0  33453      0      0     0      0      0      0  enp6s0-5
+     0      0      0      0      0      0  30818      0     0      0      0      0  enp6s0-6
+     0      0      0      0      0      0      0  31255     0      0      0      0  enp6s0-7
+
+235118      0      0      0      0      0      0      0     0      0      0      0  enp6s0d1-0
+     0 223557      0      0      0      0      0      0     0      0      0      0  enp6s0d1-1
+     0      0 297150      0      0      0      0      0     0      0      0      0  enp6s0d1-2
+     0      0      0 319487      0      0      0      0     0      0      0      0  enp6s0d1-3
+     0      0      0      0 297713      0      0      0     0      0      0      0  enp6s0d1-4
+     0      0      0      0      0 302353      0      0     0      0      0      0  enp6s0d1-5
+     0      0      0      0      0      0 224581      0     0      0      0      0  enp6s0d1-6
+     0      0      0      0      0      0      0 229381     0      0      0      0  enp6s0d1-7
+\end{lstlisting}
+
+
+
+
+
+\newpage
+
+
+
+IPv6:
+ip link set down dev {\it{ifname}}
+
+M
+Single IPv6/UDP stream.
+echo 0 > /proc/sys/net/ipv6/conf/all/disable\_ipv6
+echo 1 > /proc/sys/net/ipv6/conf/all/forwarding
+again, forwarding on only selected interfaces can be enabled.
+ip6tables -F
+ip6tables -X
+ip6tables -L
+
+ip -6 addr add 1::1/64 dev enp6s0d1
+ip -6 addr add 2::1/64 dev enp6s0
+%Single IPv6 flow.
+%To test the difference between IPv4 and IPv6 routing lookup performance.
+
+\begin{tabular}{ | l | l | l | l | }
+\hline
+Frame size & \% of link & frame rate \\
+\hline
+78     & 1.25\% & 0.5~Gb/s & 637 755 \\ %DONE
+594    & 8\%    & 3.2~Gb/s & 651 465 \\ %DONE
+1518   & 20\%   & 8~Gb/s   & 650 195 \\ %DONE
+AMS-IX & 10\%   & 4~Gb/s   & 657 240 \\ %DONE
+\hline
+\end{tabular}
+
+
+M:
+32 independent IPv6 flows.
+\begin{tabular}{ | l | l | l | l | }
+\hline
+Frame size & \% of link & bandwidth & frame rate \\
+\hline
+78     & 6\%  & 2.4~Gb/s  & 3 061 224 \\ %DONE
+594    & 37\% & 14.8~Gb/s & 3 013 029 \\ %DONE
+1518   & 94\% & 37.6~Gb/s & 3 055 916 \\ %DONE
+AMS-IX & 46\% & 18.4~Gb/s & 3 023 308 \\ %DONE
+\hline
+\end{tabular}
+
+\begin{lstlisting}
+  99:     734263          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp6s0-0
+ 100:          7     734511          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp6s0-1
+ 101:          0          0     734890          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp6s0-2
+ 102:          0          0          0     735141          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp6s0-3
+ 103:          0          0          0          0     735607          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp6s0-4
+ 104:          0          0          0          0          0     735016          0          0          0          0          0          0  IR-PCI-MSI-edge      enp6s0-5
+ 105:          0          0          0          0          0          0     733605          0          0          0          0          0  IR-PCI-MSI-edge      enp6s0-6
+ 106:          0          0          0          0          0          0          0     733752          0          0          0          0  IR-PCI-MSI-edge      enp6s0-7
+ 107:    1498149          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp6s0d1-0
+ 108:          7    1498538          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp6s0d1-1
+ 109:          0          0    1498688          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp6s0d1-2
+ 110:          0          0          0    1506717          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp6s0d1-3
+ 111:          0          0          0          0    1513929          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp6s0d1-4
+ 112:          0          0          0          0          0    1517085          0          0          0          0          0          0  IR-PCI-MSI-edge      enp6s0d1-5
+ 113:          0          0          0          0          0          0    1498571          0          0          0          0          0  IR-PCI-MSI-edge      enp6s0d1-6
+ 114:          0          0          0          0          0          0          0    1498559          0          0          0          0  IR-PCI-MSI-edge      enp6s0d1-7
+\end{lstlisting}
+
+
+
+%Measurement:
+
+%Mixed environment simulating real internet traffic.
+
+
+%Measurement:
+%MTU 9000
+%ip link set eth0 mtu 9000
+
+%Measurement:
+%Hyper-Threading disabled.
+
+
+%----
+
+%Measurement:
+%Full BGP table in the memory.
+%Expensive routing lookups.
+
+
+%----
+
+%Forwarded packet count:
+%/proc/net/snmp
+%/proc/net/snmp6
+%Can be viewed by netstat -s
+
+
+
+\section{Resource utilisation}
+AMS-IX 32 IPv4/UDP flows - 47\% of the link (18.8~Gb/s)
+Measured by Intel Performance Counter Monitor v2.8.\footnote{https://software.intel.com/en-us/articles/intel-performance-counter-monitor}
+
+CPU usage: ./pcm.x
+\begin{lstlisting}
+ EXEC  : instructions per nominal CPU cycle
+ IPC   : instructions per CPU cycle
+ FREQ  : relation to nominal CPU frequency='unhalted clock ticks'/'invariant timer ticks' (includes Intel Turbo Boost)
+ AFREQ : relation to nominal CPU frequency while in active state (not in power-saving C state)='unhalted clock ticks'/'invariant timer ticks while in C0-state'  (includes Intel Turbo Boost)
+ L3MISS: L3 cache misses 
+ L2MISS: L2 cache misses (including other core's L2 cache *hits*) 
+ L3HIT : L3 cache hit ratio (0.00-1.00)
+ L2HIT : L2 cache hit ratio (0.00-1.00)
+ L3CLK : ratio of CPU cycles lost due to L3 cache misses (0.00-1.00), in some cases could be >1.0 due to a higher memory latency
+ L2CLK : ratio of CPU cycles lost due to missing L2 cache but still hitting L3 cache (0.00-1.00)
+ READ  : bytes read from memory controller (in GBytes)
+ WRITE : bytes written to memory controller (in GBytes)
+ TEMP  : Temperature reading in 1 degree Celsius relative to the TjMax temperature (thermal headroom): 0 corresponds to the max temperature
+
+
+ Core (SKT) | EXEC | IPC  | FREQ  | AFREQ | L3MISS | L2MISS | L3HIT | L2HIT | L3CLK | L2CLK |  READ | WRITE | TEMP
+
+   0    0     0.94   0.84   1.12    1.12     223 K   4335 K    0.95    0.75    0.01    0.07     N/A     N/A     44
+   1    0     0.94   0.84   1.12    1.12     224 K   4229 K    0.95    0.76    0.01    0.07     N/A     N/A     44
+   2    0     1.14   1.03   1.10    1.12     165 K   4154 K    0.96    0.77    0.01    0.07     N/A     N/A     40
+   3    0     1.11   1.04   1.07    1.12     157 K   4049 K    0.96    0.78    0.01    0.07     N/A     N/A     42
+   4    0     1.12   1.05   1.07    1.12     178 K   4160 K    0.96    0.78    0.01    0.07     N/A     N/A     45
+   5    0     1.11   1.03   1.07    1.12     178 K   4331 K    0.96    0.78    0.01    0.08     N/A     N/A     42
+   6    0     0.94   0.84   1.12    1.12     232 K   4396 K    0.95    0.73    0.01    0.07     N/A     N/A     43
+   7    0     0.94   0.84   1.12    1.12     240 K   4302 K    0.94    0.75    0.01    0.07     N/A     N/A     45
+   8    0     0.00   0.35   0.00    1.12      10 K     20 K    0.49    0.45    0.45    0.10     N/A     N/A     40
+   9    0     0.00   0.33   0.00    1.12     256      521      0.51    0.27    0.41    0.11     N/A     N/A     42
+  10    0     0.00   0.34   0.00    1.11    1152     1522      0.24    0.22    0.79    0.06     N/A     N/A     44
+  11    0     0.00   0.50   0.00    1.12    2562     6222      0.59    0.66    0.18    0.07     N/A     N/A     42
+-----------------------------------------------------------------------------------------------------------------------------
+ SKT    0     0.69   0.94   0.73    1.12    1615 K     33 M    0.95    0.76    0.01    0.07    0.41    0.92     40
+-----------------------------------------------------------------------------------------------------------------------------
+ TOTAL  *     0.69   0.94   0.73    1.12    1615 K     33 M    0.95    0.76    0.01    0.07    0.41    0.92     N/A
+\end{lstlisting}
+
+CPU Usage: ./pcm-tsx.x
+\begin{lstlisting}
+Core | IPC  | Instructions | Cycles  | Transactional Cycles | Aborted Cycles  | #RTM  | #HLE  | Cycles/Transaction 
+   0   0.84       2525 M     2993 M         0   ( 0.00%)          0   ( 0.00%)    0        0       N/A
+   1   0.85       2526 M     2988 M         0   ( 0.00%)          0   ( 0.00%)    0        0       N/A
+   2   1.05       2986 M     2856 M         0   ( 0.00%)          0   ( 0.00%)    0        0       N/A
+   3   1.04       2979 M     2867 M         0   ( 0.00%)          0   ( 0.00%)    0        0       N/A
+   4   1.04       3001 M     2874 M         0   ( 0.00%)          0   ( 0.00%)    0        0       N/A
+   5   1.04       2974 M     2866 M         0   ( 0.00%)          0   ( 0.00%)    0        0       N/A
+   6   0.84       2518 M     2986 M         0   ( 0.00%)          0   ( 0.00%)    0        0       N/A
+   7   0.84       2525 M     2992 M         0   ( 0.00%)          0   ( 0.00%)    0        0       N/A
+   8   0.32        939 K     2912 K         0   ( 0.00%)          0   ( 0.00%)    0        0       N/A
+   9   0.37         38 K      104 K         0   ( 0.00%)          0   ( 0.00%)    0        0       N/A
+  10   0.43        128 K      299 K         0   ( 0.00%)          0   ( 0.00%)    0        0       N/A
+  11   0.42        531 K     1257 K         0   ( 0.00%)          0   ( 0.00%)    0        0       N/A
+-------------------------------------------------------------------------------------------------------------------
+   *   0.94         22 G       23 G         0   ( 0.00%)          0   ( 0.00%)    0        0       N/A
+\end{lstlisting}
+
+
+Memory Usage: ./pcm-memory.x
+\begin{lstlisting}
+---------------------------------------|
+--             Socket 0              --|
+---------------------------------------|
+---------------------------------------|
+---------------------------------------|
+--   Memory Performance Monitoring   --|
+---------------------------------------|
+--  Mem Ch 0: Reads (MB/s):   97.09  --|
+--            Writes(MB/s):  293.82  --|
+--  Mem Ch 1: Reads (MB/s):  108.90  --|
+--            Writes(MB/s):  228.77  --|
+--  Mem Ch 2: Reads (MB/s):  123.57  --|
+--            Writes(MB/s):  246.80  --|
+--  Mem Ch 3: Reads (MB/s):   95.23  --|
+--            Writes(MB/s):  207.95  --|
+-- NODE0 Mem Read (MB/s):    424.79  --|
+-- NODE0 Mem Write (MB/s) :  977.34  --|
+-- NODE0 P. Write (T/s) :    540435  --|
+-- NODE0 Memory (MB/s):  1402.13     --|
+---------------------------------------||---------------------------------------
+--                   System Read Throughput(MB/s):    424.79                  --
+--                  System Write Throughput(MB/s):    977.34                  --
+--                 System Memory Throughput(MB/s):   1402.13                  --
+---------------------------------------||---------------------------------------
+\end{lstlisting}
+
+PCI-Express usage: ./pcm-pcie.x
+\begin{lstlisting}
+Skt | PCIeRdCur | PCIeNSRd  | PCIeWiLF | PCIeItoM | PCIeNSWr | PCIeNSWrF | PCIe Rd (B) | PCIe Wr (B)
+ 0        41 M         0           0         41 M        0          0          2675 M         2668 M
+----------------------------------------------------------------------------------------------------------------
+ *         41 M         0           0         83 M        0          0          2675 M         5336 M
+\end{lstlisting}
+Note, that there is a bug in Intel's PCM related to displaying
+the total PCIe Write bandwidth - it always shows double the expected value.
+
+
+Software functions:
+\begin{lstlisting}
+22.02%  [kernel]  [k] fib_table_lookup
+ 4.33%  [kernel]  [k] mlx4_en_xmit
+ 4.09%  [kernel]  [k] _raw_spin_lock
+ 3.23%  [kernel]  [k] check_leaf.isra.7
+ 3.02%  [kernel]  [k] __netif_receive_skb_core
+ 2.74%  [kernel]  [k] memcpy
+ 2.62%  [kernel]  [k] mlx4_en_process_rx_cq
+ 2.54%  [kernel]  [k] ip_route_input_noref
+ 1.91%  [kernel]  [k] dev_gro_receive
+ 1.87%  [kernel]  [k] build_skb
+ 1.87%  [kernel]  [k] ip_rcv
+ 1.71%  [kernel]  [k] mlx4_en_poll_tx_cq
+ 1.61%  [kernel]  [k] fib_validate_source
+ 1.38%  [kernel]  [k] nf_iterate
+ 1.33%  [kernel]  [k] ip_finish_output
+ 1.27%  [kernel]  [k] irq_entries_start
+ 1.14%  [kernel]  [k] mlx4_en_complete_rx_desc
+ 1.13%  [kernel]  [k] mlx4_en_free_tx_desc.isra.22
+ 1.08%  [kernel]  [k] selinux_ip_forward                    TODO
+ 1.08%  [kernel]  [k] put_compound_page
+ 1.03%  [kernel]  [k] __netdev_alloc_frag
+ 1.02%  [kernel]  [k] ip_forward
+ 1.01%  [kernel]  [k] dev_hard_start_xmit
+\end{lstlisting}
+
+
+
+SELinux disabled:
+\begin{lstlisting}
+ 19.25%  [kernel]           [k] fib_table_lookup
+  4.99%  [kernel]           [k] mlx4_en_xmit
+  4.32%  [kernel]           [k] _raw_spin_lock
+  4.27%  [kernel]           [k] check_leaf.isra.7
+  4.22%  [kernel]           [k] ipt_do_table
+  3.16%  [kernel]           [k] __netif_receive_skb_core
+  2.69%  [kernel]           [k] mlx4_en_process_rx_cq
+  2.51%  [kernel]           [k] memcpy
+  2.42%  [kernel]           [k] ip_route_input_noref
+  2.06%  [kernel]           [k] ip_rcv
+  2.05%  [kernel]           [k] mlx4_en_poll_tx_cq
+  2.04%  [kernel]           [k] dev_gro_receive
+  1.76%  [kernel]           [k] fib_validate_source
+  1.75%  [kernel]           [k] nf_iterate
+  1.64%  [kernel]           [k] build_skb
+  1.53%  [kernel]           [k] ip_finish_output
+  1.41%  [kernel]           [k] dev_queue_xmit
+  1.18%  [kernel]           [k] local_bh_enable
+  1.17%  [kernel]           [k] mlx4_en_complete_rx_desc
+  1.15%  [kernel]           [k] dev_hard_start_xmit
+  1.13%  [kernel]           [k] ip_forward
+  1.09%  [kernel]           [k] mlx4_en_free_tx_desc.isra.22
+  1.07%  [kernel]           [k] __netdev_alloc_frag
+\end{lstlisting}
+
+Disabled SELinux:
+IPv4 AMS-IX - 51\% , 3 351 928 fps
+
+Disabled rp\_filter -
+
+AMS-IX 57.5\% - 3 779 135 pps
+64 - 6.35\% - 3 779 761 pps
+
+1518 - 99.5\% - 3 234 720 pps
+
+1518 - PCI-Express bandwidth:
+\begin{lstlisting}
+Skt | PCIeRdCur | PCIeNSRd  | PCIeWiLF | PCIeItoM | PCIeNSWr | PCIeNSWrF | PCIe Rd (B) | PCIe Wr (B)
+ 0        89 M         0           0         81 M        0          0          5752 M         5229 M
+\end{lstlisting}
+
+pcm-memory
+\begin{lstlisting}
+---------------------------------------|
+--             Socket 0              --|
+---------------------------------------|
+---------------------------------------|
+---------------------------------------|
+--   Memory Performance Monitoring   --|
+---------------------------------------|
+--  Mem Ch 0: Reads (MB/s):   64.52  --|
+--            Writes(MB/s):  395.85  --|
+--  Mem Ch 1: Reads (MB/s):   53.51  --|
+--            Writes(MB/s):  394.04  --|
+--  Mem Ch 2: Reads (MB/s):   52.30  --|
+--            Writes(MB/s):  393.64  --|
+--  Mem Ch 3: Reads (MB/s):  148.94  --|
+--            Writes(MB/s):  430.75  --|
+-- NODE0 Mem Read (MB/s):    319.27  --|
+-- NODE0 Mem Write (MB/s) : 1614.29  --|
+-- NODE0 P. Write (T/s) :    540289  --|
+-- NODE0 Memory (MB/s):  1933.56     --|
+---------------------------------------||---------------------------------------
+--                   System Read Throughput(MB/s):    319.27                  --
+--                  System Write Throughput(MB/s):   1614.29                  --
+--                 System Memory Throughput(MB/s):   1933.56                  --
+---------------------------------------||---------------------------------------
+\end{lstlisting}
+turbostat -i 1 - 2.9~Ghz, 100.00\% in C0 state
+
+
+\section{Settings influence}
+Disabled rp\_filter:
+
+IPv4 BGP table:
+
+Enabled netfilter with 1000 rules:
+
+NAT:

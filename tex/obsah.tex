@@ -1,45 +1,7 @@
 %=========================================================================
 % (c) 2014, 2015 Josef Lusticky
 
-\chapter{Introduction}
-In recent years not only global Internet traffic is increasing, but also middle and small enterprises
-need bandwidth and latency comparable to what ISPs used a few years ago.
-Whith the start of incorporating the cloud philosophy, where every device and data is accessible from everywhere,
-the traffic within the enterprises' campus network increased as well.
-
-10Gbit software routing using GNU/Linux provides a financially moderate alternative to hardware routers.
-
-
-
-
-40Gbit and 100Gbit over Ethernet - IEEE 802.3ba ratified in 2010~\cite{ieee-802.3ba}.
-10GBASE-T (4-pair copper Cat.8 twisted-pair) ratified in 2013.
-8P8C modular connector (RJ45).
-
-Then you have QSFP, which is a quad SFP [connection].
-So to get to 40 GbE today, you take four lanes of [10 Gbps] and run them together.
-You can get to 100 GbE by taking 10 lanes of 10 Gbps.
-
----
-
-Protocol offload engines (ISO/OSI layers 2-4 implemented in HW)
-on Ethernet - %http://www.ics.uci.edu/~ccgrid11/files/ccgrid11-ib-hse_last.pdf
-Interrupt coalescing, Jumbo frames, HW checksum engines, Segmentation Offload engines
-
-Accelerators:
-TCP Offload Engine - HW acceleration of the entire TCP/IP stack
-Internet Wide-Area RDMA Protocol (iWARP)
-
-Converged Ethernet - lossless ethernet for datacenters
-
-
-----
-
-TCP Segmentation Offload
-Zero-copy principle
-RDMA
-I/O Acceleration Technology
-
+\input{introduction.tex}
 
 \input{40gbe.tex}
 
@@ -51,7 +13,31 @@ I/O Acceleration Technology
 
 \input{measurements.tex}
 
-
 \chapter{Conclusion}
-40Gbit software routing using GNU/Linux provides a reasonable alternative to expensive hardware routers.
-The main bottleneck is. %TODO
+The thesis provides description of the principles behind packet processing in the Linux kernel, as well as
+a general description of the 40 Gigabit Ethernet protocol and its performance limitation.
+A detailed knowledge of the principles described in the text referenced above is required to
+perform necessary system settings for achieving maximum routing performance using the GNU/Linux operating system.
+
+
+The overall routing performance of the Linux kernel is sufficient for routing %
+Gbps of iMix traffic using the hardware equipment described in section~\ref{sec:analysis-hardware}.
+
+
+40Gbit software routing using GNU/Linux performs. %provides a reasonable alternative to expensive hardware routers.
+The main bottleneck of the default installation is the {\it{irqbalancer}} daemon, which. %TODO
+The thesis can be further extended through comparision of the GNU/Linux routing solution
+against hardware-based routers.
+These measurements could focus on comparing latency difference, throughput or power consumption.
+
+There are various user-space frameworks focused on improving the GNU/Linux network performance
+targeted for particular tasks, such as Data Plane Development Kit~\cite{dpdk}.
+Most of these frameworks are focused on improving the throughput and latency of user-space application,
+however, various extensions to perform a framework based routing exists.
+Further work extending this thesis could include comparing these frameworks with the results presented in this thesis.
+
+Another further work can be focused on replacing the Spirent hardware packet generator with
+a software solution.
+There are various high-speed packet generators avaliable for GNU/Linux
+such as well-known pkt-gen, which is a part of the upstream kernel,
+or netmap, which claims that is can generate 14.88 Mpps using a single CPU's core~\cite{netmap}.
