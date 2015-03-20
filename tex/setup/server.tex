@@ -1,0 +1,62 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\section{Server configuration}
+Change the scaling governor for each CPU present in the system to performance (default is powersave):
+\begin{lstlisting}
+echo performance | tee /sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_governor
+\end{lstlisting}
+Disable SELinux by editing SELINUX variable in /etc/sysconfig/selinux
+(default is enforcing) and reboot the computer to apply:
+\begin{lstlisting}
+vi /etc/sysconfig/selinux
+	SELINUX=disabled
+reboot
+\end{lstlisting}
+%To disable the netfilter completely execute systemctl stop firewalld.
+%If disabling the netfilter is not appropriate, flush all chains iptables -F,
+%delete all user-defined chains iptables -X (which can be checked again by iptables -L).
+Disable netfilter completely:
+\begin{lstlisting}[language=TeX]
+systemctl stop firewalld
+systemctl disable firewalld  # do not execute firewalld on boot
+\end{lstlisting}
+Enable IPv6 on all interfaces (or at least on the forwarding interfaces):
+\begin{lstlisting}
+echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6
+\end{lstlisting}
+Enable IPv4 forwarding:
+\begin{lstlisting}
+echo 1 > /proc/sys/net/ipv4/ip_forward
+\end{lstlisting}
+Enable IPv6 forwarding on all interfaces (or at least on the forwarding interfaces):
+\begin{lstlisting}
+echo 1 > /proc/sys/net/ipv6/conf/all/forwarding
+\end{lstlisting}
+
+IPv4 neighbours:
+\begin{lstlisting}
+ip neigh add 192.0.2.2 lladdr 00:10:94:00:00:01 dev enp6s0d1
+ip neigh add 192.0.2.6 lladdr 00:10:94:00:00:02 dev enp6s0
+\end{lstlisting}
+IPv6 neighbours:
+\begin{lstlisting}
+ip -6 neigh add 2001:db8:1::2 lladdr 00:10:94:00:00:03 dev enp6s0d1
+ip -6 neigh add 2001:db8:2::6 lladdr 00:10:94:00:00:04 dev enp6s0
+\end{lstlisting}
+
+Assign IPv4 addresses:
+\begin{lstlisting}
+ip addr add 192.0.2.1/30 broadcast 192.0.2.3 dev enp6s0d1
+ip addr add 192.0.2.5/30 broadcast 192.0.2.7 dev enp6s0
+\end{lstlisting}
+Assign IPv6 addresses:
+\begin{lstlisting}
+ip -6 addr add 2001:db8:1::1/64 dev enp6s0d1
+ip -6 addr add 2001:db8:2::5/64 dev enp6s0
+\end{lstlisting}
+
+%Additional system settings for a particular measurement are described.
+The routes announced in public BGP were imported to the kernel's FIB.
+Appendix~\ref{app:bgp} describes the step-by-step instructions on how to obtain the BGP table and import it to the FIB.
+%TODO /proc/net/fibtriestat , ...

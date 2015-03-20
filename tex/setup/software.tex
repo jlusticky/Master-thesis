@@ -1,12 +1,8 @@
 %=========================================================================
 % (c) 2014, 2015 Josef Lusticky
 
-\section{Software}
-
-To perform the measurements, base CentOS 7 was installed on the server.
-The operating system features Linux kernel based on version 3.10 -
-the installed version was 3.10.0-123.20.1.el7.x86\_64.
-The system detects the Mellanox ConnectX-3 EN card automatically and loads the mlx4\_core and mlx4\_en module.
+\section{Software and firmware}
+The Linux kernel detects the Mellanox ConnectX-3 EN card automatically and loads the mlx4\_core and mlx4\_en module.
 The mlx4\_core module prints the detected PCI-Express link parameters to the message buffer of the kernel.
 This buffer can be viewed using the dmesg command and it is shown bellow:
 \begin{lstlisting}[language=TeX]
@@ -91,56 +87,3 @@ Restart needed for updates to take effect.
 
 %By default, the driver uses adaptive interrupt moderation for the receive path,
 %which adjusts the moderation time to the traffic pattern~\cite{mellanox-user-manual}.
-
-
-
-
-\section{Generating 40 Gigabit traffic}
-%Thus the maximum effeciency of Ethernet is while transmitting the maximum sized frames.
-% - selecting packet generator and how to measure
-Generating 40 Gigabit traffic is not an easy task.
-Basically, there are two choices how to generate such a traffic.
-Either by using traditional software packet generator,
-limited by the CPU speed and the optimisation level of the software,
-or use a specialised hardware packet generator.
-
-Software packet generators:
-the most known pktgen,
-netmap with VALE framework.
-
-Spirent Communications is a hardware packet generator vendor,
-oriented in network testing for enterprises and data centres. % TODO ~\cite{spirent}.
-Among their products, a hardware packet generator called Spirent % TODO
-can be found.
-
-
-
-78 = 40 IPv6 + 20 UDP + 18 Ethernet
-20~Bytes for UDP, 20 is TCP header, UDP with no data..
-
-
-\begin{figure}
-	\centering
-	\includegraphics[width=14.5cm,keepaspectratio]{fig/amsix-imix.png}
-	\caption{AMS-IX iMix}
-	\label{fig:setup-amsix-imix}
-\end{figure}
-
-
-\section{Collecting statistics}
-Per interface statistics are provided by the kernel via {\it{/proc/net/dev}} file.
-This file provides statistics such as bytes received or transmitted, number of packets, errors, etc.
-It is also used by the {\it{ifconfig}} utility.
-
-Each device driver provides individual statistics for the corresponding interfaces it manages through
-files found under {\it{/sys/class/net/IFNAME/statistics/}}.
-
-The CPU utilisation can be observed in real-time by the {\it{top}} utility.
-The {\it{mpstat}} utility, which is reports various processors related statistics,
-did not provide accurate CPU utilisation in experiments.
-
-
-Intel Performance Counter Monitor (PCM)~\footnote{https://software.intel.com/en-us/articles/intel-performance-counter-monitor-a-better-way-to-measure-cpu-utilization}
-Non-maskable interrupt watchdog must be disabled
-in order to run Intel PCM.
-echo 0 > /proc/sys/kernel/nmi\_watchdog

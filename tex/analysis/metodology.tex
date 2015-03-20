@@ -4,6 +4,24 @@
 \section{Benchmarking methodology}\label{sec:analysis-metodology}
 Procedures described by RFC~2544 can be used to measure the routing performance of the Linux kernel.
 RFC~2544 specifies the benchmarking methodology for network interconnect devices.
+The ideal way to implement the series of tests described in RFC~2544 is to use a tester
+with both transmitting and receiving ports.
+Connections are made from the sending ports of the tester to the receiving ports of the
+device under test (DUT) and from the sending ports of the DUT back to the tester.
+Figure~\ref{fig:analysis-rfc2544} shows the test implementation.
+
+Since the tester both sends the test traffic and receives
+it back, after the traffic has been forwarded by the DUT, the tester
+can easily determine if all of the transmitted packets were received
+and verify that the correct packets were received~\cite{rfc2544}.
+\begin{figure}
+	\centering
+	\includegraphics[width=9cm,keepaspectratio]{fig/rfc2544.png}
+	\caption{RFC2544 test implementation (source:~\cite{rfc2544})}
+	\label{fig:analysis-rfc2544}
+\end{figure}
+
+\subsection{Traffic generation}
 The RFC~2544 specifies the following frame sizes to be used on Ethernet:
 64, 128, 256, 512, 1024, 1280 and 1518~\cite{rfc2544}.
 However, at least 66~B frame size must be used in case of UDP over IPv6 - the size of L2 header is 14,
@@ -23,22 +41,7 @@ to use the same iMix on both IPv4 and IPv6, the minimum frame size must be incre
 	\label{fig:analysis-amsix-frame-size}
 \end{figure}
 
-The ideal way to implement the series of tests described in RFC~2544 is to use a tester
-with both transmitting and receiving ports.
-Connections are made from the sending ports of the tester to the receiving ports of the
-device under test (DUT) and from the sending ports of the DUT back to the tester.
-Figure~\ref{fig:analysis-rfc2544} shows the test implementation.   
-Since the tester both sends the test traffic and receives
-it back, after the traffic has been forwarded by the DUT, the tester
-can easily determine if all of the transmitted packets were received
-and verify that the correct packets were received~\cite{rfc2544}.
-\begin{figure}
-	\centering
-	\includegraphics[width=9cm,keepaspectratio]{fig/rfc2544.png}
-	\caption{RFC2544 test implementation (source:~\cite{rfc2544})}
-	\label{fig:analysis-rfc2544}
-\end{figure}
-
+\subsection{Statistics collection}
 The Spirent TestCenter Application is able to display counters of transmitted and received frames on each interface.
 The counters can be used to determine whether all of the transmitted packets on one interface were received
 on the other interface and hence successfully forwarded by the server.
@@ -47,3 +50,25 @@ automatically, so the measurements must be configured manually in the Spirent Te
 The manual configuration consists of defining the transmit rate, observing the packet counters and comparing their values.
 If the server forwards packets without a single loss, the transmit rate can be increased and the test repeated.
 %Otherwise, the transmit rate must be decreased.
+
+The proc filesystem provides access to several statistics as well.
+The network statistics exported via proc filesystem can be found in the /proc/net directory.
+The files in this directory are read-only and cannot be manipulated using the sysctl utility.
+There are 2 important files for the measurements - the fib\_trie and fib\_triestat.
+The fib\_trie file exports the kernel's Forwarding Information Base overview.
+The file describes both the Main and Local FIBs, as described in section~\ref{sec:linux-routing}.
+The fib\_triestat file exports metadata of the FIB trie structures,
+such as average depth, maximum depth, number of leaves, etc.
+
+The CPU utilisation can be observed using the perf utility,
+which can be found in the tools/perf directory of the Linux kernel source code~\cite{kernel-source}.
+Although perf is included in the Linux kernel source code,
+it must be installed separately on most GNU/Linux distributions, including CentOS~7.
+To obtain additional statistics, such as PCI-Express utilisation or memory utilisation,
+the Intel Performance Counter Monitor (PCM)~\footnote{https://software.intel.com/en-us/articles/intel-performance-counter-monitor-a-better-way-to-measure-cpu-utilization}
+can be used.
+The PCM package is not included in the official CentOS~7 repository,
+but it can be compiled directly from the source code.
+Non-maskable interrupt watchdog must be disabled
+in order to run Intel PCM.
+The non-maskable interrupt watchdog can be disabled by writing "0" to the /proc/sys/kernel/nmi\_watchdog file.

@@ -1,0 +1,23 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\subsection{Sysfs settings}\label{subsec:analysis-settings-sysfs}
+Apart from the proc filesystem, the Linux kernel provides another virtual filesystem found in /sys.
+The sysfs exports information about loaded modules, including the parameters if a module takes any.
+The /sys/modules/mxl4\_core/parameters directory contains parameters used by the mlx4\_core module.
+The msi\_x parameter is set to 1 by default, which means attempt to use MSI-X.
+The /sys/modules/mxl4\_en/parameters directory contains parameters used by the mlx4\_en module.
+The udp\_rss parameter is set to 1 by default, which enables RSS for incoming UDP traffic.
+There are more parameters taken by both modules, but they are not discussed in this thesis.
+Further description of the parameters can be found
+in the drivers/net/ethernet/mellanox/mlx4 directory of the Linux kernel source code~\cite{kernel-source}.
+
+Each network interface is represented by a symlink in the /sys/class/net/ directory.
+The symlinks point to the corresponding network device, which is represented as a directory in sysfs.
+The scaling mechanisms described in section~\ref{sec:linux-scaling} can be set
+using the files exported in /sys/class/net/{\it{ifname}}/queues.
+Each rx-{\it{xx}} subdirectory represents a single hardware receive queue.
+The rx-{\it{xx}}/rps\_cpus file can be used to set a mask of CPUs serving the particular queue.
+Since the Mellanox ConnectX-3 NIC supports RSS, the RPS feature is disabled by default - each rps\_cpus is set to 0.
+
+%XPS

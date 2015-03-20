@@ -1,0 +1,73 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\subsection{Procfs settings}\label{subsec:analysis-settings-procfs}
+The variables exported via procfs are accessible in CentOS~7 as read-write files in /proc.
+The variables in the /proc/sys directory can be changed by the sysctl utility as well.
+The files in the /proc/sys/net directory are of interest for the experiments.
+This directory includes the following subdirectories:
+\begin{itemize}
+\item /proc/sys/net/ipv4 - variables influencing the IPv4 protocol settings
+\item /proc/sys/net/ipv6 - variables influencing the IPv6 protocol settings
+\item /proc/sys/net/netfilter - variables influencing the netfilter settings, not discussed in this thesis
+\item /proc/sys/net/unix - variables influencing communication over unix sockets, not discussed in this thesis
+\item /proc/sys/net/core - variables influencing low-level network settings, including parameters of NAPI, Low Latency Sockets, etc.
+\end{itemize}
+
+The most important setting for the routing performance measurements of the Linux kernel is IPv4 forwarding.
+It can be enabled by writing "1" to the /proc/sys/net/ipv4/ip\_forward file.
+This variable is special - its change resets all IPv4 configuration parameters to their default state~\cite{kernel-doc-ip-sysctl}.
+The /proc/sys/net/ipv4/conf/{\it{ifname}}/forwarding file can be used
+to further selectively enable or disable forwarding on a particular interface.
+Historically, some of the files in /proc/sys/net/ipv4 also influence settings of L4 protocols.
+Although these files are located in the ipv4 subdirectory, the L4 settings are independent on the underlying protocol.
+
+Files in the ipv6 directory influence the IPv6 protocol settings only.
+The IPv6 protocol is disabled in CentOS 7 on all interfaces by default.
+The variable accessible via /proc/sys/net/ipv6/conf/all/disable\_ipv6 must be changed to "0" to
+enable the IPv6 protocol on all interfaces.
+Similarly, the /proc/sys/net/ipv6/conf/all/forwarding variable must changed to "1" to enable IPv6 forwarding on all interfaces.
+Both settings can be changed on per-interface basis as well.
+
+The /proc/sys/net/ipv4/route.max\_size sets the maximum number of IPv4 routes allowed in the kernel.
+This is 2~147~483~647 by default in CentOS~7, which is enough for a full BGP table,
+which contains approx.~538~000 prefixes at the time of writing. %TODO cite
+The /proc/sys/net/ipv6/route.max\_size sets the maximum number of IPv6 routes allowed in the kernel.
+This is 4096 by default in CentOS~7, which must be raised for the measurements involving BGP routes.
+The number of IPv6 prefixes announced in the Internet is approx.~22~000 at the time of writing. %TODO cite
+
+The source IPv4 address validation is enabled by default in CentOS 7.
+This feature is called Reverse path filtering (rp\_filter) in the Linux kernel and it prevents IP spoofing.
+However, it introduces additonal processing and thus it should be disabled during the experiments.
+The rp\_filter can be disabled on a particular interface
+by writing "0" to /proc/sys/net/ipv4/conf/{\it{ifname}}/rp\_filter~\cite{kernel-doc-ip-sysctl}.
+The rp\_filter for IPv6 was implemented in the netfilter subsystem of the Linux kernel and
+thus it can be configured by iptables~\cite{kernel-source}.
+
+Files in core directory provide access to low-level variables of the networking code.
+There are two parameters that influence NAPI processing.
+The /proc/sys/net/core/dev\_weight file sets the maximum number of packets that a single device
+can feed to the kernel in its {\it{poll()}} function.
+The default value is 64 in CentOS 7.
+This value can be increased to allow the device to feed more packets at once.
+However, most of the drivers provide their own limit which cannot be overwritten unless the code of the driver is changed.
+This is the case of the mlx4 driver as well~\cite{kernel-source}.
+The /proc/sys/net/core/netdev\_budget file sets the
+maximum number of packets taken from all interfaces by a single {\it{net\_rx\_action()}} run.
+The interfaces which are registered to polling are
+probed in a round-robin manner, as described in subsection~\ref{subsec:linux-ingress-napi}.
+To allow the kernel to spend more time on packet processing, the netdev\_budget value can be increased.
+
+The proc filesystem further provides access to the IRQ settings and statistics.
+The /proc/interrupts file exports a table of all registered interrupts and their respective counters for each CPU.
+Each registered interrupt has its own IRQ number.
+On a multiprocessor system the interrupt can be served by any of the present CPU if the physical bus supports it.
+This is the case of the PCI-Express MSI-X feature, which allows to deliver an interrupt to a specified CPU,
+as described in section~\ref{sec:40gbe-throughput}.
+
+Section~\ref{sec:linux-scaling} described how a network adapter with multiple queues
+allows to scale the network traffic processing on a multi-processor system.
+Each queue has assigned its own separate IRQ, thus it can be served by a particular CPU if configured properly.
+The targeted CPU is defined using a mask written to the /proc/irq/{\it{NUMBER}}/smp\_affinity file,
+or using a list of CPUs written to the /proc/irq/{\it{NUMBER}}/smp\_affinity\_list file.
+The /proc/irq/default\_smp\_affinity file specifies a mask of CPUs serving newly registered interrupts~\cite{kernel-doc-irq-affinity}.

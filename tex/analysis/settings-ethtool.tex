@@ -1,0 +1,92 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\subsection{Ethtool settings}\label{subsec:analysis-settings-ethtool}
+Ethtool is a standard Linux utility for manipulating network drivers and hardware, particularly for
+wired Ethernet devices.
+Supported offload features can be displayed using ethtool -{}-show-offload {\it{devname}}.
+Listing~\ref{lst:analysis-ethtool-offload} shows output of ethtool -{}-show-offload eth0,
+where eth0 is the Mellanox ConnectX-3 adpater.
+
+\begin{lstlisting}[caption={Output of ethtool -{}-show-offload for Mellanox ConnectX3 adapter},label={lst:analysis-ethtool-offload}]
+rx-checksumming: on
+tx-checksumming: on
+	tx-checksum-ipv4: on
+	tx-checksum-ip-generic: off [fixed]
+	tx-checksum-ipv6: on
+	tx-checksum-fcoe-crc: off [fixed]
+	tx-checksum-sctp: off [fixed]
+scatter-gather: on
+	tx-scatter-gather: on
+	tx-scatter-gather-fraglist: off [fixed]
+tcp-segmentation-offload: on
+	tx-tcp-segmentation: on
+	tx-tcp-ecn-segmentation: off [fixed]
+	tx-tcp6-segmentation: on
+udp-fragmentation-offload: off [fixed]
+generic-segmentation-offload: on
+generic-receive-offload: on
+large-receive-offload: off [fixed]
+rx-vlan-offload: on [fixed]
+tx-vlan-offload: on [fixed]
+ntuple-filters: off [fixed]
+receive-hashing: on
+highdma: on [fixed]
+rx-vlan-filter: on [fixed]
+vlan-challenged: off [fixed]
+tx-lockless: off [fixed]
+netns-local: off [fixed]
+tx-gso-robust: off [fixed]
+tx-fcoe-segmentation: off [fixed]
+tx-gre-segmentation: off [fixed]
+tx-ipip-segmentation: off [fixed]
+tx-sit-segmentation: off [fixed]
+tx-udp_tnl-segmentation: off [fixed]
+tx-mpls-segmentation: off [fixed]
+fcoe-mtu: off [fixed]
+tx-nocache-copy: on
+loopback: off
+rx-fcs: off [fixed]
+rx-all: off [fixed]
+tx-vlan-stag-hw-insert: off [fixed]
+rx-vlan-stag-hw-parse: off [fixed]
+rx-vlan-stag-filter: off [fixed]
+\end{lstlisting}
+
+Selected offload features can be enabled by issuing ethtool -{}-offload {\it{devname}} {\it{feature}} on,
+or disabled by issuing ethtool -{}-offload {\it{devname}} {\it{feature}} off.
+The features listed as [fixed] cannot be changed on this paricular NIC.
+The rest of the features can be changed, but the feature name differs when issuing ethtool -{}-offload.
+For example, the rx-checksumming feature is turned on by issuing ethtool -{}-offload eth0 rx on.
+Similarly, the scatter-gather feature is turned on by ethtool -{}-offload eth0 sg on.
+For more information about using ethtool, the man page of ethool(8) should be consulted.
+
+Listing~\ref{lst:analysis-ethtool-offload} shows that all supported offload features that are not [fixed], are enabled.
+
+
+%Interrupt coalescence tunning:
+%-C eth0 rx-usecs 50
+
+%Ring buffer tunning:
+%-G eth0 rx 1024
+
+%\subsection{Neighboring}
+%The destination link layer address must be present in the ARP cache to avoid aditional delay of packet transmission.
+%The description of the neighboring implementation is outside the scope of this thesis.
+%The amount of ARP and Neighbor Discovery messages is negligible compared to the
+%amount of the actual traffic and it is not considered by the measurements.
+%However, their processing is not.
+
+
+%MLX4 driver -  mlx4_en_add - rounddown_pow_of_two
+% num_tx_rings_p_up , MLX4_EN_MAX_TX_RING_P_UP
+% pocet_TX_rings = pocet_cpu * pocet_RX_rings
+
+
+%TX,RX RING buffer sizes:
+%Bufferbloat is a phenomenon in packet-switched networks generally,
+%in which excess buffering of packets causes high latency and packet delay variation (also known as jitter),
+%as well as reducing the overall network throughput.
+%When a router device is configured to use excessively large buffers,
+%even very high-speed networks can become practically unusable for many interactive applications like voice calls,
+%chat, and even web surfing. %cite http://en.wikipedia.org/wiki/Network_scheduler
