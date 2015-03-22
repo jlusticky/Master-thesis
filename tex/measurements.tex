@@ -1,9 +1,12 @@
 %=========================================================================
 % (c) 2014, 2015 Josef Lusticky
 
-\chapter{Measurements}
+\chapter{Measurements}\label{chap:measurements}
+The results presented in this thesis are based on the setup and basic settings described in chapter~\ref{chap:setup}.
+%Further settings are described
+The CentOS~7 distribution kernel version 3.10.0-123.20.1.el7.x86\_64.
 
-\section{Networking performance}
+\section{CentOS~7 distribution kernel 3.10}
 Measurement 1 - single, unidirectional IPv4/UDP stream.
 \begin{tabular}{ | l | l | l | l | }
 \hline
@@ -499,3 +502,40 @@ IPv4 BGP table:
 Enabled netfilter with 1000 rules:
 
 NAT:
+
+
+
+
+\section{Upstream mainline kernel 3.19.2}
+
+1 IPv4 flow RHEL kernel
+1518 - 30.75\% - 12.3~Gbps - 1~000~000 fps
+AMS-IX - 15.22\% - 6.09~Gbps - 1~000~000 fps
+
+
+
+1 IPv4 flow 3.19.2 kernel
+960~000 fps
+slabsi nez rhel, ale dovoli 16 EQ
+% single cpu - rhel7 kernel outperforms the mainline 3.19.2
+
+
+32 IPv4 flows 3.19.2 kernel
+16 queues -> 5~300~000 fps
+1518 - 95\% - 38~Gbps - 3~088~426 fps
+AMS-IX - 80.6\% - 32.26~Gbps
+
+1200 netdev\_budget - -||- - no influence - raise softirq is highly optimised
+rp\_filter off - 5~325~000 fps - 81.02\% -32.4~Gbps
+
+
+%[ 1113.746810] mlx4_en: enp129s0d1: Using 16 RX rings
+%[ 1113.746825] mlx4_en: enp129s0d1:   frag:0 - size:1526 prefix:0 align:0 stride:1536
+%[ 1113.749856] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-8 ,Falling back to legacy EQ's
+%[ 1113.750110] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-9 ,Falling back to legacy EQ's
+%[ 1113.750363] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-10 ,Falling back to legacy EQ's
+%[ 1113.750647] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-11 ,Falling back to legacy EQ's
+%[ 1113.750893] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-12 ,Falling back to legacy EQ's
+%[ 1113.751201] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-13 ,Falling back to legacy EQ's
+%[ 1113.751470] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-14 ,Falling back to legacy EQ's
+%[ 1113.751728] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-15 ,Falling back to legacy EQ's
