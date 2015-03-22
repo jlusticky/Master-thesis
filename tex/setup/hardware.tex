@@ -3,14 +3,13 @@
 
 \section{Hardware and networking}\label{sec:setup-hardware}
 Figure~\ref{fig:setup-supermicro-board} shows the block diagram of the Supermicro motherboard.
-The Intel Xeon E5-2630 v2 processor was plugged into the front CPU socket 00.
-To plug the Mellanox ConnectX-3 EN adpater into the PCIE 3.0 x16 slot,
-a proprietary Supermicro riser card needed to be used.
-The Mellanox ConnectX-3 EN card was then plugged into this riser card.
-The front CPU is directly connected to the PCI-Express links, so no QPI links were used in the experiments.
+The Intel Xeon E5-2660 v2 processor were plugged into CPU sockets.
+The Mellanox ConnectX-3 EN adpater was plugged into the PCIE 3.0 x8 Upper slot,
+which is part of the {\it{WIO}} block.
+The PCI-Express links are directly connected to the CPU~1 only.
 \begin{figure}
 	\centering
-	\includegraphics[width=14.5cm,keepaspectratio]{fig/supermicro-board.png}
+	\includegraphics[width=15cm,keepaspectratio]{fig/supermicro-x10drui.png}
 	\caption{Supermicro motherboard's block diagram}
 	\label{fig:setup-supermicro-board}
 \end{figure}

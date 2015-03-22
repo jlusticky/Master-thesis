@@ -12,12 +12,12 @@ Mellanox ConnectX-3 EN is a multiqueue NIC with MSI-X support %TODO up to 16 rec
 and it features Receive Side Scaling with hashing support for both IPv4/IPv6 and TCP/UDP flows~\cite{mellanox-user-manual}.
 
 The Mellanox NIC requires PCI-Express 3.0 x8 slot to take full advantage of its speed.
-Faculty of Information Technology, Brno University of Technology provided a server with
-the Supermicro X9DRW-iF motherboard, which
+Brno University of Technology provided a server with
+the Supermicro X10DRU-i+ motherboard, which
 features PCI-Express 3.0 slots compatible with the Mellanox Connect-X 3 EN adapter~\cite{supermicro-board}.
-The server is further equipped with a single Intel Xeon E5-2630 v2 at 2600MHz with 6 physical cores
-and 12 logical cores when Hyper-Threading is enabled.
-The CPU features 15MB shared cache and PCI Express 3.0 support with up to 40 lanes~\cite{intel-xeon-cpu}.
+The server is further equipped with two Intel Xeon E5-2660 v3 processors at 2200MHz with 10 physical cores per CPU
+and 20 logical cores per CPU when Hyper-Threading is enabled.
+The CPU features 20MB shared L3 cache and PCI Express 3.0 support with up to 40 lanes~\cite{intel-xeon-cpu}.
 
 There are various software frameworks for high-speed packet generation.
 Kernel-space frameworks are expected to outperform user-space tools, which would always introduce some necessary delays.
