@@ -17,7 +17,7 @@ the Supermicro X10DRU-i+ motherboard, which
 features PCI-Express 3.0 slots compatible with the Mellanox Connect-X 3 EN adapter~\cite{supermicro-board}.
 The server is further equipped with two Intel Xeon E5-2660 v3 processors at 2200MHz with 10 physical cores per CPU
 and 20 logical cores per CPU when Hyper-Threading is enabled.
-The CPU features 20MB shared L3 cache and PCI Express 3.0 support with up to 40 lanes~\cite{intel-xeon-cpu}.
+Each CPU has 20MB shared L3 cache and PCI Express 3.0 support with up to 40 lanes~\cite{intel-xeon-cpu}.
 
 There are various software frameworks for high-speed packet generation.
 Kernel-space frameworks are expected to outperform user-space tools, which would always introduce some necessary delays.
@@ -39,7 +39,8 @@ another GNU/Linux server and a 40~GbE NIC is needed.
 Another solution is to use a hardware-based packet generator such as Spirent~\cite{spirent}.
 With kind permission of CESNET, the Czech national research and education network operator,
 the Spirent SPT-3U equipped with a combined 100Gb / 2x40Gb Ethernet module was used to perform the measurements.
-The Spirent supports generation of custom Layer 2-7 traffic, custom frame length and various
+The Spirent packet generator supports generation of custom Layer 2-7 traffic, custom frame length and various
 predefined traffic patterns with variable frame length called Internet Mix (iMix).
 These patterns represent a typical distribution of frame lengths found in the Internet traffic
-and they can be further customised~\cite{spirent}.
+and they can be further customised.
+Spirent SPT-3U further supports custom frame rate definition and bandwidth use specification~\cite{spirent}.

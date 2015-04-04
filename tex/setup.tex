@@ -2,14 +2,15 @@
 % (c) 2014, 2015 Josef Lusticky
 
 \chapter{Setup}\label{chap:setup}
-The basic setup consists of plugging the Intel Xeon CPU and the Mellanox ConnectX-3 NIC to the server,
+The basic setup consists of plugging the Mellanox ConnectX-3 NIC to the PCI-Express slot of the server,
 cabling the server with the Spirent packet generator,
-installation of the CentOS~7 GNU/Linux distribution and assigning IP adresses on all interconnected interfaces.
+installation of the CentOS~7 GNU/Linux distribution, assigning IP adresses on all interconnected interfaces
+and allowing IP forwarding (i.e. disabling netfilter).
 Afterwards, the CentOS~7 routing performance can be measured, with the default configuration.
 
 Further setup includes setting the {\it{performance}} scaling governor for better CPU utilisation,
 disabling SELinux, disabling netfilter,
-disabling the loadbalance daemon and assigning IRQ affinity manually.
+disabling the irqbalance daemon and assigning IRQ affinity manually.
 These steps are focused on maximum performance in frames per second statistic
 and on maximum CPU utilisation.
 

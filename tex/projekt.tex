@@ -24,7 +24,7 @@
 \usepackage[czech,english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1, IL2]{fontenc}
-\usepackage{url}
+\usepackage[hyphens]{url}
 %\usepackage{rotating}
 \usepackage{listings}
 %\lstset{language=C}
@@ -161,12 +161,12 @@ počítá i~s~provozem 40~Gb Ethernetu po metalickém vedení.
 formát rámce zůstal zcela nezměněn.
 Mezi počítači využívajícími protokol 40~Gb Ethernetu tak může být v~jednom směru posíláno
 až přibližně 59 milionů rámců za sekundu o minimální velikosti 72 bajtů,
-nebo až přibližně 4,6~GB přenášených dat za sekundu při posílání rámců o maximální velikosti 1526 bajtů.
+nebo až přibližně 4,6~GB přenášených dat za sekundu při posílání rámců o maximální velikosti 1526 bajtů (bez rozšíření typu 802.1Q apod.).
 
 Současný vývoj výkonu procesorů nestačí držet krok s narůstající
 rychlostí komunikačních protokolů na linkové vrstvě ISO/OSI modelu.
 Zatímco rychlost procesorů se zdvojnásobí přibližně jednou za 2 roky, rychlost linkových protokolů se zdvojnásobí za 18 měsíců.
-Při 59 milionech rámců za sekundu je interval mezi dvěma po sobě příchozími rámci přibližně 16~nanosekund.
+Při~přenosu 59 milionů rámců za sekundu je interval mezi dvěma po sobě příchozími rámci přibližně 16~nanosekund.
 Za tuto dobu musí být systém schopen daný rámec korektně zpracovat, jinak hrozí jeho zahlcení dalším síťovým provozem.
 
 Operační systém GNU/Linux se snaží držet krok se zrychlováním síťové komunikace pomocí množství optimalizací.
@@ -183,7 +183,7 @@ následující funkci, která bude daný paket zpracovávat.
 Forwarding Information Base je v Linuxu implentovaná pomocí struktury Trie.
 Linux využívá algoritmus Longest Prefix Match k prohledání této struktury.
 Výsledkem rozhodnotí může být zahození paketu, předání funkci k lokálnímu doručení nebo
-předání fuknci {\it{ip\_forward}}, čímž dochází ke směrování daného paketu.
+předání funkci {\it{ip\_forward}}, čímž dochází ke směrování daného paketu.
 Obdobně funguje i směrování paketů protokolu IPv6.
 
 Kromě tohoto zpracování, které je specifické pro směrování IP paketů, je zpracování síťového provozu
@@ -192,11 +192,11 @@ počítání kontrolních součtů, přiřazení do front atd.
 O snížení této režie se snaží jak vývojáři jádra pomocí mechanismů jako je NAPI nebo Generic Receive Offload,
 tak výrobci síťových karet pomocí hardwarového počítání kontrolních součtů nebo podporou vícefrontového zpracování.
 Právě podpora více front v síťových kartách umožnuje společně s vlastnostmi sběrnice PCI-Express
-distribuování zpracování paketů na více procesorech a~tím škálování síťové propustnosti.
+distribuování zpracování paketů na více procesorů a~tím škálování síťové propustnosti.
 Škálování je hlavním tématem současného vývoje a má největší vliv na celkovou propustnost systému.
 
 Pro účely měření byla využita síťová karta Mellanox ConnectX-3 EN se 2 fyzickými porty
-a hardwarový generátor provozu Spirent.
+a hardwarový generátor síťového provozu Spirent.
 Kapitola~\ref{chap:analysis} popisuje jakým způsobem lze testování s poskytnutým hardwarem provést
 a jaká je možnost konfigurace parametrů jádra Linuxu s ohledem na popsané zpracování paketů v předchozí kapitole.
 
@@ -210,8 +210,9 @@ na výkon směrování paketů v jádře Linux.
 Tyto výsledky jsou dále stručně komentovány v kapitole~\ref{chap:conclusion}, kde jsou také shrnuty nabyté poznatky
 a identifikovány hlavní problémy zamezující lepší propustnosti.
 
-Součástí diplomové práce jsou i přílohy s návodem importování internetových směrovacích záznamů z protokolu BGP
-a stručný souhrn kroků pro dosažení maximálního výkonu směrování v operačním systému GNU/Linux.
+Součástí diplomové práce jsou i přílohy s návodem importování internetových směrovacích záznamů z protokolu BGP,
+aktualizaci firmware síťové karty Mellanox ConnectX-3 EN
+a~stručný souhrn kroků pro dosažení maximálního výkonu směrování v operačním systému GNU/Linux.
 
   % Obsah
   % ----------------------------------------------

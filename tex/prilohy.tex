@@ -114,12 +114,74 @@ int main(int argc, char *argv[])
 
 The scripts and programs shown above can be found on the CD attached to this thesis.
 
+\chapter{Updating the Mellanox ConnectX-3 EN firmware}\label{app:firmware}
+The firmware can be updated using the Mellanox Firmware Tools (MFT), which can be downloaded
+from the Mellanox management tools site.\footnote{{\url{http://www.mellanox.com/page/management_tools}}}
+Installation of Mellanox Firmware Tools is described in MTF User Manual available at
+the Mellanox documentation site.\footnote{{\url{http://www.mellanox.com/related-docs/MFT/MFT_user_manual.pdf}}}
 
-\chapter{Steps to achieve maximum routing performance}
+The installation consists of unpacking the downloaded MFT archive and running the {\it{install.sh}} script.
+This will install kernel-mft and mft packages.
+The kernel-mft package contains required low-level kernel drivers, whereas the mft package contains utilities which use these drivers.
+To start the Mellanox Software Tools service, which also loads the kernel drivers, run {\it{mst start}}.
+Afterwards, the utilities from the mft package can be used, including the mlxfwmanager for updating the firmware.
+The mlxfwmanager displays various information about the adapter, including the firmware version.
+
+The newest firmware for the Mellanox ConnectX-3 adapters can be downloaded
+from the Mellanox firmware site.\footnote{{\url{http://www.mellanox.com/page/firmware_table_ConnectX3EN}}}
+Unzip the firmware and use the {\it{mlxfwmanager -u}} command in the same directory where the firmware was unzipped.
+This will update the firmware.
+After the update is complete, reboot is required to take effect.
+
+Listing~\ref{lst:setup-firmware-update} shows the output of the firmware update procedure using the {\it{mlxfwmanager -u}} command.
+The current firmware version is 2.31.5050, whereas the newer firmware placed in the current working directory is of version 2.32.5100.
+The mlxfwmanager\_pci utility can be used to query the adpater information without starting the mst service.
+
+\newpage
+
+\begin{lstlisting}[language=TeX,label={lst:setup-firmware-update},caption={Firmware update procedure}]
+[root@server]# mlxfwmanager -u
+Querying Mellanox devices firmware ...
+
+Device #1:
+----------
+
+  Device Type:      ConnectX3
+  Part Number:      MCX314A-BCB_Ax
+  Description:      ConnectX-3 EN network interface card; 40GigE; dual-port QSFP; PCIe3.0 x8 8GT/s; RoHS R6
+  PSID:             MT_1090110023
+  PCI Device Name:  /dev/mst/mt4099_pci_cr0
+  Port1 MAC:        f452145e6c70
+  Port2 MAC:        f452145e6c71
+  Versions:         Current        Available     
+     FW             2.31.5050      2.32.5100     
+     PXE            3.4.0225       3.4.0306      
+
+  Status:           Update required
+
+---------
+Found 1 device(s) requiring firmware update...
+
+Perform FW update? [y/N]: y
+Device #1: Updating FW ... Done
+
+Restart needed for updates to take effect.
+\end{lstlisting}
+
+\chapter{General steps for maximum routing performance}\label{app:general-steps}
 \begin{itemize}
-\item enable Hyper-Threading
-\item disable SELinux in /etc/sysconfig/selinux
-\item disable C-states using the kernel parameter intel\_idle.max\_cstate=0
-\item disable loadbalance daemon and assign IRQs manually
-\item disable netfilter completely by systemctl disable firewalld or at least disable connection tracking (iptables)
+\item determine how many RX queues does the NIC support by "ethtool -{}-show-channels {\it{ifname}}" and use all of them using
+"ethtool -{}-set-channels {\it{ifname}} rx {\it{num}}"
+\item set the number of TX queues at least the same as RX queues by "ethtool -{}-set-channels {\it{ifname}} tx {\it{num}}"
+\item determine how many physical cores has the CPU, which is directly connected to the PCI-Express link with the NIC
+\item if the number of physical cores is less then the number of RX queues, enable Hyper-Threading
+\item enable all offloads - check for disabled by "ethtool -{}-show-offload {\it{ifname}}"
+\item disable SELinux in /etc/sysconfig/selinux (and reboot to apply)
+\item disable netfilter completely or at least disable connection tracking
+\item set {\it{performance}} scaling governor for all CPUs
+\item disable rp\_filter
+%TODO \item disable C-states using the kernel parameter intel\_idle.max\_cstate=0
+\item disable irqbalance daemon and assign IRQs manually
+\item if the NIC does not support RSS, configure RPS
+%TODO \item disable XPS to avoid passing the TX packet processing to a different CPU
 \end{itemize}

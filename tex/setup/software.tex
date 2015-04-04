@@ -2,15 +2,21 @@
 % (c) 2014, 2015 Josef Lusticky
 
 \section{Software and firmware}
+Base CentOS 7 was installed on the server.
+The operating system features Linux kernel based on version 3.10 -
+the installed version is 3.10.0-123.20.1.el7.x86\_64.
+The operating system was updated with all updates avaliable as of 20th March 2015.
+The upstream kernel version 3.19.2 was additionally installed from the ELRepo repository~\cite{elrepo-kernel-ml}.
+
 The Linux kernel detects the Mellanox ConnectX-3 EN card automatically and loads the mlx4\_core and mlx4\_en module.
-The mlx4\_core module prints the detected PCI-Express link parameters to the message buffer of the kernel.
-This buffer can be viewed using the dmesg command and it is shown bellow:
+The mlx4\_core module prints the detected PCI-Express link parameters to the kernel's message buffer.
+The buffer can be viewed using the dmesg command and its partial output is shown bellow:
 \begin{lstlisting}[language=TeX]
 mlx4_core 0000:06:00.0: PCIe link speed is 8.0GT/s, device supports 8.0GT/s
 mlx4_core 0000:06:00.0: PCIe link width is x8, device supports x8
 \end{lstlisting}
 The mlx4\_core module further registers interrupts and prints the assigned IRQ numbers for each queue
-to the message buffer of the kernel:
+to the kernel's message buffer:
 \begin{lstlisting}[language=TeX]
 mlx4_core 0000:06:00.0: irq 61 for MSI/MSI-X
 mlx4_core 0000:06:00.0: irq 62 for MSI/MSI-X
@@ -18,12 +24,13 @@ mlx4_core 0000:06:00.0: irq 62 for MSI/MSI-X
 mlx4_core 0000:06:00.0: irq 90 for MSI/MSI-X
 \end{lstlisting}
 
-The driver uses MSI or MSI-X feature of the PCI-Express bus, as described in section~\ref{sec:40gbe-throughput}.
+The driver uses either MSI or MSI-X feature of the PCI-Express bus, as described in section~\ref{sec:40gbe-throughput}.
 The MSI-X feature is used automatically if the system supports it, otherwise the adapter uses MSI.
-The lspci -vv command can be used to check whether MSI-X is used.
-The MSI-X capability is followed by an Enable flag which is followed with either "+" (enabled)
+The {\it{lspci -vv}} command can be used to check whether MSI-X is used -
+the MSI-X capability is followed by an Enable flag which is followed with either "+" (enabled)
 or "-" (disabled).
-Listing~\ref{lst:setup-lspci} shows part of its output for the Mellanox ConnectX-3 EN adapter.
+Listing~\ref{lst:setup-lspci} shows partial output of lspci for the Mellanox ConnectX-3 EN adapter.
+The system supports MSI-X and the adapter is configured to use it.
 \begin{lstlisting}[language=TeX,label={lst:setup-lspci},caption={Partial output of lspci -vv for Mellanox ConnectX-3 EN}]
 06:00.0 Ethernet controller: Mellanox Technologies MT27500 Family [ConnectX-3]
 		...
@@ -33,57 +40,9 @@ Listing~\ref{lst:setup-lspci} shows part of its output for the Mellanox ConnectX
 				...
 \end{lstlisting}
 
-
-
 Apart from the NIC driver, which is part of kernel package, the Mellanox ConnectX-3 adpater uses its own firmware.
-The firmware can be updated using the Mellanox Firmware Tools (MFT), which can be downloaded
-from the Mellanox management tools site.\footnote{{\url{http://www.mellanox.com/page/management_tools}}}
-Installation of Mellanox Firmware Tools is described in MTF User Manual available at
-the Mellanox documentation site.\footnote{{\url{http://www.mellanox.com/related-docs/MFT/MFT_user_manual.pdf}}}
-The installation consists of unpacking the downloaded MFT archive and running the {\it{install.sh}} script.
-This will install kernel-mft and mft packages.
-The kernel-mft package contains required low-level kernel drivers, whereas the mft package contains utilities which use these drivers.
-To start the Mellanox Software Tools service, which also loads the kernel drivers, run {\it{mst start}}.
-Afterwards, the utilities from the mft package can be used, including the mlxfwmanager for updating the firmware.
-The mlxfwmanager displays various information about the adapter, including the firmware version.
-
-The newest firmware for the Mellanox ConnectX-3 adapters can be downloaded
-from the Mellanox firmware site.\footnote{{\url{http://www.mellanox.com/page/firmware_table_ConnectX3EN}}}
-Unzip the firmware and use the {\it{mlxfwmanager -u}} command in the same directory where the firmware was unzipped.
-This will update the firmware.
-After the update is complete, reboot is required to take effect.
-
-Listing~\ref{lst:setup-firmware-update} shows the output of the firmware update procedure using the {\it{mlxfwmanager -u}} command.
-The current firmware version is 2.31.5050, whereas the newer firmware placed in the current working directory is of version 2.32.5100.
-The mlxfwmanager\_pci utility can be used to query the adpater information without starting the mst service.
-\begin{lstlisting}[language=TeX,label={lst:setup-firmware-update}]
-[root@server]# mlxfwmanager -u
-Querying Mellanox devices firmware ...
-
-Device #1:
-----------
-
-  Device Type:      ConnectX3
-  Part Number:      MCX314A-BCB_Ax
-  Description:      ConnectX-3 EN network interface card; 40GigE; dual-port QSFP; PCIe3.0 x8 8GT/s; RoHS R6
-  PSID:             MT_1090110023
-  PCI Device Name:  /dev/mst/mt4099_pci_cr0
-  Port1 MAC:        f452145e6c70
-  Port2 MAC:        f452145e6c71
-  Versions:         Current        Available     
-     FW             2.31.5050      2.32.5100     
-     PXE            3.4.0225       3.4.0306      
-
-  Status:           Update required
-
----------
-Found 1 device(s) requiring firmware update...
-
-Perform FW update? [y/N]: y
-Device #1: Updating FW ... Done
-
-Restart needed for updates to take effect.
-\end{lstlisting}
+The firmware was updated to version 2.32.5100, which is the latest version available as of 10th January 2015.
+The firmware update procedure is described in appendix~\ref{app:firmware}.
 
 %By default, the driver uses adaptive interrupt moderation for the receive path,
 %which adjusts the moderation time to the traffic pattern~\cite{mellanox-user-manual}.

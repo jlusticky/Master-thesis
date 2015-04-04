@@ -4,28 +4,42 @@
 \chapter{Conclusion}\label{chap:conclusion}
 The thesis provides description of the principles behind packet processing in the Linux kernel, as well as
 a general description of the 40 Gigabit Ethernet protocol and its performance limitation.
-A detailed knowledge of the principles described in the text referenced above is required to
-perform necessary system settings for achieving maximum routing performance using the GNU/Linux operating system.
+An advanced knowledge of the principles described in the thesis is required to
+perform the correct system settings for maximum routing performance using the GNU/Linux operating system.
 
+The CentOS~7 operating system was installed to perform the measurements.
+The system features Linux kernel based on version 3.10.
+Additionally, upstream kernel 3.19.2 was installed.
+The Linux kernel routing perfomance was measured under different scenarios, including
+simulation of a real internet traffic, based on the data provided by the Amsterdam Internet Exchange.
+Custom frame-size distribution was configured for this purpose and used in the experiments.
+%TODO BGP
+The overall routing performance of the Linux kernel is sufficient for routing %TODO
+Gbps of the configured traffic using Intel Xeon CPU with 16 logical cores (8~physical cores and HyperThreading enabled).
+That is, the Linux kernel is able to route approx.~5~millions frames per second using 16 cores.
 
-The overall routing performance of the Linux kernel is sufficient for routing %
-Gbps of iMix traffic using the hardware equipment described in section~\ref{sec:analysis-hardware}.
+40Gbit software routing using GNU/Linux may provide a reasonable alternative to proprietary hardware-based routers.
+The main bottleneck of the default installation is the {\it{irqbalancer}} daemon, which
+does not set the optimal IRQ affinity for networking purposes.
+Thus, the scaling mechanisms implemented in the Linux kernel are not used optimally.
+The thesis describes how to set the IRQ affinity manually for the purpose of maximum throughput.
 
+The Linux kernel uses advantage of its scaling mechanisms to perform well in network processing,
+however, a single-core packet processing can be improved to achieve better results.
+The Linux kernel is able to route approx.~500~000 %TODO
+frames per second utilising a single core.
+This is also the limitation of a single network flow processing,
+since the scaling mechanisms implemented in the Linux kernel are based on processing each flow by a different CPU.
 
-40Gbit software routing using GNU/Linux performs. %provides a reasonable alternative to expensive hardware routers.
-The main bottleneck of the default installation is the {\it{irqbalancer}} daemon, which. %TODO
-The thesis can be further extended through comparision of the GNU/Linux routing solution
-against hardware-based routers.
-These measurements could focus on comparing latency difference, throughput or power consumption.
+The thesis can be further extended through comparision against hardware-based routers.
+The future work may compare latency, throughput or power consumption of both systems.
+Additionally, various user-space frameworks focused on improving the GNU/Linux network performance may be evaluated,
+such as Data Plane Development Kit.
+Further work extending this thesis may include comparing the performance of
+the frameworks with the results presented in the thesis.
 
-There are various user-space frameworks focused on improving the GNU/Linux network performance
-targeted for particular tasks, such as Data Plane Development Kit~\cite{dpdk}.
-Most of these frameworks are focused on improving the throughput and latency of user-space application,
-however, various extensions to perform a framework based routing exists.
-Further work extending this thesis could include comparing these frameworks with the results presented in this thesis.
-
-Another further work can be focused on replacing the Spirent hardware packet generator with
-a software solution.
-There are various high-speed packet generators avaliable for GNU/Linux
-such as well-known pkt-gen, which is a part of the upstream kernel,
-or netmap, which claims that is can generate 14.88 Mpps using a single CPU's core~\cite{netmap}.
+%Another further work can be focused on replacing the Spirent hardware packet generator with
+%a software solution.
+%There are various high-speed packet generators avaliable for GNU/Linux
+%such as well-known pkt-gen, which is a part of the upstream kernel,
+%or netmap, which claims that is can generate 14.88 Mpps using a single CPU's core~\cite{netmap}.

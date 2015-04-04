@@ -2,8 +2,8 @@
 % (c) 2014, 2015 Josef Lusticky
 
 \subsection{Procfs settings}\label{subsec:analysis-settings-procfs}
-The variables exported via procfs are accessible in CentOS~7 as read-write files in /proc.
-The variables in the /proc/sys directory can be changed by the sysctl utility as well.
+The variables exported via procfs are accessible as files located in /proc.
+The variables in the /proc/sys directory can be manipulated by the sysctl utility as well.
 The files in the /proc/sys/net directory are of interest for the experiments.
 This directory includes the following subdirectories:
 \begin{itemize}
@@ -11,7 +11,7 @@ This directory includes the following subdirectories:
 \item /proc/sys/net/ipv6 - variables influencing the IPv6 protocol settings
 \item /proc/sys/net/netfilter - variables influencing the netfilter settings, not discussed in this thesis
 \item /proc/sys/net/unix - variables influencing communication over unix sockets, not discussed in this thesis
-\item /proc/sys/net/core - variables influencing low-level network settings, including parameters of NAPI, Low Latency Sockets, etc.
+\item /proc/sys/net/core - variables influencing low-level networking settings, including parameters of NAPI, Low Latency Sockets, etc.
 \end{itemize}
 
 The most important setting for the routing performance measurements of the Linux kernel is IPv4 forwarding.
@@ -22,9 +22,8 @@ to further selectively enable or disable forwarding on a particular interface.
 Historically, some of the files in /proc/sys/net/ipv4 also influence settings of L4 protocols,
 such as memory limits, TCP Timestamping, Selective ACKs, etc.
 Although these files are located in the ipv4 subdirectory, the L4 settings are independent on the underlying protocol.
-The Layer~4 settings influence on the forwarding perfomance of the Linux kernel
-is negligeable and most of them are even auto-tuned by the kernel itself~\cite{linux-kernel-networking}.
-The description of these settings is outside the scope of this thesis.
+Most of the Layer~4 settings are auto-tuned by the kernel itself and
+their description is outside the scope of this thesis~\cite{linux-kernel-networking}.
 
 Files in the ipv6 directory influence the IPv6 protocol settings only.
 The IPv6 protocol is disabled in CentOS 7 on all interfaces by default.

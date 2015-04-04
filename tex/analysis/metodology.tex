@@ -2,7 +2,7 @@
 % (c) 2014, 2015 Josef Lusticky
 
 \section{Benchmarking methodology}\label{sec:analysis-metodology}
-Procedures described by RFC~2544 can be used to measure the routing performance of the Linux kernel.
+Procedures described by RFC~2544 can be used to measure routing performance of the Linux kernel.
 RFC~2544 specifies the benchmarking methodology for network interconnect devices.
 The ideal way to implement the series of tests described in RFC~2544 is to use a tester
 with both transmitting and receiving ports.
@@ -24,7 +24,7 @@ and verify that the correct packets were received~\cite{rfc2544}.
 \subsection{Traffic generation}
 The RFC~2544 specifies the following frame sizes to be used on Ethernet:
 64, 128, 256, 512, 1024, 1280 and 1518~\cite{rfc2544}.
-However, at least 66~B frame size must be used in case of UDP over IPv6 - the size of L2 header is 14,
+However, at least 66~B frame size must be used in case of transmitting UDP over IPv6 - the size of L2 header is 14,
 the size of CRC is 4, the size of IPv6 header is 40 and the size of UDP header is 8.
 
 In addition to the specified frame sizes, the Spirent TestCenter Application allows to configure custom iMix,
@@ -65,7 +65,7 @@ which can be found in the tools/perf directory of the Linux kernel source code~\
 Although perf is included in the Linux kernel source code,
 it must be installed separately on most GNU/Linux distributions, including CentOS~7.
 To obtain additional statistics, such as PCI-Express utilisation or memory utilisation,
-the Intel Performance Counter Monitor (PCM)~\footnote{https://software.intel.com/en-us/articles/intel-performance-counter-monitor-a-better-way-to-measure-cpu-utilization}
+the Intel Performance Counter Monitor (PCM)\footnote{\url{https://software.intel.com/en-us/articles/intel-performance-counter-monitor-a-better-way-to-measure-cpu-utilization}}
 can be used.
 The PCM package is not included in the official CentOS~7 repository,
 but it can be compiled directly from the source code.
