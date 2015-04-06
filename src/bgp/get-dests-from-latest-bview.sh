@@ -5,4 +5,4 @@ if [ -z "$1" ]; then
 	exit 1
 fi
 
-/usr/local/bin/bgpdump "$1" | grep 'PREFIX' | grep '\.' | sed 's/PREFIX: \(.*\)/\1/' | uniq
+/usr/local/bin/bgpdump "$1" | grep 'PREFIX' | grep '\.' | sed 's/PREFIX: \(.*\)/\1/' | grep -v '0.0.0.0/0' | uniq

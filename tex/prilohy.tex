@@ -1,5 +1,6 @@
 %=========================================================================
 % (c) 2014, 2015 Josef Lusticky
+
 \chapter{Populating kernel's FIB with BGP routes}\label{app:bgp}
 RIPE Network Coordination Centre provides BGP data on its
 website.\footnote{{\url{http://www.ripe.net/data-tools/stats/ris/ris-raw-data}}}
@@ -28,11 +29,16 @@ The Makefile also supports make rpm target to generate rpm package (a wrong date
 The bgpdump utility can parse the downloaded latest-bview.gz file directly (even wihout extracting first).
 The following command extracts individual destination networks from the BGP data file and writes them to {\it{destinations}} file.
 \begin{lstlisting}[language=TeX]
-bgpdump latest-bview.gz | grep 'PREFIX' | grep '\.' | sed 's/PREFIX: \(.*\)/\1/' | uniq > destinations
+bgpdump latest-bview.gz | grep 'PREFIX' | grep '\.' | sed 's/PREFIX: \(.*\)/\1/' | grep -v '0.0.0.0/0' | uniq > destinations
 \end{lstlisting}
 The numbers of routes corresponds to the number of prefixes announced on the Internet.
 Note that the first destination entry is default route 0.0.0.0/0 and the file also contains subnets such as 10.0.0.0/8 or 192.168.0.0/16,
-you may want to remove these subnets from the file prior to the next step.
+which you may want to remove from the file prior to the next step.
+Basically, you want to remove all the local routes from the generated file.
+The local routes can be displayed using the following command.
+\begin{lstlisting}
+ip route show table local | grep '^local'
+\end{lstlisting}
 
 The {\it{destinations}} file can be used to insert the router to the kernel's FIB table by ip route add command.
 To insert subnets from the {\it{destinations}} file to the kernel's FIB, the following C program was written.
@@ -52,7 +58,8 @@ Note the {\it{execlp()}} function call on line 57, which performs the route inse
     #define ARRAY_SIZE(x) (sizeof((x)) / sizeof((x)[0]))
 #endif
 
-char *gateways[] = { "192.168.56.1", "193.160.39.1" }; // , etc. };
+/* Define your gateway IP addresses */
+char *gateways[] = { "192.0.2.6" }; //, "193.160.39.1" }; // , etc. };
 
 int main(int argc, char *argv[])
 {

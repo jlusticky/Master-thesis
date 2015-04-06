@@ -8,7 +8,8 @@
     #define ARRAY_SIZE(x) (sizeof((x)) / sizeof((x)[0]))
 #endif
 
-char *gateways[] = { "192.168.56.1", "193.160.39.1" }; // , etc. };
+/* Define your gateway IP addresses */
+char *gateways[] = { "192.0.2.6" }; //, "193.160.39.1" }; // , etc. };
 
 int main(int argc, char *argv[])
 {
@@ -19,7 +20,7 @@ int main(int argc, char *argv[])
 
   if (argc != 2)
   {
-    fprintf(stderr, "Usage: %s dstfile\n", argv[0]);
+    fprintf(stderr, "Usage: %s destinations\n", argv[0]);
     return EXIT_FAILURE;
   }
 
