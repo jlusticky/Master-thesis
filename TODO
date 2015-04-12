@@ -1,8 +1,8 @@
-Extended Abstract v cestine na A4
-Kapitola Analysis-Software settings,
-irqbalancer
+TODO:
+introduction
+doplnit zaver o bgp
+dopsat prilohu general steps
 mq fronta misto pfifo_fast
-
 
 Kernel networking:
  - http://www.cubrid.org/blog/dev-platform/understanding-tcp-ip-network-stack/
@@ -20,6 +20,3 @@ Linux:
  - http://ramirose.wix.com/ramirosen
  - http://lwn.net/images/pdf/LDD3/ch17.pdf - Hardware Information
  - http://www.haifux.org/lectures/172/netLec.pdf - 17
-
-
-- bgpdump - autoconf, autoheader, ./configure --disable-ipv6, make, make example, make install

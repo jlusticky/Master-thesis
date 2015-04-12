@@ -188,7 +188,7 @@ Restart needed for updates to take effect.
 \item disable SELinux in /etc/sysconfig/selinux (and reboot to apply)
 \item disable netfilter completely or at least disable connection tracking
 \item set {\it{performance}} scaling governor for all CPUs
-\item disable rp\_filter
+\item disable {\it{rp\_filter}} on all forwarding interfaces by writing "0" to /proc/sys/net/ipv4/conf/{\it{ifname}}/rp\_filter
 %TODO \item disable C-states using the kernel parameter intel\_idle.max\_cstate=0
 \item disable irqbalance daemon and assign IRQs manually
 \item if the NIC does not support RSS, configure RPS
