@@ -26,7 +26,6 @@ Otherwise only one nexthop can be specified for a destination.
 Multicast routing provides ability to route packets destined to multicast addresses~\cite{linux-kernel-networking}.
 
 The Linux kernel supports up to 255 routing tables that can be used for policy routing.
-%The compile-time configuration option {\it{CONFIG\_IP\_MULTIPLE\_TABLES}} enables support for multiple routing tables.
 However, the use of multiple routing tables can make a router very complex and therefore
 policy routing is beyond the scope of this thesis.
 With no policy routing, there are two routing tables created by the kernel while booting - the {\it{local}} FIB table
@@ -49,7 +48,6 @@ it builds a {\it{fib\_result}} object, which consists of various routing paramet
 including the next hop associated with the outgoing interface~\cite{linux-kernel-networking}.
 Listing~\ref{lst:linux-fib-lookup} shows implementation of {\it{fib\_lookup}} when
 multiple routing tables configuration is disabled.
-%compile-time option CONFIG\_IP\_MULTIPLE\_TABLES is disabled.
 
 \bigskip
 \begin{lstlisting}[caption={Implementation of the fib\_lookup() function},label={lst:linux-fib-lookup}]

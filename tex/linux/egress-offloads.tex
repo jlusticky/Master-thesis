@@ -8,11 +8,11 @@ Tx checksum offload calculates TCP/UDP and
 IP checksums of the packets in the hardware before they are transmitted on the wire.
 
 A counter-part of LRO is TCP Segmentation Offload (TSO).
-With a TSO-capable adapter, the kernel can prepare much larger packets (e.g. 64KB)
-for outgoing data and the adapter will re-segment the data into smaller packets according to the MTU~\cite{jls2009-gro}.
+With a TSO-capable adapter, the kernel can prepare much larger packets for outgoing data
+(e.g. up to 64KB in case of IPv4) and the adapter will re-segment the data into smaller packets according to the MTU~\cite{jls2009-gro}.
 TSO is well supported in Linux -
 for systems which are engaged mainly in sending of data,
-it is sufficient to make 10Gb line-rate at full speed~\cite{jls2009-gro}.
+it is sufficient to make 10~Gbps rate~\cite{jls2009-gro}.
 TSO reduces the necessary CPU load, bus overhead, and cache impact to send a series of packets,
 but it still does not require the adapter to actually know
 anything about specific TCP connections -

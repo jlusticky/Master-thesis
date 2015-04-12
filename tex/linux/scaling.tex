@@ -14,16 +14,18 @@ which results in a data structure which is shown in figure~\ref{fig:linux-queue-
 	\label{fig:linux-queue-old}
 \end{figure}
 
-This is a scheme which has worked well for years, but it has run into a fundamental limitation:
-it does not map well to devices which have multiple transmit queues,
-where each transmit queue needs to be scheduled independently.
-10 and 40~Gigabit Ethernet devices with multiple transmit queues have become common~\cite{mq-networking}.
+This scheme has worked well for years, but it does not map well to devices which have multiple transmit queues.
+The multiqueue devices need each transmit queue to be scheduled independently.
+10 and 40~Gigabit Ethernet devices with multiple transmit queues are very common~\cite{mq-networking}.
 
 To provide an independent scheduling of a transmit queue,
-a new netdev\_queue structure was implemented in the Linux kernel.
-The netdev\_queue structure encapsulates all of the information about a single transmit queue,
+a new {\it{netdev\_queue}} structure is implemented in the Linux kernel.
+The {\it{netdev\_queue}} structure encapsulates all of the information about a single transmit queue,
 and it is protected by its own lock.
 Multiqueue device drivers set up an array of these structures according to the number of queues.
+The {\it{mq}} (multiqueue) queueing  discipline uses the array to attach a specific {\it{qdisc}} to each queue.
+The {\it{mq}} discipline is a dummy scheduler, which is used by default
+for multiqueue devices instead of the regular {\it{pfifo\_fast}} discipline~\cite{kernel-doc-multiqueue}.
 Figure~\ref{fig:linux-queue-mq} shows the new data structure.
 \begin{figure}
 	\centering
@@ -70,7 +72,7 @@ Apart from load distribution, the above described mechanism also minimise cache 
 The most significant is a cache miss of a hardware interrupt handler for the particular queue,
 queue lock cache miss and packet metadata in its {\it{sk\_buff}}.
 RPS and RFS were introduced in kernel version 2.6.35
-and XPS was incorporated into 2.6.38~\cite{kernel-doc-scaling}.
+and XPS in 2.6.38~\cite{kernel-doc-scaling}.
 
 To complete the list, there are two additional network scaling mechanisms implemented in the Linux kernel - 
 Receive Flow Steering and Accelerated Receive Flow Steering.
@@ -79,4 +81,3 @@ The difference between them is that the Accelerated Receive Flow Steering is imp
 whereas Receive Flow Steering is a software implementation.
 Since these two mechanisms provide network scaling to user-space applications, they will not be discussed further in
 this thesis~\cite{kernel-doc-scaling}.
-%The irqbalance daemon can be used to adjust the interrupting CPUs.

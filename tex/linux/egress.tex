@@ -34,10 +34,14 @@ Figure~\ref{fig:linux-egress-packet} shows a brief overview of this part of the 
 	\bigskip
 \end{figure}
 
-The default queuing discipline for every network device where
-no custom configuration has been applied is fifo\_fast~\cite{linux-kernel-networking}.
-As the name suggests, the fifo\_fast is a classless First In First Out discipline,
-that is, the first packet to get in, is going to be the first to be sent~\cite{tcpip-in-linux}.
+The Linux kernel supports various queuing disciplines, that can be configured by the {\it{tc}} utility.
+The default queuing discipline for every network device is {\it{pfifo\_fast}}~\cite{linux-kernel-networking}.
+The {\it{pfifo\_fast}} is a three-band First In First Out discipline.
+As long as there are packets waiting in band 0, band 1 will not be processed.
+Simliarly, packets from band 1 are always processed before packets from band 2.
+Within each band, a simple FIFO rule apply.
+The kernel inserts the packets to one of the band according to the Type of Service flag of the packet~\cite{tcpip-in-linux}.
+A more detailed discussion of the traffic control and its queuing disciplines is outside the scope of this thesis.
 
 After the packet has been selected for transmission by the traffic control, it is passed to the
 {\it{ndo\_start\_xmit()}} function, which is implemented by the device driver.
@@ -45,22 +49,10 @@ The packet is inserted to the hardware transmit queue by the driver and transmit
 The hardware transmit queue is implemented as a ring buffer (TX ring)
 and the DMA controller of the device uses it to fetch the egress frames~\cite{kernel-source}.
 
-Linux kernel supports multiple queuing disciplines, that can be configured by the {\it{tc}} utility.
-A more detailed discussion of the traffic control and its queuing disciplines is outside the scope of this thesis.
-Currently two qdiscs are optimised for multiqueue devices.
-The first is the default pfifo\_fast qdisc.
-This qdisc supports one qdisc per hardware queue.
-The mq (multiqueue) qdisc is a dummy scheduler.
-It is used by default for multiqueue devices instead of the regular pfifo\_fast qdisc,
-but can also be attached manually to restore multiqueue behaviour
-after attaching a non-multiqueue (shared) qdisc~\cite{kernel-doc-multiqueue}.
-
-%%%%
-%TODO
-%%%
-
-The networking subsystem has been assigned two different softirqs -
-NET\_RX\_SOFTIRQ handles incoming traffic and NET\_TX\_SOFTIRQ handles outgoing traffic.
+The adpater uses interrupts to notify the kernel when the transmission fails or succeeds.
+Simlarly to NET\_RX\_SOFTIRQ, which perfoms an interrupt-related work for incoming traffic,
+the NET\_TX\_SOFTIRQ softirq handles the interrupt-related work for outgoing traffic.
+The transmission code uses the softirq to mitigate interrupts in a similar fashion as the reception code.
 Because different instances of the same softirq handler can run concurrently on different CPUs,
 networking code is both low latency and scalable~\cite{understanding-internals}.
 
