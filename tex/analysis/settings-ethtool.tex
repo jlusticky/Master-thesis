@@ -53,15 +53,15 @@ rx-vlan-stag-hw-parse: off [fixed]
 rx-vlan-stag-filter: off [fixed]
 \end{lstlisting}
 
-Selected offload features can be enabled by issuing ethtool -{}-offload {\it{devname}} {\it{feature}} on,
-or disabled by issuing ethtool -{}-offload {\it{devname}} {\it{feature}} off.
-The features listed as [fixed] cannot be changed on this paricular NIC.
-The rest of the features can be changed, but the feature name differs when issuing ethtool -{}-offload.
-For example, the rx-checksumming feature is turned on by issuing ethtool -{}-offload eth0 rx on.
-Similarly, the scatter-gather feature is turned on by ethtool -{}-offload eth0 sg on.
+Selected offload features can be enabled by ethtool -{}-offload {\it{devname}} {\it{feature}} on,
+or disabled by ethtool -{}-offload {\it{devname}} {\it{feature}} off.
+The features listed as [fixed] cannot be changed on this particular NIC.
+The rest of the features can be changed, but the feature name differs when executing ethtool -{}-offload.
+For example, the rx-checksumming feature is turned on by ethtool -{}-offload eth0 {\it{rx}} on.
+Similarly, the scatter-gather feature is turned on by ethtool -{}-offload eth0 {\it{sg}} on.
 For more information about using ethtool, the man page of ethool(8) should be consulted.
 
-Listing~\ref{lst:analysis-ethtool-offload} shows that all supported offload features that are not [fixed], are enabled.
+Listing~\ref{lst:analysis-ethtool-offload} shows that all supported offload features not marked as [fixed] are enabled.
 
 
 %Interrupt coalescence tunning:

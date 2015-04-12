@@ -2,30 +2,40 @@
 % (c) 2014, 2015 Josef Lusticky
 
 \chapter{Introduction}
+The growth of Ethernet from 10 Mbit/s to 10 Gbit/s has already surpassed
+the growth of microprocessor performance.
+The 40~Gigabit Ethernet makes the performance gap even larger, but
+it is still the original Ethernet underneath - an old technology
+with a lot of compatibility issues for high-speed networking.
+The recent 40 and 100~Gigabit Ethernet standard opens doors to
+high-speed networking, but it requires other parts of the network to scale within.
+
+The GNU/Linux operating system is used in a wide range of high-speed servers.
+Because of its free license and open source code,
+
+Packet processing in the Linux kernel is described in the thesis.
+
+With the 
+The performance of packet processing in the GNU/Linux operating
+system 
+scaling mechanisms.
+
+
 A fundamental obstacle to improving network performance is that servers were designed
 for computing rather than input and output (I/O).
 The Internet revolution has drastically changed server requirements,
 and I/O is becoming a major bottleneck in delivering high-speed computing.
-Not only the global Internet traffic is increasing, but also middle and small enterprises
-need bandwidth and latency comparable to what ISPs used a few years ago.
 
-The recent 40 and 100~Gigabit Ethernet standard provides solution
-to handle the growing traffic within enterprise campus networks.
-Thanks to its cheap price, compatibility and wide-spread use,
-Ethernet has become ubiquitous data link protocol.
-However, the growth of Ethernet from 10 Mbit/s to 10 Gbit/s has already surpassed
-the growth of microprocessor performance. %~\cite{10gea-toe}.
-The 40~Gigabit Ethernet makes the performance gap even larger, but
-it is still the original Ethernet underneath - an old technology
-with a lot of compatibility issues for high-speed networking.
+
+
+
 
 Another bottleneck is the TCP/IP stack being processed at a rate less than the network speed.
 The processing of TCP/IP over Ethernet is traditionally accomplished by software running on the CPUs of the server.
 As network connections scale beyond Gigabit Ethernet speeds,
 the CPU becomes burdened with a large amount of TCP/IP protocol processing required.
-Reassembling out-of-order packets, resource-intensive memory copies, and interrupts put a tremendous load on the host's CPU.
 
-The GNU/Linux operating system is used in a wide range of high-speed servers.
+
 An important task of the Linux network stack is to forward traffic.
 This is relevant especially when discussing core routers, which operate in the Internet backbone.
 Forwarding occurs on Layer~3 of the ISO/OSI network model.

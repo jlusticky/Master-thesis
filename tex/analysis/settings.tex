@@ -4,52 +4,30 @@
 \section{Software settings}\label{sec:analysis-settings}
 The CentOS 7 operating system features various components that influence forwarding performance.
 The performance of the CentOS~7 dsitribution kernel is measured in this thesis.
-Further measurements also take the latest upstream kernel into account, which is version
-3.19.2 at the time of writing~\cite{kernel-source}.
-%The upstream kernel is provided by the ELRepo repository~\note{http://elrepo.org/}.
-%The package upstream kernel compiled with configuration options based on CentOS~7 distribution kernel
-%is available from as a package named {\it{kernel-ml}} from the elrepo-kernel repository.
-%+ enable elrepo-kernel
+Further measurements also take the latest upstream kernel 3.19.2 into account~\cite{kernel-source}.
 
-To measure a pure routing performance of the Linux kernel,
+To measure a bare routing performance of the Linux kernel,
 the Netfilter and SELinux components should be disabled.
-If disabling the netfilter is not appropriate, the iptables utility must be used to configure netfilter to allow forwarding,
+If disabling the Netfilter is not appropriate, the iptables utility must be used to configure the Netfilter to allow IP forwarding,
 because the default rules do not allow packet forwarding in CentOS~7.
-Similarly to netfilter, the SELinux component should be disabled to prevent performance decrease.
+Additionally, SELinux should be disabled to prevent performance decrease.
 SELinux in CentOS~7 uses enforcing policy by default.
 An influence of both the components on forwarding performance can be measured.
 
 The Linux kernel features dynamic CPU frequency scaling.
 The CPUFreq governors are policies that decide what frequency should be used.
-The CPUfreq governor {\it{performance}} should be used during the measurements, as it sets the CPU statically to the
-highest frequency avaliable~\cite{cpufreq-governors}. %, which is 2.6~GHz in case of Intel Xeon E5-2630 v2.
+The CPUfreq governor {\it{performance}} should be used during the measurements.
+The {\it{performance}} governor sets the CPU statically to the
+highest frequency avaliable. %, which is 2.6~GHz in case of Intel Xeon E5-2630 v2.
+The default governor is {\it{powersave}} in CentOS~7,
+which sets the CPU statically to the lowest frequency~\cite{cpufreq-governors}.
 
 To change the Linux kernel compile-time configuration, the kernel must be recompiled.
 The CentOS~7 kernel provides a fair amount of features that could break existing setups when disabled.
 The default kernel compile-time configuration does not have to provide the best routing performance,
 however, it is usually used in most scenarious and hence its benchmark results are of interests for most people.
 
-\subsection{CentOS~7 kernel compile-time configuration}
-When the Linux kernel is compiled with support for symmetric multiprocessing
-using the CONFIG\_SMP option and runs on a multiprocessor system, the code for receiving and
-transmitting packets takes full advantage of that.
-Every modern GNU/Linux distribution compiled for the AMD64 architecture has the option enabled,
-including the CentOS~7~\cite{understanding-internals}.
-Advanced networking features enabled during compile-time
-%introduce just a negligible overhead when they are not
-does not have to be used in run-time.
-For example, the MULTIPLE\_IP\_TABLES support is enabled in the CentOS 7 distribution kernel, however,
-since the measurements presented in this thesis use no policy routing,
-the simple FIB lookup principle described in section~\ref{sec:linux-routing} is still performed.
-
-The CentOS~7 Linux kernel configuration has the CONFIG\_NO\_HZ\_FULL option enabled.
-That is, the system uses adaptive ticks
-and there are no regular interrupts from the timer
-which would cause additonal delays during the packet processing~\cite{kernel-doc-nohz}.
-
-Apart from compile-time options, the Linux kernel configuration can be changed during run-time.
-The proc and sys filesystems provide access to the kernel variables that influence packet processing.
-Tuning of these variables can provide significant amount of performance improvement when configured properly.
+\input{analysis/settings-compile.tex}
 
 \input{analysis/settings-procfs.tex}
 

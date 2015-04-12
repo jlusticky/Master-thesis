@@ -7,6 +7,8 @@ The Intel Xeon E5-2660 v2 processors were plugged into the CPU sockets.
 The Mellanox ConnectX-3 EN adpater was plugged into the PCIE 3.0 x8 Upper slot,
 which is part of the {\it{WIO}} block.
 The PCI-Express links are directly connected to the CPU~1 only.
+Communication with the other CPU is performed over the QPI links.
+Thus, an interrupt request targeted the CPU~0 must some execution of CPU~1 as well.
 \begin{figure}
 	\centering
 	\includegraphics[width=15cm,keepaspectratio]{fig/supermicro-x10drui.png}
@@ -15,12 +17,13 @@ The PCI-Express links are directly connected to the CPU~1 only.
 \end{figure}
 
 The server was put to the same rack as the Spirent hardware generator.
-A pair of 40GBASE-SR4 multimode fiber cables with QSPF connectors
+A pair of 2 metres long 40GBASE-SR4 multimode fiber cables with QSPF connectors
 was used to connect Spirent with the Mellanox ConnectX-3 EN adapter.
 
-IPv4 addresses from 192.0.2.0/24 (TEST-NET-1) block were assigned~\cite{rfc5737}.
+IPv4 addresses from 192.0.2.0/24 (TEST-NET-1) block were assigned.
 IPv6 addresses from 2001:db8::/32 range were assigned.
-Addresses within these blocks should not appear on the public Internet~\cite{rfc3849}.
+Addresses within these blocks should not appear on the public Internet
+and therefore they do not conflict with the prefixes from the Internet BGP table~\cite{rfc3849}~\cite{rfc5737}.
 Figure~\ref{fig:addressing-scheme} shows the addressing scheme used for the measurements.
 \begin{figure}[H]
 	\centering

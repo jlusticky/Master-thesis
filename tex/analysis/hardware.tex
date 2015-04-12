@@ -6,7 +6,7 @@ The network interface card used in the experiments is
 Mellanox ConnectX-3 EN QSPF dual-port PCI-E 3.0 x8 MCX314A-BCBT~\cite{mellanox-product-brief}.
 The card was provided by the Faculty of Information Technology, Brno University of Technology.
 Mellanox ConnectX-3 EN is an adapter that can run 10~Gigabit Ethernet and 40~Gigabit Ethernet.
-It also supports nonstandard 56~Gbps link speed while connected to Mellanox switches.
+It also supports nonstandard 56~Gbps link speed when connected to Mellanox switches.
 The card is PCI-Express 3.0 x8 compatible with support of previous PCI-Express versions.
 Mellanox ConnectX-3 EN is a multiqueue NIC with MSI-X support %TODO up to 16 receive queues per port
 and it features Receive Side Scaling with hashing support for both IPv4/IPv6 and TCP/UDP flows~\cite{mellanox-user-manual}.
@@ -19,21 +19,20 @@ The server is further equipped with two Intel Xeon E5-2660 v3 processors at 2200
 and 20 logical cores per CPU when Hyper-Threading is enabled.
 Each CPU has 20MB shared L3 cache and PCI Express 3.0 support with up to 40 lanes~\cite{intel-xeon-cpu}.
 
-There are various software frameworks for high-speed packet generation.
-Kernel-space frameworks are expected to outperform user-space tools, which would always introduce some necessary delays.
-The pktgen project is an upstream component of the Linux kernel.
-At the time of writing, Pktgen itself is not capable of generating even full 10~GbE frame rates~\cite{netmap}.
+There are various software frameworks for high-speed packet generation,
+such as pktgen\footnote{\url{https://www.kernel.org/doc/Documentation/networking/pktgen.txt}}
+or Netmap\footnote{\url{http://info.iet.unipi.it/~luigi/netmap/}}.
+Pktgen is an upstream component of the Linux kernel, but
+at the time of wrting it is not capable of generating even full 10~GbE frame rate~\cite{netmap}.
 However, it can be combined with other frameworks for fast packet processing, such as
-Intel's Data Plane Development Kit~\cite{dpdk}.
-
-Another kernel-space packet generator is Netmap,
-which is not an upstream part but provides patches to the Linux kernel~\cite{netmap}.
-Netmap claims to generate 14.88~million frames per second, which is a full frame rate of 10~Gigabit Ethernet,
-however it was not tested against 40~GbE full frame rate of 59.5~million frames per second,
+Intel's Data Plane Development Kit\footnote{\url{http://dpdk.org/}}.
+Netmap provides patches to the Linux kernel.
+Netmap claims to generate 14.88~million frames per second, which is a full frame rate of 10~Gigabit Ethernet~\cite{netmap}.
+However, Netmap was not tested against 40~GbE full frame rate of 59.5~million frames per second,
 as calculated in section~\ref{sec:40gbe-frame-rates}.
-Although both above mentioned frameworks seem promising, their benchmarking and description
+Although both the frameworks seem promising, their benchmarking and description
 are outside the scope of this thesis.
-Moreover, to perform the measurements using a software-based packet generation,
+Moreover, to perform the measurements of a software-based packet generator,
 another GNU/Linux server and a 40~GbE NIC is needed.
 
 Another solution is to use a hardware-based packet generator such as Spirent~\cite{spirent}.
@@ -43,4 +42,4 @@ The Spirent packet generator supports generation of custom Layer 2-7 traffic, cu
 predefined traffic patterns with variable frame length called Internet Mix (iMix).
 These patterns represent a typical distribution of frame lengths found in the Internet traffic
 and they can be further customised.
-Spirent SPT-3U further supports custom frame rate definition and bandwidth use specification~\cite{spirent}.
+Spirent SPT-3U further supports configuration of custom frame rates and bandwidth use~\cite{spirent}.

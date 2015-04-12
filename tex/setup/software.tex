@@ -10,7 +10,7 @@ The upstream kernel version 3.19.2 was additionally installed from the ELRepo re
 
 The Linux kernel detects the Mellanox ConnectX-3 EN card automatically and loads the mlx4\_core and mlx4\_en module.
 The mlx4\_core module prints the detected PCI-Express link parameters to the kernel's message buffer.
-The buffer can be viewed using the dmesg command and its partial output is shown bellow:
+The buffer can be viewed using the dmesg utility and its partial output is shown bellow:
 \begin{lstlisting}[language=TeX]
 mlx4_core 0000:06:00.0: PCIe link speed is 8.0GT/s, device supports 8.0GT/s
 mlx4_core 0000:06:00.0: PCIe link width is x8, device supports x8
@@ -26,11 +26,11 @@ mlx4_core 0000:06:00.0: irq 90 for MSI/MSI-X
 
 The driver uses either MSI or MSI-X feature of the PCI-Express bus, as described in section~\ref{sec:40gbe-throughput}.
 The MSI-X feature is used automatically if the system supports it, otherwise the adapter uses MSI.
-The {\it{lspci -vv}} command can be used to check whether MSI-X is used -
-the MSI-X capability is followed by an Enable flag which is followed with either "+" (enabled)
-or "-" (disabled).
+The {\it{lspci -vv}} command can be used to check whether MSI-X is used.
 Listing~\ref{lst:setup-lspci} shows partial output of lspci for the Mellanox ConnectX-3 EN adapter.
-The system supports MSI-X and the adapter is configured to use it.
+The MSI-X capability is followed by an Enable flag which is followed with either "+" (enabled)
+or "-" (disabled).
+Listing~\ref{lst:setup-lspci} shows that the system supports MSI-X and the adapter is configured to use it.
 \begin{lstlisting}[language=TeX,label={lst:setup-lspci},caption={Partial output of lspci -vv for Mellanox ConnectX-3 EN}]
 06:00.0 Ethernet controller: Mellanox Technologies MT27500 Family [ConnectX-3]
 		...
@@ -40,9 +40,6 @@ The system supports MSI-X and the adapter is configured to use it.
 				...
 \end{lstlisting}
 
-Apart from the NIC driver, which is part of kernel package, the Mellanox ConnectX-3 adpater uses its own firmware.
+Apart from the NIC driver, the Mellanox ConnectX-3 adpater uses its own proprietary firmware.
 The firmware was updated to version 2.32.5100, which is the latest version available as of 10th January 2015.
-The firmware update procedure is described in appendix~\ref{app:firmware}.
-
-%By default, the driver uses adaptive interrupt moderation for the receive path,
-%which adjusts the moderation time to the traffic pattern~\cite{mellanox-user-manual}.
+The firmware is not part of the Linux kernel and its update procedure is described in appendix~\ref{app:firmware}.

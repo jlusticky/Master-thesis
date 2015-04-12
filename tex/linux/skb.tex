@@ -36,7 +36,7 @@ Every transmitted {\it{skb}} has an associated socket object {\it{*sk}},
 which points to the socket that the packet comes from.
 It is a network layer representation of sockets.
 If the packet is forwarded, then {\it{sk}} is set to NULL,
-because it was not generated on the local host~\cite{linux-kernel-networking}.
+because it was not generated on the local host.
 For incoming packets, the {\it{*dev}} member of skb structure points to the incoming network device,
 and for outgoing packets to the outgoing network device~\cite{linux-kernel-networking}.
 

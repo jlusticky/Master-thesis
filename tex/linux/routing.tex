@@ -1,5 +1,5 @@
 %=========================================================================
-% (c) 2011, 2012 Josef Lusticky
+% (c) 2014, 2015 Josef Lusticky
 
 \section{Routing subsystem}\label{sec:linux-routing}
 Routing takes place on L3, so it is entirely kernel's responsibility to forward packets to their destination.
@@ -25,20 +25,20 @@ Multipath routing provides ability to add more than one nexthop to a route~\cite
 Otherwise only one nexthop can be specified for a destination.
 Multicast routing provides ability to route packets destined to multicast addresses~\cite{linux-kernel-networking}.
 
-The Linux kernel supports up to 255 routing tables that can be used for policy routing~\cite{linux-kernel-networking}.
+The Linux kernel supports up to 255 routing tables that can be used for policy routing.
 %The compile-time configuration option {\it{CONFIG\_IP\_MULTIPLE\_TABLES}} enables support for multiple routing tables.
 However, the use of multiple routing tables can make a router very complex and therefore
 policy routing is beyond the scope of this thesis.
 With no policy routing, there are two routing tables created by the kernel while booting - the {\it{local}} FIB table
-and the {\it{main}} FIB table~\cite{linux-kernel-networking}.
+and the {\it{main}} FIB table.
 The {\it{local}} table contains routing entries of local addresses.
 Routing entries can be added to the local table only by the kernel.
 Adding routing entries to the {\it{main}} table is done by a system
 administrator or by routing daemons or as a result of an ICMP Redirect message~\cite{linux-kernel-networking}.
 
-The routing entries of the kernel's FIB table are organised as a Trie structure~\cite{linux-kernel-networking}.
+The routing entries of the kernel's FIB table are organised as a Trie structure.
 The routing lookup in the Linux kernel uses longest matching prefix lookup algorithm
-called FIB TRIE (also known as LC-trie), which performs good for large routing tables~\cite{linux-kernel-networking}.
+called FIB TRIE (also known as LC-trie), which performs good for large routing tables.
 The routing lookup can consume much of CPU time, depending on the size of the FIB table.
 It can also consume much of the memory as the algorithm is rather complex~\cite{linux-kernel-networking}.
 

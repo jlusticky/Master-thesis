@@ -3,7 +3,7 @@
 
 \chapter{Networking in the Linux kernel}\label{chap:linux}
 The Linux kernel version 3.10 consists of nearly 17 million lines of code
-and the networking is arguably half of the kernel~\cite{linux-by-numbers}.
+and the networking is arguably half of the kernel.
 The GNU/Linux operating system is used in a wide range of routers.
 Ranging from home and small office routers, to enterprise routers and
 core high-speed routers on the Internet backbone~\cite{linux-by-numbers}.
@@ -28,10 +28,9 @@ Figure~\ref{fig:linux-layers} shows the distribution of responsibilities for eac
 
 Every received incoming frame is passed to the kernel.
 On a DMA-capable network card, the kernel allocates a buffer from its memory and passes its descriptor to the
-device driver during the device initialisation~\cite{tcpip-in-linux}.
-These descriptors are used to store the frames received on the network card by using DMA transfers.
-%The device driver instructs the device to use DMA transfers.
-A buffer descriptor indicates where the buffer resides in the kernel memory and how big the buffer is~\cite{tcpip-in-linux}.
+device driver during the device initialisation.
+These descriptors are used to store the frames received on the network card by using DMA transfers~\cite{tcpip-in-linux}.
+A buffer descriptor indicates where the buffer resides in the kernel memory and how big the buffer is.
 The purpose of the DMA transfer is to move data without CPU intervention.
 Once a complete frame is transferred using a device DMA transfer,
 the device raises an interrupt to inform the kernel about the received data~\cite{tcpip-in-linux}.

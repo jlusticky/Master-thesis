@@ -39,6 +39,8 @@ The local routes can be displayed using the following command.
 \begin{lstlisting}
 ip route show table local | grep '^local'
 \end{lstlisting}
+If you are connected remotely, such as through SSH,
+you must also remove routes to your local PC, which would break existing connection when misconfigured.
 
 The {\it{destinations}} file can be used to insert the router to the kernel's FIB table by ip route add command.
 To insert subnets from the {\it{destinations}} file to the kernel's FIB, the following C program was written.

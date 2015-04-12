@@ -1,0 +1,23 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+\subsection{CentOS~7 kernel compile-time configuration}
+When the Linux kernel is compiled with support for symmetric multiprocessing
+with the CONFIG\_SMP option and runs on a multiprocessor system, the code for receiving and
+transmitting packets takes full advantage of that.
+Every modern GNU/Linux distribution compiled for the AMD64 architecture has the option enabled,
+including the CentOS~7~\cite{understanding-internals}.
+Advanced networking features enabled in compile-time
+does not have to be used in run-time.
+For example, the MULTIPLE\_IP\_TABLES support is enabled in the CentOS 7 distribution kernel, however,
+since the measurements presented in this thesis use no policy routing,
+the simple FIB lookup principle described in section~\ref{sec:linux-routing} is still performed.
+
+The CentOS~7 Linux kernel configuration has the CONFIG\_NO\_HZ\_FULL option enabled.
+That is, the system uses adaptive ticks
+and there are no regular interrupts from the timer
+which would cause additonal delays during the packet processing~\cite{kernel-doc-nohz}.
+
+Apart from compile-time options, the Linux kernel configuration can be changed in run-time.
+The {\it{proc}} and {\it{sys}} filesystems provide access to the kernel variables that influence packet processing.
+Tuning of these variables can provide a significant performance improvement when configured properly.

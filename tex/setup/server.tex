@@ -2,19 +2,17 @@
 % (c) 2014, 2015 Josef Lusticky
 
 \section{Server configuration}
-The general system configuration used by default in all measurements is described in this chapter.
-It consists of disabling netfilter, disabling SELinux, changing the scaling governor, disabling rp\_filter and
+The general system configuration used by default in all measurements
+consists of disabling Netfilter, disabling SELinux, changing the scaling governor, disabling rp\_filter and
 configuring the IP addresses acording to the scheme described in section~\ref{sec:setup-hardware}.
 
-%If disabling the netfilter is not appropriate, flush all chains iptables -F,
-%delete all user-defined chains iptables -X (which can be checked again by iptables -L).
 Netfilter was disabled completely:
 \begin{lstlisting}[language=TeX]
 systemctl stop firewalld
 systemctl disable firewalld  # do not execute firewalld on boot
 \end{lstlisting}
 SELinux was disabled by changing the SELINUX variable to {\it{disabled}} in /etc/sysconfig/selinux
-(default is {\it{enforcing}}). The system was rebooted to apply:
+(default is {\it{enforcing}}). The system must reboot to apply:
 \begin{lstlisting}
 vi /etc/sysconfig/selinux
 	SELINUX=disabled
