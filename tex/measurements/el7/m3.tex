@@ -1,0 +1,124 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+% FINAL
+\subsection{Measurement 3 - single IPv4 flow over QPI}
+Instruct the kernel to use the CPU~9 for processing the RX interrupts.
+The softirq and forwarding code runs on CPU~9.
+\begin{lstlisting}
+for i in `seq 178 193` ; do echo 9 > /proc/irq/\$i/smp_affinity_list ;done
+\end{lstlisting}
+The CPU~9 is not directly connected to the PCI-Express link with the NIC,
+so QPI links between CPUs are used.
+
+\begin{tabular}{ | l | l | l | l | }
+\hline
+Frame size & \% of link & bandwidth & frame rate \\
+\hline
+64     &  1.09\% &  0.44~Gb/s & 650~000 \\
+594    &  7.98\% &  3.19~Gb/s & 650~000 \\
+1518   & 19.99\% &  8.00~Gb/s & 650~000 \\
+AMS-IX &  9.89\% &  3.96~Gb/s & 650~000 \\
+\hline
+\end{tabular}
+The routing perfomance drops by 35\% when it is performed by
+a CPU not directly connected to the PCI-Express link with the NIC.
+
+\begin{lstlisting}[language=TeX]
+ L3MISS: L3 cache misses
+ L2MISS: L2 cache misses (including other core's L2 cache *hits*)
+ L3HIT : L3 cache hit ratio (0.00-1.00)
+ L2HIT : L2 cache hit ratio (0.00-1.00)
+ L3CLK : ratio of CPU cycles lost due to L3 cache misses (0.00-1.00), in some cases could be >1.0 due to a higher memory latency
+ L2CLK : ratio of CPU cycles lost due to missing L2 cache but still hitting  L3 cache (0.00-1.00)
+ L3OCC : L3 occupancy (in KBytes)
+
+
+ Core (SKT) | L3MISS | L2MISS | L3HIT | L2HIT | L3CLK | L2CLK |  L3OCC
+
+   0    0     6209       24 K    0.75    0.32    0.19    0.12      480
+   1    0       13      546      0.98    0.12    0.01    0.14      640
+   2    0      154     4746      0.97    0.16    0.03    0.18       40
+   3    0       16     1452      0.99    0.14    0.01    0.15        0
+   4    0       68     1164      0.94    0.25    0.00    0.00       80
+   5    0       10      537      0.98    0.13    0.01    0.14      160
+   6    0        5      538      0.99    0.13    0.01    0.14        0
+   7    0       10      543      0.98    0.12    0.01    0.13        0
+   8    0       10      548      0.98    0.11    0.01    0.11        0
+   9    0     2002 K   2798 K    0.28    0.74    0.20    0.02     2360
+  10    1      790       12 K    0.94    0.14    0.08    0.24     4640
+  11    1       29      985      0.97    0.12    0.02    0.15        0
+  12    1       22      569      0.96    0.11    0.02    0.09        0
+  13    1      325     2112      0.85    0.15    0.05    0.06       40
+  14    1      238     1328      0.82    0.16    0.05    0.05      120
+  15    1       28      526      0.95    0.16    0.02    0.07       40
+  16    1       32      572      0.94    0.13    0.02    0.07        0
+  17    1       27      563      0.95    0.11    0.02    0.08        0
+  18    1       20      563      0.96    0.12    0.01    0.09       40
+  19    1       30      606      0.95    0.11    0.02    0.09       40
+  20    0      158     1017      0.84    0.07    0.08    0.13       40
+  21    0       10      553      0.98    0.13    0.02    0.20        0
+  22    0       10      739      0.99    0.10    0.01    0.16       40
+  23    0        7      574      0.99    0.13    0.01    0.18        0
+  24    0       10      578      0.98    0.14    0.01    0.16        0
+  25    0        4      535      0.99    0.14    0.01    0.16        0
+  26    0       11      551      0.98    0.12    0.01    0.16        0
+  27    0       11      550      0.98    0.13    0.01    0.13        0
+  28    0       10      560      0.98    0.13    0.01    0.14        0
+  29    0       97     5729      0.98    0.07    0.00    0.05        0
+  30    1      185      911      0.80    0.08    0.10    0.12        0
+  31    1       19      572      0.97    0.11    0.02    0.13        0
+  32    1       15      556      0.97    0.13    0.02    0.13       80
+  33    1       23      591      0.96    0.13    0.02    0.12       40
+  34    1       21      555      0.96    0.12    0.01    0.09        0
+  35    1       21      539      0.96    0.15    0.02    0.09      120
+  36    1       23      555      0.96    0.13    0.02    0.09        0
+  37    1       63      684      0.91    0.18    0.01    0.02        0
+  38    1       16      555      0.97    0.14    0.01    0.10        0
+  39    1     4826     7108      0.32    0.52    0.24    0.02        0
+------------------------------------------------------------------------
+ SKT    0     2009 K   2844 K    0.29    0.73    0.20    0.02     3840
+ SKT    1     6753       32 K    0.79    0.26    0.10    0.08     5160
+------------------------------------------------------------------------
+ TOTAL  *     2015 K   2877 K    0.30    0.73    0.19    0.02      N/A
+\end{lstlisting}
+
+CPU~9 performs the actual forwarding, while CPU~10
+is busy with the QPI communication overhead.
+
+\begin{lstlisting}
+Intel(r) QPI data traffic estimation in bytes (data traffic coming to CPU/socket through QPI links):
+
+               QPI0     QPI1    |  QPI0   QPI1  
+----------------------------------------------------------------------------------------------
+ SKT    0       90 M     90 M   |    0%     0%   
+ SKT    1       70 M     71 M   |    0%     0%   
+----------------------------------------------------------------------------------------------
+Total QPI incoming data traffic:  323 M     QPI data traffic/Memory controller traffic: 0.39
+\end{lstlisting}
+Both QPI links are used.
+
+
+perf top -C 9
+\begin{lstlisting}
+  21.25%  [kernel]  [k] _raw_spin_lock
+  11.61%  [kernel]  [k] memcpy
+   6.69%  [kernel]  [k] fib_table_lookup
+   6.60%  [kernel]  [k] skb_gro_reset_offset
+   4.55%  [kernel]  [k] udp_gro_receive
+   3.96%  [kernel]  [k] mlx4_en_xmit
+   3.44%  [kernel]  [k] mlx4_en_process_rx_cq
+   2.93%  [kernel]  [k] mlx4_en_poll_tx_cq
+\end{lstlisting}
+
+perf top -C 10
+\begin{lstlisting}
+   9.77%  [kernel]  [k] find_busiest_group
+   3.47%  [kernel]  [k] cpumask_next_and
+   3.01%  [kernel]  [k] _raw_spin_lock
+   2.93%  [kernel]  [k] ktime_get
+   2.59%  [kernel]  [k] mlx4_en_DUMP_ETH_STATS
+   2.58%  [kernel]  [k] run_timer_softirq
+   2.36%  [kernel]  [k] idle_cpu
+   2.22%  [kernel]  [k] __schedule
+\end{lstlisting}

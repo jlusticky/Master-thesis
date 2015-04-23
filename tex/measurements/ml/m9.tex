@@ -1,0 +1,35 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+%FINAL
+\subsection{1 IPv4 flow 3.19.2 kernel}
+\begin{tabular}{ | l | l | l | l | }
+\hline
+Frame size & \% of link & bandwidth & frame rate \\
+\hline
+64     &  1.60\% &  0.64~Gb/s & 950~000 \\
+594    & 11.66\% &  4.66~Gb/s & 950~000 \\
+1518   & 29.22\% & 11.69~Gb/s & 950~000 \\
+AMS-IX & 14.45\% &  5.78~Gb/s & 950~000 \\
+\hline
+\end{tabular}
+
+%slabsi nez rhel (xx\%), ale dovoli 16 EQ
+% single cpu - rhel7 kernel outperforms the mainline 3.19.2
+
+
+perf top -C 10
+\begin{lstlisting}
+  15.89%  [kernel]            [k] fib_table_lookup
+   9.05%  [kernel]            [k] _raw_spin_lock
+   4.79%  [kernel]            [k] mlx4_en_xmit
+   4.75%  [kernel]            [k] mlx4_en_process_rx_cq
+   3.96%  [kernel]            [k] memcpy
+   3.33%  [kernel]            [k] check_leaf.isra.6
+   2.65%  [kernel]            [k] ip_route_input_noref
+   2.37%  [kernel]            [k] __netif_receive_skb_core
+   2.02%  [kernel]            [k] ip_rcv
+   2.01%  [kernel]            [k] mlx4_en_poll_tx_cq
+   2.01%  [kernel]            [k] build_skb
+\end{lstlisting}
+FIB table lookup and locking take most of the time as in case of the CentOS~7 distribution kernel.

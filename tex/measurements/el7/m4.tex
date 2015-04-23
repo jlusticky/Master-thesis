@@ -1,0 +1,133 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+% FINAL
+\subsection{Measurement 4 - 32 IPv4 flows with irqbalance daemon}
+
+\begin{tabular}{ | l | l | l | l | }
+\hline
+Frame size & \% of link & bandwidth & frame rate \\
+\hline
+64     &  8.99\% &  3.60~Gb/s & 5~350~000 \\
+594    & 68.15\% & 27.26~Gb/s & 5~550~000 \\
+1518   & 98.50\% & 39.40~Gb/s & 3~202~210 \\
+AMS-IX & 88.25\% & 35.30~Gb/s & 5~800~000 \\
+\hline
+\end{tabular}
+
+The {\it{irqbalance}} daemon assigned IRQs to CPUs 11-18, 30 and 33-39.
+
+\newpage
+
+\begin{landscape}
+\vspace*{\fill}
+\begin{lstlisting}
+     CPU12 CPU13 CPU14 CPU15 CPU16 CPU17 CPU18 CPU19  CPU30  CPU33  CPU34  CPU35  CPU36  CPU37  CPU38  CPU39
+178:     0     0     0     0     0     0     0     0      0 292448      0      0      0      0      0      0 en29-0
+179:     0     0     0     0     0     0     0     0      0      0 292978      0      0      0      0      0 en29-1
+180:     0     0     0     0     0     0     0     0      0      0      0 292698      0      0      0      0 en29-2
+181:     0     0     0     0     0     0     0     0      0      0      0      0 286435      0      0      0 en29-3
+182:     0     0     0     0     0     0     0     0      0      0      0      0      0 282449      0      0 en29-4
+183:     0     0     0     0     0     0     0     0      0      0      0      0      0      0 288839      0 en29-5
+184:     0     0     0     0     0     0     0     0      0      0      0      0      0      0      0 327901 en29-6
+185:     0     0     0     0     0     0     0     0 325935      0      0      0      0      0      0      0 en29-7
+186: 53145     0     0     0     0     0     0     0      0      0      0      0      0      0      0      0 en29d1-0
+187:     0 53090     0     0     0     0     0     0      0      0      0      0      0      0      0      0 en29d1-1
+188:     0     0 39978     0     0     0     0     0      0      0      0      0      0      0      0      0 en29d1-2
+189:     0     0     0 40484     0     0     0     0      0      0      0      0      0      0      0      0 en29d1-3
+190:     0     0     0     0 40072     0     0     0      0      0      0      0      0      0      0      0 en29d1-4
+191:     0     0     0     0     0 39982     0     0      0      0      0      0      0      0      0      0 en29d1-5
+192:     0     0     0     0     0     0 40488     0      0      0      0      0      0      0      0      0 en29d1-6
+193:     0     0     0     0     0     0     0 43262      0      0      0      0      0      0      0      0 en29d1-6
+\end{lstlisting}
+\vspace*{\fill}
+\end{landscape}
+
+\begin{lstlisting}
+ L3MISS: L3 cache misses 
+ L2MISS: L2 cache misses (including other core's L2 cache *hits*) 
+ L3HIT : L3 cache hit ratio (0.00-1.00)
+ L2HIT : L2 cache hit ratio (0.00-1.00)
+ L3CLK : ratio of CPU cycles lost due to L3 cache misses (0.00-1.00), in some cases could be >1.0 due to a higher memory latency
+ L2CLK : ratio of CPU cycles lost due to missing L2 cache but still hitting L3 cache (0.00-1.00)
+
+
+ Core (SKT) | L3MISS | L2MISS | L3HIT | L2HIT | L3CLK | L2CLK |  L3OCC
+
+   0    0     1076       11 K    0.91    0.17    0.01    0.01      120
+   1    0      574     4139      0.86    0.12    0.10    0.14       40
+   2    0      241     1421      0.83    0.18    0.12    0.12        0
+   3    0      658       11 K    0.94    0.09    0.07    0.24        0
+   4    0       19      580      0.97    0.14    0.02    0.12        0
+   5    0       78      363      0.79    0.25    0.03    0.03        0
+   6    0       65      710      0.91    0.15    0.04    0.10       40
+   7    0       19      544      0.97    0.12    0.02    0.10       40
+   8    0       13      648      0.98    0.11    0.01    0.08        0
+   9    0       32      582      0.95    0.11    0.02    0.08        0
+  10    1     1007     3598      0.72    0.06    0.72    0.37       40
+  11    1     4452     3802 K    1.00    0.45    0.00    0.10       40
+  12    1     4932     3770 K    1.00    0.42    0.00    0.10      240
+  13    1     6273     4131 K    1.00    0.51    0.00    0.09       40
+  14    1     5086     4211 K    1.00    0.52    0.00    0.09       80
+  15    1     4762     4211 K    1.00    0.50    0.00    0.10       80
+  16    1     4453     4111 K    1.00    0.54    0.00    0.09       80
+  17    1     4680     4124 K    1.00    0.56    0.00    0.09      160
+  18    1     4737     4275 K    1.00    0.48    0.00    0.10       80
+  19    1      105      573      0.82    0.18    0.18    0.17        0
+  20    0      170      979      0.83    0.06    0.07    0.10       40
+  21    0       16      692      0.98    0.10    0.01    0.12        0
+  22    0       12      570      0.98    0.12    0.01    0.13        0
+  23    0       15      839      0.98    0.10    0.01    0.13        0
+  24    0       13      532      0.98    0.16    0.02    0.14        0
+  25    0       22      441      0.95    0.21    0.01    0.06        0
+  26    0       14      540      0.97    0.14    0.02    0.13        0
+  27    0        9      516      0.98    0.15    0.01    0.13        0
+  28    0      268     2659      0.90    0.09    0.10    0.18       40
+  29    0      239      916      0.74    0.15    0.10    0.06        0
+  30    1     1238     2816 K    1.00    0.60    0.00    0.27      680
+  31    1       54      560      0.90    0.25    0.09    0.19       80
+  32    1     3416     9666      0.65    0.20    0.72    0.27       40
+  33    1       14 K   3887 K    1.00    0.64    0.00    0.27      640
+  34    1       16 K   3969 K    1.00    0.63    0.00    0.27      960
+  35    1       15 K   3881 K    1.00    0.64    0.00    0.27      960
+  36    1       14 K   3878 K    1.00    0.63    0.00    0.27      880
+  37    1       14 K   3920 K    1.00    0.63    0.00    0.27      440
+  38    1       17 K   4014 K    1.00    0.63    0.00    0.27      600
+  39    1     2106     2853 K    1.00    0.60    0.00    0.28     1240
+------------------------------------------------------------------------
+ SKT    0     3553       41 K    0.91    0.13    0.01    0.03      320
+ SKT    1      141 K     61 M    1.00    0.57    0.00    0.14     7360
+------------------------------------------------------------------------
+ TOTAL  *      144 K     61 M    1.00    0.57    0.00    0.14      N/A 
+\end{lstlisting}
+
+
+This is also the first measurements nearly hitting 40~Gbps mark with 1~518~byte of payload.
+PCI-Express utilisation
+pcm-pcie.x -B
+\begin{lstlisting}
+Skt | PCIeRdCur |  RFO  |  CRd  |  DRd  |  ItoM  |  PRd  |  WiL  | PCIe Rd (B) | PCIe Wr (B)
+ 0      22 K      1344      33 K    25 K      0       0       0          5270 K          86 K
+ 1      89 M      3249 K  7965 K    74 M     81 M     0     567 K          11 G        5422 M
+----------------------------------------------------------------------------------------------------
+ *      89 M      3251 K  7998 K    74 M     81 M     0     567 K          11 G        5422 M
+\end{lstlisting}
+The PCI-Express link could be saturated when forwarding bidirectional traffic
+- the PCI-Express 3.0 x8 throughput is 7~876.8~MB/s as calculated in section~\ref{sec:40gbe-throughput}.
+Note, that there is a bug in Intel's PCM related to displaying
+the PCIe Read bandwidth - it always shows double the expected value.
+
+%%%%%%%%%%%%%%%%%
+
+
+
+Irqbalance moves the interrupts between CPUs.
+Heavily depends on the dynamic IRQ mappings.
+Executing the hardware interrupt handler on new CPU that has not served the interrupt yet causes cache miss.
+
+%Changes TX queues using Transmit Packet Steering (XPS) - cat /sys/class/net/enp6s0/queues/tx-?/xps_cpus
+
+
+%\begin{lstlisting}
+%for i in `seq 99 114`; do cat /proc/irq/$i/smp_affinity ; done
+%\end{lstlisting}
