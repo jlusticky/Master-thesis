@@ -14,8 +14,8 @@ This function adds the device to the kernel's {\it{poll\_list}} and schedules th
 From now on, the task of delivering more incoming frames from
 the device's queue is delegated to the kernel~\cite{understanding-internals}.
 
-In the NET\_RX\_SOFTIRQ routine, the kernel iterates over the polll\_list and keeps calling
-the {\it{poll()}} function of the device driver to fetch the frames from the device's ingress queue (implemented as a ring buffer).
+In the NET\_RX\_SOFTIRQ routine, the kernel iterates over the {\it{polll\_list}} and calls
+the {\it{poll()}} function of the device driver to fetch the frames from the device's ingress queue (receive ring buffer).
 The kernel fetches the packets and passes them to the higher-layer protocol handler for further processing~\cite{linux-kernel-networking}.
 The {\it{poll()}} function is called with a maximum number
 of packets ({\it{budget}}) it is allowed to feed into the kernel.

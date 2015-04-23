@@ -13,6 +13,16 @@ high-speed networking, but it requires other parts of the network to scale withi
 The GNU/Linux operating system is used in a wide range of high-speed servers.
 Because of its free license and open source code,
 
+
+The performance of a software-based solution that uses Linux, cannot compete
+with commercial products that can count on the help of specialised hardware.
+This is a consequence of the speed difference between dedicated hardware and general-purpose CPUs.
+However,
+
+high performance packet forwarding opens doors to handling multiple-gigabit Ethernet speeds -
+if the system processes packets on Layer~3 fast enough,
+next step is to optimise TCP and higher Layers of the network stack.
+
 Packet processing in the Linux kernel is described in the thesis.
 
 With the 
@@ -21,13 +31,11 @@ system
 scaling mechanisms.
 
 
-A fundamental obstacle to improving network performance is that servers were designed
-for computing rather than input and output (I/O).
-The Internet revolution has drastically changed server requirements,
-and I/O is becoming a major bottleneck in delivering high-speed computing.
+The purpose of the thesis
+is to provide a comprehensive performance analysis of the Linux kernel
+in packet forwarding.
 
-
-
+system settings for achieving maximum routing performance.
 
 
 Another bottleneck is the TCP/IP stack being processed at a rate less than the network speed.
@@ -39,13 +47,11 @@ the CPU becomes burdened with a large amount of TCP/IP protocol processing requi
 An important task of the Linux network stack is to forward traffic.
 This is relevant especially when discussing core routers, which operate in the Internet backbone.
 Forwarding occurs on Layer~3 of the ISO/OSI network model.
-The performance of a pure software-based solution that uses Linux, cannot compete
-with commercial products that can count on the help of specialised hardware.
-This is a consequence of the speed difference between dedicated hardware and general-purpose CPUs.
-However, high performance packet forwarding opens doors to handling multiple-gigabit Ethernet speeds -
-if the system processes packets on Layer~3 fast enough,
-next step is to optimise TCP and higher Layers of the network stack.
 
 Measuring performance of the software IP routing using GNU/Linux-based operating system on 40~Gigabit Ethernet
 can reveal bottlenecks that need to be eliminated
 on the way to a full-speed 40~Gigabit TCP/IP processing.
+
+The server GNU/Linux operating system
+Spirent hardware packet generator.
+

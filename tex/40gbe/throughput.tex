@@ -19,17 +19,18 @@ PCI-Express 2.0 uses 8b/10b coding, that is, 8 bits of data cost 10 bits to tran
 Therefore, the actual bandwidth is 500~MB/s per lane.
 A PCI-Express 2.0 link with 8 lanes provides 4~GB/s throughput,
 which is not enough to transfer the 40~GbE traffic between the NIC and the CPU.
-The widest 16-lanes link doubles the throughput to 8~GB/s, which is sufficient for 40~GbE adapter.
+The widest 16-lanes link doubles the throughput to 8~GB/s, which is sufficient for a 40~GbE adapter.
 
 PCI-Express 3.0 increases throughput to 8~Gigatransfers/s in each direction for a single lane~\cite{pcie-specification}.
 Additionally, it uses more efficient 128b/130b coding.
 This way, a bandwidth of 984.6~MB/s per lane is achieved, almost twice the PCI-Express 2.0.
 An 8-lane PCI-Express 3.0 link provides 7~876.8~MB/s bandwidth which is sufficient to handle 40~GbE traffic.
 
-The above calculations do not include additional overhead of the link for signalling interrupts.
-The PCI-Express devices are required to support Message Signalled Interrupts (MSI) feature~\cite{pcie-specification}.
+The above calculations do not include an additional overhead of the PCI-Express link headers
+and signalling interrupts.
+The PCI-Express devices are required to support the Message Signalled Interrupts (MSI) feature~\cite{pcie-specification}.
 MSI is a technique to generate interrupts by writing to a specified address,
-which the kernel has written into the peripheral's configuration during initialisation.
+which has been written into the peripheral's configuration during initialisation.
 The interrupt signalling consists of sending a Write request over the PCI-Express link
 to the specified address~\cite{pcie-tutorial-1}.
 There can be up to 32 MSI interrupts assigned to a single device,

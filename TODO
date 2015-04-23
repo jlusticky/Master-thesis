@@ -1,22 +1,18 @@
 TODO:
+irqbalance respects kernel predefined IRQ affinity, kernel is NUMA aware
 introduction
 doplnit zaver o bgp
+latency testy
 dopsat prilohu general steps
-mq fronta misto pfifo_fast
+projit citace a todo
+-doplnit adaptive interrupts MLX
+konzistentnost IN a OUT rozhrani
+
 
 Kernel networking:
  - http://www.cubrid.org/blog/dev-platform/understanding-tcp-ip-network-stack/
  - http://linux-ip.net/html/routing-tables.html#id-rtrt-unspec-text
  - http://linux-ip.net/html/routing-selection.html#tb-routing-selection-adv
- - http://www.linuxjournal.com/article/7356
- - http://linux-development-for-fresher.blogspot.cz/2012/05/understanding-netlink-socket.html
 
-Kernel profiling, debugging:
+mimo dp: Kernel profiling, debugging:
  - http://lwn.net/Articles/551314/
-
-Linux:
- - http://www.linuxfoundation.org/collaborate/workgroups/networking/group
- - https://www.usenix.org/legacy/publications/library/proceedings/als01/full_papers/jamal/jamal.pdf
- - http://ramirose.wix.com/ramirosen
- - http://lwn.net/images/pdf/LDD3/ch17.pdf - Hardware Information
- - http://www.haifux.org/lectures/172/netLec.pdf - 17

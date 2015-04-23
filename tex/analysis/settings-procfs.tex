@@ -84,3 +84,9 @@ and assigns the IRQ mappings according to the load.
 The {\it{irqbalance}} daemon is part of the CentOS~7 and it is enabled by default.
 While the {\it{irqbalance}} can introduce some performance advantage,
 it does not take scaling or CPU placements (NUMA) into account~\cite{irqbalance-source}.
+
+The CentOS~7 operating system further features the {\it{tuned}} utility in its default installation.
+The {\it{tuned}} allows user to switch between user definable tuning profiles.
+Several predefined profiles are already included, such as {\it{network-throughput}} or {\it{network-latency}}.
+However, none of the profiles influences the low-level packet processing parameters described in chapter~\ref{chap:linux}.
+Instead, the {\it{tuned}} focuses on L4 protocol parameters such as socket memory options~\cite{tuned}.
