@@ -16,6 +16,15 @@ This distribution can be configured in the Spirent TestCenter Application, howev
 to use the same iMix for both IPv4 and IPv6, the minimum frame size must be increased to 66 as described above.
 To avoid an unfair packet scheduling by the server, all packets should be assigned the same Type of Service flag.
 
+The Spirent TestCenter Application allows to configure exact frame rate or bandwidth use.
+The measurements should distinguish at least between 50~000 frames per second or 1\% of bandwidth use.
+Each measurement takes 90~seconds and it is repeated 3 times.
+If the kernel is able to forward all frames in at least one of the 3 measurements,
+the measurement is successful.
+This is to determine whether the kernel is able to forward such amount of traffic.
+Some network unrelated tasks performed by the kernel may cause the inability to forward all frames,
+such as gathering statistics, memory management, etc.
+
 \begin{figure}
 	\centering
 	\includegraphics[width=14.5cm,keepaspectratio]{fig/amsix.png}

@@ -3,6 +3,9 @@
 
 % FINAL
 \subsection{Measurement 1 - single IPv4 flow}
+The first measurement consists of forwarding a single IPv4/UDP flow.
+The Linux kernel is able to forward 1~million IPv4 packets per second on a single core.
+\\
 \begin{tabular}{ | l | l | l | l | }
 \hline
 Frame size & \% of link & bandwidth & frame rate \\
@@ -25,7 +28,6 @@ The following partial output of the /proc/interrupts file shows the interrupt ma
 183:  ...    0     0       0     0     0  ...  enp129s0-5
 184:  ...    0     0       0     0     0  ...  enp129s0-6
 185:  ...    0     0       0     0     0  ...  enp129s0-7
-
 186:  ...    0     0       0     0     0  ...  enp129s0d1-0
 187:  ...    0     0       0     0     0  ...  enp129s0d1-1
 188:  ...    0     0       0     0     0  ...  enp129s0d1-2

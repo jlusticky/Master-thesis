@@ -5,7 +5,7 @@
 \subsection{Measurement 3 - single IPv4 flow over QPI}
 Instruct the kernel to use the CPU~9 for processing the RX interrupts.
 The softirq and forwarding code runs on CPU~9.
-\begin{lstlisting}
+\begin{lstlisting}[language=TeX]
 for i in `seq 178 193` ; do echo 9 > /proc/irq/\$i/smp_affinity_list ;done
 \end{lstlisting}
 The CPU~9 is not directly connected to the PCI-Express link with the NIC,

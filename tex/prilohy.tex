@@ -31,7 +31,7 @@ The following command extracts individual destination networks from the BGP data
 \begin{lstlisting}[language=TeX]
 bgpdump latest-bview.gz | grep 'PREFIX' | grep '\.' | sed 's/PREFIX: \(.*\)/\1/' | grep -v '0.0.0.0/0' | uniq > destinations
 \end{lstlisting}
-The numbers of routes corresponds to the number of prefixes announced on the Internet.
+The number of routes corresponds to the number of prefixes announced on the Internet.
 Note that the first destination entry is default route 0.0.0.0/0 and the file also contains subnets such as 10.0.0.0/8 or 192.168.0.0/16,
 which you may want to remove from the file prior to the next step.
 Basically, you want to remove all the local routes from the generated file.

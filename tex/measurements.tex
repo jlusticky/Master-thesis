@@ -3,98 +3,57 @@
 
 \chapter{Measurements}\label{chap:measurements}
 The results presented in this thesis are based on the setup and basic settings described in chapter~\ref{chap:setup}.
-%Further settings are described
-The CentOS~7 distribution kernel version 3.10.0-123.20.1.el7.x86\_64.
+The CentOS~7 operating system
+was installed on a server equipped with two Intel Xeon E5-2660 v3 CPUs
+and Mellanox ConnectX-3 EN 40~Gbps ethernet adapter, as described in section~\ref{sec:analysis-hardware}.
+Unless stated otherwise,
+the bandwidth use is configured in frames per second with a unit of margin 50~000.
 
 \section{CentOS~7 distribution kernel 3.10}
+The CentOS~7 distribution kernel version 3.10.0-123.20.1.el7.x86\_64
+was used in the measurements presented in this section.
 
-\input{measurements/el7/m1.tex}
-
-\input{measurements/el7/m2.tex}
-
-\input{measurements/el7/m3.tex}
-
-\input{measurements/el7/m4.tex}
-
-\input{measurements/el7/m5.tex}
-
-\input{measurements/el7/m6.tex}
-
-\input{measurements/el7/m7.tex}
-
-\input{measurements/el7/m8.tex}
-
-
-\section{Software functions}
-
-Disabled SELinux:
-IPv4 AMS-IX - 51\% , 3 351 928 fps
-
-Disabled rp\_filter -
-
-turbostat -i 1 - 2.9~Ghz, 100.00\% in C0 state
-
+	\input{measurements/el7/m1.tex}
+	
+	\input{measurements/el7/m2.tex}
+	
+	\input{measurements/el7/m3.tex}
+	
+	\input{measurements/el7/m4.tex}
+	
+	\input{measurements/el7/m5.tex}
+	
+	\input{measurements/el7/m6.tex}
+	
+	\input{measurements/el7/m7.tex}
+	
+	\input{measurements/el7/m8.tex}
 
 
 \section{Upstream mainline kernel 3.19.2}
 
-\input{measurements/ml/m9.tex}
-
-\input{measurements/ml/m10.tex}
-
+	\input{measurements/ml/m9.tex}
+	
+	\input{measurements/ml/m10.tex}
 
 \section{Settings influence}
-Enabled SELinux:
-Enabled rp\_filter:
 
-IPv4 BGP table:
+	\input{measurements/ht.tex}
+	
+The following measurements take only the AMS-IX distribution and 32 IPv4 flows into account.
+The measurements are performed with HT disabled,
+therefore the previous result of 5~900~000 frames per second can be used for comparision.
 
-%1200 netdev\_budget - -||- - no influence - raise softirq is highly optimised
+	\input{measurements/netdev_budget.tex}
 
-%Enabled netfilter with 1000 rules:
+	\input{measurements/rp_filter.tex}
 
-%NAT:
+	\input{measurements/selinux.tex}
 
-\section{IPv4 BGP}
-\begin{lstlisting}
-Basic info: size of leaf: 40 bytes, size of tnode: 40 bytes.
-Main:
-	Aver depth:     2.43
-	Max depth:      8
-	Leaves:         503308
-	Prefixes:       538739
-	Internal nodes: 114429
-	  1: 58727  2: 26171  3: 14805  4: 7315  5: 4240  6: 2103  7: 1065  8: 2  17: 1
-	Pointers: 995794
-Null ptrs: 378058
-Total size: 61373  kB
+	%netfilter
+	%netfilter 1000 ip table rules
+	%netfilter - masquerade == nat
 
-Counters:
----------
-gets = 14129134
-backtracks = 1913823
-semantic match passed = 15973885
-semantic match miss = 0
-null node hit= 1360956
-skipped node resize = 0
+\section{BGP routes}
 
-Local:
-	Aver depth:     3.08
-	Max depth:      4
-	Leaves:         12
-	Prefixes:       13
-	Internal nodes: 7
-	  1: 6  3: 1
-	Pointers: 20
-Null ptrs: 2
-Total size: 2  kB
-
-Counters:
----------
-gets = 13959019
-backtracks = 15201204
-semantic match passed = 103193
-semantic match miss = 0
-null node hit= 8238092
-skipped node resize = 0
-\end{lstlisting}
+	\input{measurements/bgp.tex}

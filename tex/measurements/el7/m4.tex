@@ -43,7 +43,7 @@ The {\it{irqbalance}} daemon assigned IRQs to CPUs 11-18, 30 and 33-39.
 \vspace*{\fill}
 \end{landscape}
 
-\begin{lstlisting}
+\begin{lstlisting}[language=TeX]
  L3MISS: L3 cache misses 
  L2MISS: L2 cache misses (including other core's L2 cache *hits*) 
  L3HIT : L3 cache hit ratio (0.00-1.00)
@@ -106,11 +106,11 @@ This is also the first measurements nearly hitting 40~Gbps mark with 1~518~byte 
 PCI-Express utilisation
 pcm-pcie.x -B
 \begin{lstlisting}
-Skt | PCIeRdCur |  RFO  |  CRd  |  DRd  |  ItoM  |  PRd  |  WiL  | PCIe Rd (B) | PCIe Wr (B)
- 0      22 K      1344      33 K    25 K      0       0       0          5270 K          86 K
- 1      89 M      3249 K  7965 K    74 M     81 M     0     567 K          11 G        5422 M
-----------------------------------------------------------------------------------------------------
- *      89 M      3251 K  7998 K    74 M     81 M     0     567 K          11 G        5422 M
+Skt | PCIe Rd (B) | PCIe Wr (B)
+ 0         5270 K          86 K
+ 1           11 G        5422 M
+--------------------------------
+ *           11 G        5422 M
 \end{lstlisting}
 The PCI-Express link could be saturated when forwarding bidirectional traffic
 - the PCI-Express 3.0 x8 throughput is 7~876.8~MB/s as calculated in section~\ref{sec:40gbe-throughput}.
@@ -122,12 +122,7 @@ the PCIe Read bandwidth - it always shows double the expected value.
 
 
 Irqbalance moves the interrupts between CPUs.
-Heavily depends on the dynamic IRQ mappings.
+%Heavily depends on the dynamic IRQ mappings.
 Executing the hardware interrupt handler on new CPU that has not served the interrupt yet causes cache miss.
 
 %Changes TX queues using Transmit Packet Steering (XPS) - cat /sys/class/net/enp6s0/queues/tx-?/xps_cpus
-
-
-%\begin{lstlisting}
-%for i in `seq 99 114`; do cat /proc/irq/$i/smp_affinity ; done
-%\end{lstlisting}

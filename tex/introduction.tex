@@ -10,13 +10,9 @@ with a lot of compatibility issues for high-speed networking.
 The recent 40 and 100~Gigabit Ethernet standard opens doors to
 high-speed networking, but it requires other parts of the network to scale within.
 
-The GNU/Linux operating system is used in a wide range of high-speed servers.
-Because of its free license and open source code,
-
-
+The GNU/Linux operating system is used in a wide range of computers interconnected with high-speed Ethernet.
 The performance of a software-based solution that uses Linux, cannot compete
 with commercial products that can count on the help of specialised hardware.
-This is a consequence of the speed difference between dedicated hardware and general-purpose CPUs.
 However,
 
 high performance packet forwarding opens doors to handling multiple-gigabit Ethernet speeds -
@@ -36,6 +32,11 @@ is to provide a comprehensive performance analysis of the Linux kernel
 in packet forwarding.
 
 system settings for achieving maximum routing performance.
+
+
+
+Hardware vendors have made various optimisations towards high-speed packet processing.
+Network interface cards support offloads, processors direct cache access, etc.
 
 
 Another bottleneck is the TCP/IP stack being processed at a rate less than the network speed.
