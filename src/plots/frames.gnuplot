@@ -1,7 +1,7 @@
 # plotting
 set title "Frame rate throughput"
 set terminal png
-set output "plot.png"
+set output "frames.png"
 set grid y
 set xrange [0:1550]
 set xtics ("64" 40, 128, 265, 512, 768, 1024, 1280, 1518)
