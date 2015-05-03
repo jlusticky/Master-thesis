@@ -1,0 +1,18 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+Increasing the netdev\_budget 10 times to 3~000.
+\begin{lstlisting}
+echo 3000 > /proc/sys/net/core/netdev_budget
+\end{lstlisting}
+
+\begin{tabular}{ | l | l | l | l | }
+\hline
+Frame size & \% of link & bandwidth & frame rate \\
+\hline
+AMS-IX & 89.77\% & 35.91~Gb/s & 5~900~000 \\
+\hline
+\end{tabular}
+
+The netdev\_budget has no influence.
+The raise softirq mechanism is highly optimised.

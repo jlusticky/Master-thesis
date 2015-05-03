@@ -1,0 +1,50 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+The following measurement is perfomed with the Internet routes obtained from RIPE's BGP data.
+The data contains 538~738 routes at the time of writing.
+The complete setup of loading the routes into the kernel's FIB is described in appendix~\ref{app:bgp}.
+The FIB statistics are exported via the {\it{/proc/net/fib\_triestat}} file, as described in
+subsection~\ref{sub:analysis-metodology-collection}.
+\begin{lstlisting}
+Basic info: size of leaf: 40 bytes, size of tnode: 40 bytes.
+Main:
+	Aver depth:     2.43
+	Max depth:      8
+	Leaves:         503308
+	Prefixes:       538739
+	Internal nodes: 114429
+	  1: 58727  2: 26171  3: 14805  4: 7315  5: 4240  6: 2103  7: 1065  8: 2  17: 1
+	Pointers: 995794
+Null ptrs: 378058
+Total size: 61373  kB
+
+Counters:
+---------
+gets = 14129134
+backtracks = 1913823
+semantic match passed = 15973885
+semantic match miss = 0
+null node hit= 1360956
+skipped node resize = 0
+
+Local:
+	Aver depth:     3.08
+	Max depth:      4
+	Leaves:         12
+	Prefixes:       13
+	Internal nodes: 7
+	  1: 6  3: 1
+	Pointers: 20
+Null ptrs: 2
+Total size: 2  kB
+
+Counters:
+---------
+gets = 13959019
+backtracks = 15201204
+semantic match passed = 103193
+semantic match miss = 0
+null node hit= 8238092
+skipped node resize = 0
+\end{lstlisting}
