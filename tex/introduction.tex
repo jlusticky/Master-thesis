@@ -11,47 +11,77 @@ The recent 40 and 100~Gigabit Ethernet standard opens doors to
 high-speed networking, but it requires other parts of the network to scale within.
 
 The GNU/Linux operating system is used in a wide range of computers interconnected with high-speed Ethernet.
+An important task of the Linux network stack is to forward traffic.
+This is relevant especially when discussing core routers, which operate in the Internet backbone.
+Forwarding occurs on Layer~3 of the ISO/OSI network model.
 The performance of a software-based solution that uses Linux, cannot compete
 with commercial products that can count on the help of specialised hardware.
-However,
+However, various stack bypass solutions have shown, that the Linux kernel is not using
+the CPU optimally.
 
-high performance packet forwarding opens doors to handling multiple-gigabit Ethernet speeds -
+The purpose of the thesis is to provide a comprehensive performance analysis of the Linux kernel
+in packet forwarding.
+The 40~Gigabit Ethernet protocol provides
+frame rates of up to 59~million packets per second
+and throughput of 4.6~GB per second.
+Such speed can easily burden the CPU with a large amount of TCP/IP protocol processing required.
+
+Apart from the 40~Gigabit Ethernet protocol itself,
+the packet processing in the Linux kernel is described in the thesis.
+Since the emerge of 100~Mbps Ethernet, the Linux kernel
+engineers have been optimising the network stack towards high-speed packet processing.
+Hardware vendors have also made various optimisations towards high-speed packet processing -
+network interface cards support offloads, processors direct cache access, etc.
+
+
+
+
+
+A high-end server with a 40~GbE network interface card
+and 2 Intel Xeon CPUs was setup to measure the routing performance of the Linux kernel.
+The measurements presented in this thesis demonstrate perfomance influences of various system settings
+such as Reverse path filtering, Netfilter or SELinux.
+Apart from ,
+the routing perfomance with imported routes from the Internet BGP protocol was tested.
+At the time of writing, there are approx.~538~000 routes announced in the public BGP,
+which leads to expensive software lookups in the Forwarding Information Base of the Linux kernel.
+
+
+Spirent hardware packet generator was used to measure the routing perfomance of the Linux kernel.
+
+
+
+Measuring performance of the software IP routing using GNU/Linux-based operating system on 40~Gigabit Ethernet
+can reveal bottlenecks that need to be eliminated
+on the way to a full-speed 40~Gigabit TCP/IP processing.
+
+
 if the system processes packets on Layer~3 fast enough,
 next step is to optimise TCP and higher Layers of the network stack.
 
-Packet processing in the Linux kernel is described in the thesis.
 
-With the 
+
+
+
 The performance of packet processing in the GNU/Linux operating
 system 
 scaling mechanisms.
 
 
-The purpose of the thesis
-is to provide a comprehensive performance analysis of the Linux kernel
-in packet forwarding.
+
 
 system settings for achieving maximum routing performance.
 
 
 
-Hardware vendors have made various optimisations towards high-speed packet processing.
-Network interface cards support offloads, processors direct cache access, etc.
-
 
 Another bottleneck is the TCP/IP stack being processed at a rate less than the network speed.
+
 The processing of TCP/IP over Ethernet is traditionally accomplished by software running on the CPUs of the server.
-As network connections scale beyond Gigabit Ethernet speeds,
-the CPU becomes burdened with a large amount of TCP/IP protocol processing required.
 
 
-An important task of the Linux network stack is to forward traffic.
-This is relevant especially when discussing core routers, which operate in the Internet backbone.
-Forwarding occurs on Layer~3 of the ISO/OSI network model.
 
-Measuring performance of the software IP routing using GNU/Linux-based operating system on 40~Gigabit Ethernet
-can reveal bottlenecks that need to be eliminated
-on the way to a full-speed 40~Gigabit TCP/IP processing.
+
 
 The server GNU/Linux operating system
 Spirent hardware packet generator.
