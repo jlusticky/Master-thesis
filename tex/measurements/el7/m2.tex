@@ -2,58 +2,25 @@
 % (c) 2014, 2015 Josef Lusticky
 
 % FINAL
-\subsection{Measurement 2 - 32 independent IPv4 flows}
+\subsection{Measurement 2 - default configuration - 32 IPv4 flows}
+Since the Linux kernel scaling mechanisms described in section~\ref{sec:linux-scaling}
+are based on processing each flow by a different CPU,
+the routing performance of the default configuration was tested against 32 IPv4 flows.
+\\
+\\
 \begin{tabular}{ | l | l | l | l | }
 \hline
 Frame size & \% of link & bandwidth & frame rate \\
 \hline
-64     &  1.26\% &  0.50~Gb/s & 750~000 \\
-594    & 12.28\% &  4.91~Gb/s & 800~000 \\
-1518   & 24.61\% &  9.84~Gb/s & 800~000 \\
-AMS-IX & 15.22\% &  6.09~Gb/s & 800~000 \\
+64     &  2.69\% &  1.08~Gb/s & 1~550~000 \\
+594    & 19.65\% &  7.86~Gb/s & 1~600~000 \\
+1518   & 49.22\% & 19.69~Gb/s & 1~650~000 \\
+AMS-IX & 24.34\% &  9.74~Gb/s & 1~600~000 \\
 \hline
 \end{tabular}
-When forwarding IP packets from multiple IPv4 flows on a single CPU,
-the routing performance of the Linux kernel drops by 20\% against forwarding a single IPv4 flow.
-%Since the destination IP address is the same as in the previous case,
-%this is the cost of fetching the packets from different ingress queues.
-The NIC triggers more TX interrupts, so the kernels spends more time on serving them.
-
-Interrupt mapping:
-\begin{lstlisting}
-      ... CPU8  CPU9   CPU10 CPU11 CPU12  ...
-178:  ...    0     0  944701     0     0  ...  enp129s0-0
-179:  ...    0     0       0     0     0  ...  enp129s0-1
-180:  ...    0     0       0     0     0  ...  enp129s0-2
-181:  ...    0     0       0     0     0  ...  enp129s0-3
-182:  ...    0     0       0     0     0  ...  enp129s0-4
-183:  ...    0     0       0     0     0  ...  enp129s0-5
-184:  ...    0     0       0     0     0  ...  enp129s0-6
-185:  ...    0     0       0     0     0  ...  enp129s0-7
-
-186:  ...    0     0  657322     0     0  ...  enp129s0d1-0
-187:  ...    0     0  657648     0     0  ...  enp129s0d1-1
-188:  ...    0     0  657231     0     0  ...  enp129s0d1-2
-189:  ...    0     0  657384     0     0  ...  enp129s0d1-3
-190:  ...    0     0  657114     0     0  ...  enp129s0d1-4
-191:  ...    0     0  657291     0     0  ...  enp129s0d1-5
-192:  ...    0     0  657190     0     0  ...  enp129s0d1-6
-193:  ...    0     0  657964     0     0  ...  enp129s0d1-7
-\end{lstlisting}
-The packets are evenly distributed among all hardware queues.
-However, the interrupts are not distributed among CPUs.
-
-Processor usage:
-\begin{lstlisting}
-  12.07%  [kernel]  [k] _raw_spin_lock
-   8.68%  [kernel]  [k] fib_table_lookup
-   5.01%  [kernel]  [k] mlx4_en_xmit
-   4.63%  [kernel]  [k] mlx4_en_process_rx_cq
-   3.64%  [kernel]  [k] __netif_receive_skb_core
-   3.49%  [kernel]  [k] memcpy
-   3.08%  [kernel]  [k] irq_entries_start
-   2.68%  [kernel]  [k] mlx4_eq_int
-   2.33%  [kernel]  [k] mlx4_en_poll_tx_cq
-   2.24%  [kernel]  [k] ip_route_input_noref
-\end{lstlisting}
-The kernel spends most of the time on locking and FIB table lookup. 
+\\
+\\
+As expected, the scaling mechanisms help to increase the routing performance of the Linux kernel.
+The scaling mechanisms perform better when forwarding larger frames.
+This may be caused by differences in memory management allocations,
+since the memory management is common for all CPUs present in the system.

@@ -1,0 +1,39 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+% FINAL
+\subsection{Measurement 9 - 32 independent IPv6 flows with irqbalance}
+
+\begin{tabular}{ | l | l | l | l | }
+\hline
+Frame size & \% of link & bandwidth & frame rate \\
+\hline
+78     &  4.90\% &  1.96~Gb/s & 2~500~000 \\
+594    & 31.32\% & 12.53~Gb/s & 2~550~000 \\
+1518   & 98.00\% & 39.20~Gb/s & 3~185~955 \\
+AMS-IX & 48.69\% & 19.48~Gb/s & 3~200~000 \\
+\hline
+\end{tabular}
+
+The scaling mechanisms are sensitive to frame size.
+
+Spin lock.
+
+\begin{lstlisting}
+  17.70%  [kernel]          [k] ip6_pol_route.isra.46
+   8.18%  [kernel]          [k] _raw_spin_lock
+   8.17%  [kernel]          [k] fib6_lookup
+   6.43%  [kernel]          [k] _raw_read_lock_bh
+   5.60%  [kernel]          [k] _raw_read_unlock_bh
+   5.39%  [kernel]          [k] fib6_get_table
+   4.79%  [kernel]          [k] dst_release
+   3.37%  [kernel]          [k] ip6_finish_output2
+   2.48%  [kernel]          [k] mlx4_en_xmit
+   2.11%  [kernel]          [k] __netif_receive_skb_core
+   2.08%  [kernel]          [k] memcpy
+   2.04%  [kernel]          [k] mlx4_en_process_rx_cq
+   1.32%  [kernel]          [k] mlx4_en_poll_tx_cq
+   1.27%  [kernel]          [k] local_bh_enable_ip
+   1.26%  [kernel]          [k] __pskb_pull_tail
+   1.19%  [kernel]          [k] put_compound_page
+\end{lstlisting}

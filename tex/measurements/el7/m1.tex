@@ -2,129 +2,22 @@
 % (c) 2014, 2015 Josef Lusticky
 
 % FINAL
-\subsection{Measurement 1 - single IPv4 flow}
-The first measurement consists of forwarding a single IPv4/UDP flow.
-The Linux kernel is able to forward 1~million IPv4 packets per second on a single core.
+\subsection{Measurement 1 - default configuration - single IPv4 flow}
+The first measurement shows the routing perfomance with
+IP addresses assigned, IP forwarding enabled and Netfilter rules flushed.
+
+The IP addresses were assigned as described in section~\ref{sec:setup-server}.
+The IP forwarding was enabled by echoing "1" to the /proc/sys/net/ipv4/ip\_forward file and the Netfilter rules
+were flushed using {\it{iptables -F}}, because the default rules do not allow forwarding.
+\\
 \\
 \begin{tabular}{ | l | l | l | l | }
 \hline
 Frame size & \% of link & bandwidth & frame rate \\
 \hline
-64     &  1.68\% &  0.67~Gb/s & 1~000~000 \\
-594    & 12.28\% &  4.91~Gb/s & 1~000~000 \\
-1518   & 30.76\% & 12.30~Gb/s & 1~000~000 \\
-AMS-IX & 15.22\% &  6.09~Gb/s & 1~000~000 \\
+64     &  0.59\% & 0.24~Gb/s & 350~000 \\
+594    &  4.30\% & 1.72~Gb/s & 350~000 \\
+1518   & 10.77\% & 4.31~Gb/s & 350~000 \\
+AMS-IX &  5.33\% & 2.13~Gb/s & 350~000 \\
 \hline
 \end{tabular}
-
-The following partial output of the /proc/interrupts file shows the interrupt mapping:
-\begin{lstlisting}
-      ... CPU8  CPU9   CPU10 CPU11 CPU12  ...
-178:  ...    0     0  255725     0     0  ...  enp129s0-0
-179:  ...    0     0       0     0     0  ...  enp129s0-1
-180:  ...    0     0       0     0     0  ...  enp129s0-2
-181:  ...    0     0       0     0     0  ...  enp129s0-3
-182:  ...    0     0       0     0     0  ...  enp129s0-4
-183:  ...    0     0       0     0     0  ...  enp129s0-5
-184:  ...    0     0       0     0     0  ...  enp129s0-6
-185:  ...    0     0       0     0     0  ...  enp129s0-7
-186:  ...    0     0       0     0     0  ...  enp129s0d1-0
-187:  ...    0     0       0     0     0  ...  enp129s0d1-1
-188:  ...    0     0       0     0     0  ...  enp129s0d1-2
-189:  ...    0     0       0     0     0  ...  enp129s0d1-3
-190:  ...    0     0       0     0     0  ...  enp129s0d1-4
-191:  ...    0     0  313670     0     0  ...  enp129s0d1-5
-192:  ...    0     0       0     0     0  ...  enp129s0d1-6
-193:  ...    0     0       0     0     0  ...  enp129s0d1-7
-\end{lstlisting}
-All packets are assigned to a single queue, in this case the queue number 5 (the enp129s0d1 is the receiving interface).
-Each corresponding smp\_affinity file shows that the Linux kernel
-automatically assigned interrupts to the CPUs 10-19 and 30-39.
-\begin{lstlisting}
-cat /proc/irq/187/smp_affinity_list
-	10-19,30-39
-\end{lstlisting}
-Intel Performance Counter Monitor shows that the CPUs 10-19 and 30-39 are
-logical cores of the CPU in Socket 1.
-The CPU in this socket is directly connected to the PCI-Express link, as shown in figure~\ref{fig:setup-supermicro-board}.
-
-The perf utility can be used to list the functions utilising the CPU 10.
-\begin{lstlisting}
-perf top -C 10
-  11.42%  [kernel]  [k] fib_table_lookup
-   9.62%  [kernel]  [k] _raw_spin_lock
-   6.65%  [kernel]  [k] mlx4_en_xmit
-   4.84%  [kernel]  [k] memcpy
-   4.03%  [kernel]  [k] mlx4_en_complete_rx_desc
-   3.61%  [kernel]  [k] check_leaf.isra.7
-   3.52%  [kernel]  [k] mlx4_en_free_tx_desc.isra.22
-   3.42%  [kernel]  [k] mlx4_en_process_rx_cq
-   3.16%  [kernel]  [k] mlx4_en_poll_tx_cq
-   2.89%  [kernel]  [k] put_compound_page
-   2.72%  [kernel]  [k] dev_queue_xmit
-\end{lstlisting}
-The kernel spends most of the time on FIB lookup and locking.
-
-\begin{lstlisting}[language=TeX]
- L3MISS: L3 cache misses
- L2MISS: L2 cache misses (including other core's L2 cache *hits*)
- L3HIT : L3 cache hit ratio (0.00-1.00)
- L2HIT : L2 cache hit ratio (0.00-1.00)
- L3CLK : ratio of CPU cycles lost due to L3 cache misses (0.00-1.00), in some cases could be >1.0 due to a higher memory latency
- L2CLK : ratio of CPU cycles lost due to missing L2 cache but still hitting  L3 cache (0.00-1.00)
- L3OCC : L3 occupancy (in KBytes)
-
-
- Core (SKT) | L3MISS | L2MISS | L3HIT | L2HIT | L3CLK | L2CLK |  L3OCC
-
-   0    0     4052       23 K    0.83    0.26    0.19    0.18      120
-   1    0       52     1542      0.97    0.14    0.03    0.17       80
-   2    0       37     1458      0.97    0.14    0.02    0.17      200
-   3    0       42     1489      0.97    0.14    0.02    0.13        0
-   4    0       36     1460      0.98    0.15    0.02    0.16        0
-   5    0      223     1695      0.87    0.22    0.00    0.00       80
-   6    0        4      542      0.99    0.13    0.00    0.12       40
-   7    0        4      539      0.99    0.12    0.00    0.12        0
-   8    0        4      533      0.99    0.12    0.00    0.11        0
-   9    0       20      589      0.97    0.10    0.02    0.11       40
-  10    1     1179     2608 K    1.00    0.88    0.00    0.04      240
-  11    1      129      586      0.78    0.11    0.16    0.13        0
-  12    1        7      531      0.99    0.12    0.01    0.16        0
-  13    1      446     2223      0.80    0.14    0.06    0.05       80
-  14    1        7      531      0.99    0.14    0.01    0.12        0
-  15    1        7      535      0.99    0.13    0.01    0.13        0
-  16    1        6      534      0.99    0.13    0.01    0.12        0
-  17    1       16      675      0.98    0.17    0.01    0.12        0
-  18    1       10      534      0.98    0.13    0.01    0.12        0
-  19    1       24      607      0.96    0.11    0.02    0.10        0
-  20    0      175     1090      0.84    0.07    0.08    0.14        0
-  21    0        9      598      0.98    0.13    0.01    0.18        0
-  22    0       80      974      0.92    0.14    0.01    0.03        0
-  23    0       10      583      0.98    0.13    0.01    0.10        0
-  24    0       15      831      0.98    0.12    0.01    0.17        0
-  25    0       41      582      0.93    0.13    0.03    0.11        0
-  26    0        4      513      0.99    0.13    0.00    0.13        0
-  27    0        5      534      0.99    0.13    0.01    0.14       40
-  28    0        5      534      0.99    0.12    0.01    0.12       40
-  29    0       34      659      0.95    0.12    0.03    0.12        0
-  30    1      102      603      0.83    0.12    0.16    0.17       40
-  31    1       12      627      0.98    0.34    0.01    0.15      120
-  32    1       37      544      0.93    0.12    0.05    0.16        0
-  33    1       11      584      0.98    0.13    0.01    0.16       40
-  34    1        7      528      0.99    0.14    0.01    0.17       40
-  35    1        8      541      0.99    0.16    0.01    0.17        0
-  36    1        8      541      0.99    0.12    0.01    0.16        0
-  37    1       11      541      0.98    0.13    0.02    0.17       40
-  38    1       11      553      0.98    0.12    0.01    0.16        0
-  39    1     2105     4296      0.51    0.65    0.13    0.03      480
--------------------------------------------------------------------------
- SKT    0     4852       40 K    0.88    0.21    0.03    0.05      640
- SKT    1     4143     2624 K    1.00    0.87    0.00    0.04     1080
--------------------------------------------------------------------------
- TOTAL  *     8995     2664 K    1.00    0.87    0.00    0.04      N/A
-\end{lstlisting}
-
-The CPU 10 is performing the work.
-Most of the cache misses are L2 miss, but there are also necessary L3 misses.
-L2 hit ration is 88\%, while L3 hit ration is almost 100\%.
-CPU~0 is running the Intel PCM and prints the output.

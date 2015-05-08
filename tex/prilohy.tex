@@ -15,11 +15,12 @@ RIPE NCC provides bgpdump utility to parse this file to a human-readable text fi
 To build bgpdump on CentOS 7 issue the following commands:
 \begin{lstlisting}[language=TeX]
 yum install bzip2-devel zlib-devel    # dependecies
-http://www.ris.ripe.net/source/bgpdump/libbgpdump-1.4.99.13.tgz
+wget http://www.ris.ripe.net/source/bgpdump/libbgpdump-1.4.99.13.tgz
 tar xf libbgpdump-1.4.99.13.tgz
+cd libbgpdump-1.4.99.13
 ./configure
 make
-make example
+make example     # needed prior make install
 make install
 \end{lstlisting}
 Note that make example is required prior to make install.
@@ -29,18 +30,23 @@ The Makefile also supports make rpm target to generate rpm package (a wrong date
 The bgpdump utility can parse the downloaded latest-bview.gz file directly (even wihout extracting first).
 The following command extracts individual destination networks from the BGP data file and writes them to {\it{destinations}} file.
 \begin{lstlisting}[language=TeX]
-bgpdump latest-bview.gz | grep 'PREFIX' | grep '\.' | sed 's/PREFIX: \(.*\)/\1/' | grep -v '0.0.0.0/0' | uniq > destinations
+bgpdump latest-bview.gz | grep 'PREFIX' | grep '\.' | sed 's/PREFIX: \(.*\)/\1/' | uniq > destinations
 \end{lstlisting}
 The number of routes corresponds to the number of prefixes announced on the Internet.
 Note that the first destination entry is default route 0.0.0.0/0 and the file also contains subnets such as 10.0.0.0/8 or 192.168.0.0/16,
 which you may want to remove from the file prior to the next step.
 Basically, you want to remove all the local routes from the generated file.
 The local routes can be displayed using the following command.
-\begin{lstlisting}
+\begin{lstlisting}[language=TeX]
 ip route show table local | grep '^local'
 \end{lstlisting}
 If you are connected remotely, such as through SSH,
 you must also remove routes to your local PC, which would break existing connection when misconfigured.
+In case of the provided server's connection, the {\it{destinations}} file must not contain 195.113.0.0/16 prefix
+The {\it{destinations}} file was obtained by running the following command:
+\begin{lstlisting}[language=TeX]
+bgpdump latest-bview.gz | grep 'PREFIX' | grep '\.' | sed 's/PREFIX: \(.*\)/\1/' | grep -v '195.113.0.0/16' uniq > destinations
+\end{lstlisting}
 
 The {\it{destinations}} file can be used to insert the router to the kernel's FIB table by ip route add command.
 To insert subnets from the {\it{destinations}} file to the kernel's FIB, the following C program was written.

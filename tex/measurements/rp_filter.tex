@@ -1,8 +1,8 @@
 %=========================================================================
 % (c) 2014, 2015 Josef Lusticky
 
+%FINAL
 \subsection{Reverse path filter}
-
 Enable rp\_filter.
 \begin{lstlisting}[language=TeX]
 echo 1 | tee /proc/sys/net/ipv4/conf/*/rp_filter
@@ -33,3 +33,8 @@ The fib\_table\_lookup is performed twice for each packet
 and it is therefore taking much more of the CPU time.
 There is also new fib\_validate\_source function, which is perfoming calling
 the actual fib\_table\_lookup.
+
+In bidirectional routing with reverse path filter enbaled,
+it may be worth changing the default RSS key to a symetric one.
+A symetric RSS key would lead to processing both directions of the same flow on the same CPU,
+therefore the result of the {\it{fib\_table\_lookup}} can be reached in the CPUs cache~\cite{symetric-rss}.
