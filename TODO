@@ -9,6 +9,7 @@ projit citace a todo
 - změnit random v BGP
 - dopsat Firewall,NAT
 - XPS
+- direct cache access
 
 Kernel networking:
  - http://www.cubrid.org/blog/dev-platform/understanding-tcp-ip-network-stack/
