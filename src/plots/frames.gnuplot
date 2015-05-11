@@ -12,4 +12,4 @@ set ylabel "Frame rate [fps]"
 set xlabel "Frame size [B]"
 set key box
 set xzeroaxis linetype -1           # xzeroaxis same as border
-plot [64:1518] (40*10**9)/((x+20)*8) title "40 GbE", "plot.data" title "Linux" with linespoints
+plot [0:1518] (40*10**9)/((x+20)*8) title "40 GbE", "frames.data" title "Linux" with linespoints

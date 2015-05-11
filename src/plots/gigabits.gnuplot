@@ -9,6 +9,6 @@ set xtics ("64" 50, 128, 265, 512, 768, 1024, 1280, 1518)
 #set yrange [0:45]
 set ylabel "Throughput [Gbps]"
 set xlabel "Frame size [B]"
-set key box
+#set key box
 set xzeroaxis linetype -1           # xzeroaxis same as border
-plot "gigabits.data" title "Linux" with linespoints
+plot "gigabits.data" notitle with linespoints

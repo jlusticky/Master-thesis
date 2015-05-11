@@ -6,7 +6,7 @@ The growth of Ethernet from 10 Mbit/s to 10 Gbit/s has already surpassed
 the growth of microprocessor performance.
 The 40~Gigabit Ethernet makes the performance gap even larger, but
 it is still the original Ethernet underneath - an old technology
-with a lot of compatibility issues for high-speed networking.
+with a lot of compatibility issues for high-speed packet processing.
 The recent 40 and 100~Gigabit Ethernet standard opens doors to
 high-speed networking, but it requires other parts of the network to scale within.
 
@@ -14,75 +14,40 @@ The GNU/Linux operating system is used in a wide range of computers interconnect
 An important task of the Linux network stack is to forward traffic.
 This is relevant especially when discussing core routers, which operate in the Internet backbone.
 Forwarding occurs on Layer~3 of the ISO/OSI network model.
-The performance of a software-based solution that uses Linux, cannot compete
+The performance of a software-based solution that uses GNU/Linux, cannot compete
 with commercial products that can count on the help of specialised hardware.
 However, various stack bypass solutions have shown, that the Linux kernel is not using
 the CPU optimally.
 
 The purpose of the thesis is to provide a comprehensive performance analysis of the Linux kernel
-in packet forwarding.
-The 40~Gigabit Ethernet protocol provides
-frame rates of up to 59~million packets per second
-and throughput of 4.6~GB per second.
+in IP packet forwarding.
+The 40~Gigabit Ethernet protocol is able to transmit up to 59~million frames per second
+and 4.6~GB of L2 data per second.
 Such speed can easily burden the CPU with a large amount of TCP/IP protocol processing required.
 
 Apart from the 40~Gigabit Ethernet protocol itself,
 the packet processing in the Linux kernel is described in the thesis.
 Since the emerge of 100~Mbps Ethernet, the Linux kernel
 engineers have been optimising the network stack towards high-speed packet processing.
-Hardware vendors have also made various optimisations towards high-speed packet processing -
-network interface cards support offloads, processors direct cache access, etc.
+Hardware vendors have made various optimisations,
+which help the operating system to lower the amount of processing required.
 
-
-
-
-
-A high-end server with a 40~GbE network interface card
+In the thesis, a high-end server with a 40~GbE network interface card
 and 2 Intel Xeon CPUs was setup to measure the routing performance of the Linux kernel.
 The measurements presented in this thesis demonstrate perfomance influences of various system settings
-such as Reverse path filtering, Netfilter or SELinux.
-Apart from ,
-the routing perfomance with imported routes from the Internet BGP protocol was tested.
+such as scaling mechanisms, Reverse path filtering or SELinux.
+The measurements presented in this thesis also include comparison of IPv6 processing performance
+against IPv4 processing performance.
+Additionally, the thesis presents the Linux routing perfomance with imported routes from the Internet BGP protocol.
 At the time of writing, there are approx.~538~000 routes announced in the public BGP,
 which leads to expensive software lookups in the Forwarding Information Base of the Linux kernel.
 
-
-Spirent hardware packet generator was used to measure the routing perfomance of the Linux kernel.
-
-
+Spirent hardware packet generator was used to generate the traffic and to collect the results.
+Unfortunately, the measurements must have been configured manually, since the provided Spirent does not
+contain licenses to automate the testing scenarious.
 
 Measuring performance of the software IP routing using GNU/Linux-based operating system on 40~Gigabit Ethernet
 can reveal bottlenecks that need to be eliminated
 on the way to a full-speed 40~Gigabit TCP/IP processing.
-
-
-if the system processes packets on Layer~3 fast enough,
+If the system processes packets on Layer~3 fast enough,
 next step is to optimise TCP and higher Layers of the network stack.
-
-
-
-
-
-The performance of packet processing in the GNU/Linux operating
-system 
-scaling mechanisms.
-
-
-
-
-system settings for achieving maximum routing performance.
-
-
-
-
-Another bottleneck is the TCP/IP stack being processed at a rate less than the network speed.
-
-The processing of TCP/IP over Ethernet is traditionally accomplished by software running on the CPUs of the server.
-
-
-
-
-
-The server GNU/Linux operating system
-Spirent hardware packet generator.
-

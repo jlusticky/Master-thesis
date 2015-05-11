@@ -3,7 +3,12 @@
 
 % FINAL
 \subsection{Measurement 6 - 32 IPv4 flows with irqbalance daemon}
-
+The measurement includes the {\it{irqbalance}} daemon enabled.
+The {\it{irqbalance}} daemon is responsible for dynamically assigning the interrupts to CPUs
+using the files found under /proc/irq/{\it{NUMBER}}/smp\_affinity,
+as described in section~\ref{sec:analysis-settings}.
+\\
+\\
 \begin{tabular}{ | l | l | l | l | }
 \hline
 Frame size & \% of link & bandwidth & frame rate \\
@@ -14,8 +19,17 @@ Frame size & \% of link & bandwidth & frame rate \\
 AMS-IX & 88.25\% & 35.30~Gb/s & 5~800~000 \\
 \hline
 \end{tabular}
-
-The {\it{irqbalance}} daemon assigned IRQs to CPUs 11-18, 30 and 33-39.
+\\
+\\
+The scaling mechanisms of the Linux kernel take advantage of interrupt assignment
+done by the {\it{irqbalance}} daemon.
+The server is able to route almost 36~Gbps of the simulated AMS-IX internet traffic.
+The measurement further confirms that the scaling mechanisms are sensitive to the frame size.
+The measurement featuring 1518~octet frames was configured to use 98.5\% of the link bandwidth.
+\\
+The following listing shows that the {\it{irqbalance}} daemon assigned IRQs to CPUs 11-18, 30 and 33-39.
+The CPUs 12-19 are serving RX interrupts, while the CPUs 30-39 are serving TX interrupts
+({\it{en29d1}} represents the receiving interface).
 
 \newpage
 
@@ -43,6 +57,9 @@ The {\it{irqbalance}} daemon assigned IRQs to CPUs 11-18, 30 and 33-39.
 \vspace*{\fill}
 \end{landscape}
 
+\noindent
+\\
+The listing bellow shows the cache use.
 \begin{lstlisting}[language=TeX]
  L3MISS: L3 cache misses 
  L2MISS: L2 cache misses (including other core's L2 cache *hits*) 
@@ -100,11 +117,8 @@ The {\it{irqbalance}} daemon assigned IRQs to CPUs 11-18, 30 and 33-39.
 ------------------------------------------------------------------------
  TOTAL  *      144 K     61 M    1.00    0.57    0.00    0.14      N/A 
 \end{lstlisting}
-
-
-This is also the first measurements nearly hitting 40~Gbps mark with 1~518~byte of payload.
-PCI-Express utilisation
-pcm-pcie.x -B
+The measurement featuring 1518~octet frames is the first measurements saturating the 40~Gbps Ethernet connection.
+Intel PCM can be used to monitor the PCI-Express utilisation:
 \begin{lstlisting}
 Skt | PCIe Rd (B) | PCIe Wr (B)
  0         5270 K          86 K
@@ -114,15 +128,9 @@ Skt | PCIe Rd (B) | PCIe Wr (B)
 \end{lstlisting}
 The PCI-Express link could be saturated when forwarding bidirectional traffic
 - the PCI-Express 3.0 x8 throughput is 7~876.8~MB/s as calculated in section~\ref{sec:40gbe-throughput}.
-Note, that there is a bug in Intel's PCM related to displaying
-the PCIe Read bandwidth - it always shows double the expected value.
+Note, that there seems to be a bug in Intel PCM related to displaying
+the PCIe Read bandwidth - it always shows double the expected value (reading 11~Gigabytes does not make sense).
 
-%%%%%%%%%%%%%%%%%
-
-
-
-Irqbalance moves the interrupts between CPUs.
+%Irqbalance moves the interrupts between CPUs.
 %Heavily depends on the dynamic IRQ mappings.
-Executing the hardware interrupt handler on new CPU that has not served the interrupt yet causes cache miss.
-
-%Changes TX queues using Transmit Packet Steering (XPS) - cat /sys/class/net/enp6s0/queues/tx-?/xps_cpus
+%Executing the hardware interrupt handler on new CPU that has not served the interrupt yet causes cache miss.

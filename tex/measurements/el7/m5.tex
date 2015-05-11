@@ -3,14 +3,17 @@
 
 % FINAL
 \subsection{Measurement 5 - single IPv4 flow over QPI}
-Instruct the kernel to use the CPU~9 for processing the RX interrupts.
+In this measurement, the kernel is instructed to use the CPU~9 for processing the RX interrupts.
+The logical CPU~9 resides in Socket~0, which is not directly connected to the PCI-Express link.
 The softirq and forwarding code runs on CPU~9.
+To achieve this, the QPI links between CPUs must be used, as described in section~\ref{sec:setup-hardware}.
+The following command maps the interrupts to CPU~9.
 \begin{lstlisting}[language=TeX]
-for i in `seq 178 193` ; do echo 9 > /proc/irq/\$i/smp_affinity_list ;done
+for i in `seq 178 193` ; do echo 9 > /proc/irq/$i/smp_affinity_list ; done
 \end{lstlisting}
-The CPU~9 is not directly connected to the PCI-Express link with the NIC,
-so QPI links between CPUs are used.
-
+The results are presented by the table bellow.
+\\
+\\
 \begin{tabular}{ | l | l | l | l | }
 \hline
 Frame size & \% of link & bandwidth & frame rate \\
@@ -21,9 +24,14 @@ Frame size & \% of link & bandwidth & frame rate \\
 AMS-IX &  9.89\% &  3.96~Gb/s & 650~000 \\
 \hline
 \end{tabular}
+\\
+\\
 The routing perfomance drops by 35\% when it is performed by
 a CPU not directly connected to the PCI-Express link with the NIC.
-
+This is a significant perfomance drop.
+\\
+Moreover, the following listing shows that the CPU~10 must be also involved, as
+it communicates with the CPU~9 over the QPI.
 \begin{lstlisting}[language=TeX]
  L3MISS: L3 cache misses
  L2MISS: L2 cache misses (including other core's L2 cache *hits*)
@@ -32,7 +40,6 @@ a CPU not directly connected to the PCI-Express link with the NIC.
  L3CLK : ratio of CPU cycles lost due to L3 cache misses (0.00-1.00), in some cases could be >1.0 due to a higher memory latency
  L2CLK : ratio of CPU cycles lost due to missing L2 cache but still hitting  L3 cache (0.00-1.00)
  L3OCC : L3 occupancy (in KBytes)
-
 
  Core (SKT) | L3MISS | L2MISS | L3HIT | L2HIT | L3CLK | L2CLK |  L3OCC
 
@@ -82,25 +89,27 @@ a CPU not directly connected to the PCI-Express link with the NIC.
 ------------------------------------------------------------------------
  TOTAL  *     2015 K   2877 K    0.30    0.73    0.19    0.02      N/A
 \end{lstlisting}
-
 CPU~9 performs the actual forwarding, while CPU~10
 is busy with the QPI communication overhead.
-
+As a result of this, performing the actual forwarding
+by a CPU connected over the QPI decreases the routing perfomance significantly.
+\\
+\\
+The use of QPI links is shown by the listing bellow.
 \begin{lstlisting}
 Intel(r) QPI data traffic estimation in bytes (data traffic coming to CPU/socket through QPI links):
 
-               QPI0     QPI1    |  QPI0   QPI1  
-----------------------------------------------------------------------------------------------
- SKT    0       90 M     90 M   |    0%     0%   
- SKT    1       70 M     71 M   |    0%     0%   
-----------------------------------------------------------------------------------------------
-Total QPI incoming data traffic:  323 M     QPI data traffic/Memory controller traffic: 0.39
+               QPI0     QPI1
+-------------------------------------------------
+ SKT    0       90 M     90 M
+ SKT    1       70 M     71 M
+-------------------------------------------------
+Total QPI incoming data traffic:  323 M
+QPI data traffic/Memory controller traffic: 0.39
 \end{lstlisting}
-Both QPI links are used.
-
-
-perf top -C 9
+The following listings shows the ouput of the {\it{perf}} utility for CPU~9 and CPU~10.
 \begin{lstlisting}
+perf top -C 9
   21.25%  [kernel]  [k] _raw_spin_lock
   11.61%  [kernel]  [k] memcpy
    6.69%  [kernel]  [k] fib_table_lookup
@@ -110,9 +119,8 @@ perf top -C 9
    3.44%  [kernel]  [k] mlx4_en_process_rx_cq
    2.93%  [kernel]  [k] mlx4_en_poll_tx_cq
 \end{lstlisting}
-
-perf top -C 10
 \begin{lstlisting}
+perf top -C 10
    9.77%  [kernel]  [k] find_busiest_group
    3.47%  [kernel]  [k] cpumask_next_and
    3.01%  [kernel]  [k] _raw_spin_lock
@@ -122,3 +130,5 @@ perf top -C 10
    2.36%  [kernel]  [k] idle_cpu
    2.22%  [kernel]  [k] __schedule
 \end{lstlisting}
+Apart from locking and the actual FIB lookup,
+the CPU~9 is also busy with {\it{memcpy}} which may be caused by the overhead of the QPI communication.

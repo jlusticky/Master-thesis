@@ -4,7 +4,9 @@
 % FINAL
 \subsection{Measurement 4 - 32 independent IPv4 flows}
 This measurement can be compared with Measurement~2, except that the {\it{irqbalance}} daemon is disabled.
-Therefore, the IRQ mapping is left untouched in its default state, as shown by Measurement~3.
+Therefore, the IRQ mapping is left untouched in its default state.
+\\
+\\
 \begin{tabular}{ | l | l | l | l | }
 \hline
 Frame size & \% of link & bandwidth & frame rate \\
@@ -15,15 +17,13 @@ Frame size & \% of link & bandwidth & frame rate \\
 AMS-IX & 15.22\% &  6.09~Gb/s & 800~000 \\
 \hline
 \end{tabular}
+\\
+\\
 When forwarding IP packets from multiple IPv4 flows on a single CPU,
 the routing performance of the Linux kernel drops by 20\% against forwarding a single IPv4 flow.
-%Since the destination IP address is the same as in the previous case,
-%this is the cost of fetching the packets from different ingress queues.
-Each receive queue triggers roughly the same number of interrupts as in the previous measurement,
-but overall the NIC triggers much more interrupts.
-The kernel spends more time on running the interrupt service routine code.
-
-Interrupt mapping:
+The following listing shows that
+the packets are evenly distributed among all hardware queues.
+However, the interrupts are not distributed among CPUs.
 \begin{lstlisting}
       ... CPU8  CPU9   CPU10 CPU11 CPU12  ...
 178:  ...    0     0  474701     0     0  ...  enp129s0-0
@@ -34,7 +34,6 @@ Interrupt mapping:
 183:  ...    0     0       0     0     0  ...  enp129s0-5
 184:  ...    0     0       0     0     0  ...  enp129s0-6
 185:  ...    0     0       0     0     0  ...  enp129s0-7
-
 186:  ...    0     0  317322     0     0  ...  enp129s0d1-0
 187:  ...    0     0  317648     0     0  ...  enp129s0d1-1
 188:  ...    0     0  317231     0     0  ...  enp129s0d1-2
@@ -44,11 +43,15 @@ Interrupt mapping:
 192:  ...    0     0  317190     0     0  ...  enp129s0d1-6
 193:  ...    0     0  317964     0     0  ...  enp129s0d1-7
 \end{lstlisting}
-The packets are evenly distributed among all hardware queues.
-However, the interrupts are not distributed among CPUs.
-
-Processor usage:
+Each receive queue triggers roughly the same number of interrupts as in the previous measurement,
+but overall the NIC triggers much more interrupts.
+The kernel spends more time on running the interrupt service routine code.
+Apart from servicing interrupts, the kernel must fetch the packets from different ingress queues,
+which in turn may need additional locking.
+\\
+The following listing shows partial output of {\it{perf}}:
 \begin{lstlisting}
+perf top -C 10
   12.07%  [kernel]  [k] _raw_spin_lock
    8.68%  [kernel]  [k] fib_table_lookup
    5.01%  [kernel]  [k] mlx4_en_xmit
@@ -60,4 +63,4 @@ Processor usage:
    2.33%  [kernel]  [k] mlx4_en_poll_tx_cq
    2.24%  [kernel]  [k] ip_route_input_noref
 \end{lstlisting}
-The kernel spends most of the time on locking and FIB table lookup. 
+The kernel spends most of the time on locking and FIB table lookup.

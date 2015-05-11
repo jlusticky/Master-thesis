@@ -2,35 +2,40 @@
 % (c) 2014, 2015 Josef Lusticky
 
 % FINAL
-\subsection{Measurement 7 - 32 IPv4 flows with custom IRQ affinity mappings}
-
+\subsection{Measurement 7 - 32 IPv4 flows with manual IRQ affinity mappings}
+While {\it{irqbalance}} mapped the interrupts inteligently, it is always worth checking the mappings.
+The dynamic mappings made by the {\it{irqbalance}} daemon can change during the run-time, which may lead
+to unpredictable perfomance drops.
+\\
+The following listing shows the interrupt mapping scheme used during this measurement.
+Unlike the mapping assigned by the {\it{irqbalance}} daemon,
+this mapping targets both RX and TX interrupts to 8 CPUs only.
 \begin{lstlisting}[language=TeX]
-echo 1 > /proc/irq/default_smp_affinity     # mask for new registered irqs
-echo 0 | tee /proc/irq/*/smp_affinity_list
+echo 18 > /proc/irq/177/smp_affinity_list   # assign mlx4-async IRQ to CPU 18
 
-echo 18 > /proc/irq/174/smp_affinity_list 
-echo 18 > /proc/irq/175/smp_affinity_list 
-echo 18 > /proc/irq/176/smp_affinity_list 
-echo 18 > /proc/irq/177/smp_affinity_list 
+echo 10 > /proc/irq/178/smp_affinity_list   # enp129s0-0 IRQ to CPU 10
+echo 11 > /proc/irq/179/smp_affinity_list
+echo 12 > /proc/irq/180/smp_affinity_list
+echo 13 > /proc/irq/181/smp_affinity_list
+echo 14 > /proc/irq/182/smp_affinity_list
+echo 15 > /proc/irq/183/smp_affinity_list
+echo 16 > /proc/irq/184/smp_affinity_list
+echo 17 > /proc/irq/185/smp_affinity_list   # enp192s0-7 IRQ to CPU 17
 
-echo 10 > /proc/irq/178/smp_affinity_list 
-echo 11 > /proc/irq/179/smp_affinity_list 
-echo 12 > /proc/irq/180/smp_affinity_list 
-echo 13 > /proc/irq/181/smp_affinity_list 
-echo 14 > /proc/irq/182/smp_affinity_list 
-echo 15 > /proc/irq/183/smp_affinity_list 
-echo 16 > /proc/irq/184/smp_affinity_list 
-echo 17 > /proc/irq/185/smp_affinity_list
+echo 10 > /proc/irq/186/smp_affinity_list   # enp192s0d1-0 IRQ to CPU 10
+echo 11 > /proc/irq/187/smp_affinity_list
+echo 12 > /proc/irq/188/smp_affinity_list
+echo 13 > /proc/irq/189/smp_affinity_list
+echo 14 > /proc/irq/190/smp_affinity_list
+echo 15 > /proc/irq/191/smp_affinity_list
+echo 16 > /proc/irq/192/smp_affinity_list
+echo 17 > /proc/irq/193/smp_affinity_list   # enp192s0d1-7 IRQ to CPU 17
 
-echo 10 > /proc/irq/186/smp_affinity_list
-echo 11 > /proc/irq/187/smp_affinity_list 
-echo 12 > /proc/irq/188/smp_affinity_list 
-echo 13 > /proc/irq/189/smp_affinity_list 
-echo 14 > /proc/irq/190/smp_affinity_list 
-echo 15 > /proc/irq/191/smp_affinity_list 
-echo 16 > /proc/irq/192/smp_affinity_list 
-echo 17 > /proc/irq/193/smp_affinity_list
+# clear XPS on both interfaces
+echo "0" | tee /sys/class/net/enp192s0/queues/tx-*/xps_cpus
+echo "0" | tee /sys/class/net/enp192s0d1/queues/tx-*/xps_cpus
 
+# use the IRQ mask to assign XPS
 cat /proc/irq/178/smp_affinity > /sys/class/net/enp129s0/queues/tx-0/xps_cpus
 cat /proc/irq/179/smp_affinity > /sys/class/net/enp129s0/queues/tx-1/xps_cpus
 cat /proc/irq/180/smp_affinity > /sys/class/net/enp129s0/queues/tx-2/xps_cpus
@@ -49,30 +54,38 @@ cat /proc/irq/191/smp_affinity > /sys/class/net/enp129s0d1/queues/tx-5/xps_cpus
 cat /proc/irq/192/smp_affinity > /sys/class/net/enp129s0d1/queues/tx-6/xps_cpus
 cat /proc/irq/193/smp_affinity > /sys/class/net/enp129s0d1/queues/tx-7/xps_cpus
 \end{lstlisting}
-
-XPS needed to choose the queue.
-MLX driver uses combined interrupts for RX and TX,
-the CPU will serve RX and TX interrupts for the same packets.
-
+The {\it{mlx4}} driver uses combined interrupts for RX and TX,
+therefore each mapped CPU serves RX and TX interrupts for the same packets.
+Such mapping should lead to a better cache utilisation than in the previous measurement.
+\\
+\\
 \begin{tabular}{ | l | l | l | l |}
 \hline
 Frame size & \% of link & bandwidth & frame rate \\
 \hline
 64     &  8.99\% &  3.60~Gb/s & 5~350~000 \\
 594    & 68.15\% & 27.26~Gb/s & 5~550~000 \\
-1518   & 99.60\% & 39.84~Gb/s & 3~237~971 \\
+1518   & 99.60\% & 39.40~Gb/s & 3~202~210 \\
 AMS-IX & 88.25\% & 35.30~Gb/s & 5~800~000 \\
 \hline
 \end{tabular}
+\\
+\\
+The throughput performance with manual IRQ mappings is equal to the mappings set by the {\it{irqbalance}} daemon.
+The measurement was also configured to use 128, 256, 512, 768, 1024 and 1280~byte sized frames.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm,keepaspectratio]{fig/frames.png}
+\end{figure}
+The following listing shows the actual mappings.
 
+\newpage
 
+\begin{landscape}
+\vspace*{\fill}
 \begin{lstlisting}
-       CPU10      CPU11
-174:       0          0          0          0          0          0          0          0          0  mlx4-comp-0@pci:0000:81:00.0
-175:       0          0          0          0          0          0          0          0          0  mlx4-comp-1@pci:0000:81:00.0
-176:       0          0          0          0          0          0          0          0          0  mlx4-comp-2@pci:0000:81:00.0
-177:       0          0          0          0          0          0          0          0       1655  mlx4-async@pci:0000:81:00.0
-
+       CPU10      CPU11      CPU12      CPU13      CPU14      CPU15      CPU16      CPU17      CPU18
+177:       0          0          0          0          0          0          0          0       1655  mlx4-async
 178:  298717          0          0          0          0          0          0          0          0  enp129s0-0
 179:       0     294264          0          0          0          0          0          0          0  enp129s0-1
 180:       0          0     291502          0          0          0          0          0          0  enp129s0-2
@@ -90,10 +103,16 @@ AMS-IX & 88.25\% & 35.30~Gb/s & 5~800~000 \\
 192:       0          0          0          0          0          0     402918          0          0  enp129s0d1-6
 193:       0          0          0          0          0          0          0     413299          0  enp129s0d1-7
 \end{lstlisting}
+\vspace*{\fill}
+\end{landscape}
 
-
-
-\begin{lstlisting}
+\noindent
+The RX and TX interrupts are spread across 8 CPUs.
+The advantage of this mapping against the mapping done by the {\it{irqbalance}} daemon
+is that it requires half the CPUs and the IRQ serving should cause fewer cache misses as well.
+\\
+The listing bellow shows the cache statistics.
+\begin{lstlisting}[language=TeX]
  L3MISS: L3 cache misses 
  L2MISS: L2 cache misses (including other core's L2 cache *hits*) 
  L3HIT : L3 cache hit ratio (0.00-1.00)
@@ -150,54 +169,14 @@ AMS-IX & 88.25\% & 35.30~Gb/s & 5~800~000 \\
 ------------------------------------------------------------------------
  TOTAL  *       92 K     48 M    1.00    0.52    0.00    0.14     N/A
 \end{lstlisting}
+As expected, the total cache miss count is lower with the manual IRQ mappings.
 
-
-
-%[ 1113.746810] mlx4_en: enp129s0d1: Using 16 RX rings
-%[ 1113.746825] mlx4_en: enp129s0d1:   frag:0 - size:1526 prefix:0 align:0 stride:1536
-%[ 1113.749856] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-8 ,Falling back to legacy EQ's
-%[ 1113.750110] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-9 ,Falling back to legacy EQ's
-%[ 1113.750363] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-10 ,Falling back to legacy EQ's
-%[ 1113.750647] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-11 ,Falling back to legacy EQ's
-%[ 1113.750893] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-12 ,Falling back to legacy EQ's
-%[ 1113.751201] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-13 ,Falling back to legacy EQ's
-%[ 1113.751470] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-14 ,Falling back to legacy EQ's
-%[ 1113.751728] mlx4_en 0000:81:00.0: Failed Assigning an EQ to enp129s0d1-15 ,Falling back to legacy EQ's
-
-MODIFIED DRIVER:
-\begin{lstlisting}
- 178:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-0
- 179:          0          0          0          0          0          0          0          0          0          0          0     322289          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-1
- 180:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-2
- 181:          0          0          0          0          0          0          0          0          0          0          0          0          0          9          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-3
- 182:          0          0          0          0          0          0          0          0          0          0          0          0          0          0     322605          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-4
- 183:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-5
- 184:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0     322647          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-6
- 185:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-7
- 186:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0     320985          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-8
- 187:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-9
- 188:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0     319121          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-10
- 189:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-11
- 190:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-12
- 191:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          9          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-13
- 192:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-14
- 193:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0     320599          0          0          0          0  IR-PCI-MSI-edge      enp129s0-15
- 194:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-0
- 195:          0          0          0          0          0          0          0          0          0          0          0    1528846          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-1
-
- 212:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-2
- 213:          0          0          0          0          0          0          0          0          0          0          0          0          0          1          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-3
- 214:          0          0          0          0          0          0          0          0          0          0          0          0          0          0    1620548          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-4
- 215:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-5
- 216:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0    1655182          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-6
- 217:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-7
- 218:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0    1592842          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-8
- 219:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-9
- 220:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0    1603307          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-10
- 221:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-11
- 222:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-12
- 223:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          1          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-13
- 224:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-14
- 225:          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0    1562320          0          0          0          0  IR-PCI-MSI-edge      enp129s0d1-15
-  
-\end{lstlisting}  
+The manual mappings are the best IRQ affinity settings in terms of number of CPUs used,
+cache use and predictability.
+%The routing perfomance is the same as in the case of dynamically settings the IRQ mappings using the {\it{irqbalance}} daemon.
+On a system with a single processor, it may be worth to assign other interrupts
+to a CPU not serving the interrupts from the network adapter.
+\begin{lstlisting}[language=TeX]
+echo 1 > /proc/irq/default_smp_affinity     # mask for new registered irqs
+echo 0 | tee /proc/irq/*/smp_affinity_list  # assign all IRQs to CPU 0
+\end{lstlisting}

@@ -27,7 +27,7 @@ IP version, IP checksum and header length are checked~\cite{kernel-source}.
 If the received packet passes all the checks, it proceeds to the NF\_INET\_PRE\_ROUTING hook callback,
 if such callback is registered.
 If it was not discarded by the netfilter hook,
-the {\it{skb}} associtated with the packet is passed to the {\it{ip\_rcv\_finish()}} function,
+the {\it{skb}} associated with the packet is passed to the {\it{ip\_rcv\_finish()}} function,
 where a lookup in the routing subsystem is performed.
 The routing subsystem mainly assigns the {\it{skb$\rightarrow$\_skb\_refdst}} and it is further discussed in section~\ref{sec:linux-routing}.
 

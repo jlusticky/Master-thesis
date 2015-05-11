@@ -1,0 +1,30 @@
+%=========================================================================
+% (c) 2014, 2015 Josef Lusticky
+
+% FINAL
+\subsection{Single IPv6 flow}
+\begin{tabular}{ | l | l | l | l | }
+\hline
+Frame size & \% of link & bandwidth & frame rate \\
+\hline
+AMS-IX & 13.69\% &  5.48~Gb/s & 900~000 \\
+\hline
+\end{tabular}
+
+\begin{lstlisting}
+perf top -C 10
+   9.43%  [kernel]  [k] _raw_spin_lock
+   6.29%  [kernel]  [k] fib6_lookup_1
+   5.49%  [kernel]  [k] mlx4_en_process_rx_cq
+   4.12%  [kernel]  [k] mlx4_en_xmit
+   3.62%  [kernel]  [k] memcpy
+   3.09%  [kernel]  [k] mlx4_en_poll_tx_cq
+   3.06%  [kernel]  [k] ip6_pol_route.isra.44
+   2.84%  [kernel]  [k] irq_entries_start
+   2.22%  [kernel]  [k] dst_release
+   2.10%  [kernel]  [k] __netif_receive_skb_core
+   2.08%  [kernel]  [k] __local_bh_enable_ip
+   1.81%  [kernel]  [k] build_skb
+   1.71%  [kernel]  [k] ip6_forward
+   1.69%  [kernel]  [k] ipv6_rcv
+\end{lstlisting}

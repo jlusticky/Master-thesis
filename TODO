@@ -1,13 +1,14 @@
 TODO:
-irqbalance respects kernel predefined IRQ affinity, kernel is NUMA aware
-introduction
 doplnit zaver o bgp
-latency testy
 dopsat prilohu general steps
 projit citace a todo
 -doplnit adaptive interrupts MLX
-konzistentnost IN a OUT rozhrani
-
+- doplnit kartu MLX s 16 frontami
+- evenly -> uniformly
+- projet aspellem: find . -name "*.tex" -exec aspell --lang=en_GB --mode=tex check "{}" \;
+- změnit random v BGP
+- dopsat Firewall,NAT
+- XPS
 
 Kernel networking:
  - http://www.cubrid.org/blog/dev-platform/understanding-tcp-ip-network-stack/

@@ -3,7 +3,9 @@
 
 %FINAL
 \subsection{Netdev\_budget}
-Increasing the netdev\_budget 10 times to 3~000.
+The measurement increases the {\it{netdev\_budget}} NAPI parameter from its default 300 to 3~000.
+The parameter is described in section~\ref{sec:linux-ingress}.
+The {\it{netdev\_budget}} can be configured using {\it{procfs}}
 \begin{lstlisting}
 echo 3000 > /proc/sys/net/core/netdev_budget
 \end{lstlisting}
@@ -12,9 +14,10 @@ echo 3000 > /proc/sys/net/core/netdev_budget
 \hline
 Frame size & \% of link & bandwidth & frame rate \\
 \hline
-AMS-IX & 89.77\% & 35.91~Gb/s & 5~900~000 \\
+AMS-IX & 88.25\% & 35.30~Gb/s & 5~800~000 \\
 \hline
 \end{tabular}
-
-The netdev\_budget has no influence.
-The raise softirq mechanism is highly optimised.
+\\
+\\
+Increasing the {\it{netdev\_budget}} has no influence on routing performance,
+which means that the raise softirq mechanism is highly optimised.

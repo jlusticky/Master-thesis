@@ -185,18 +185,18 @@ Restart needed for updates to take effect.
 
 \chapter{General steps for maximum routing performance}\label{app:general-steps}
 \begin{itemize}
+\item if the server is not going to run any application disable Hyper-Threading
 \item determine how many RX queues does the NIC support by "ethtool -{}-show-channels {\it{ifname}}" and use all of them using
-"ethtool -{}-set-channels {\it{ifname}} rx {\it{num}}"
-\item set the number of TX queues at least the same as RX queues by "ethtool -{}-set-channels {\it{ifname}} tx {\it{num}}"
-\item determine how many physical cores has the CPU, which is directly connected to the PCI-Express link with the NIC
-\item if the number of physical cores is less then the number of RX queues, enable Hyper-Threading
-\item enable all offloads - check for disabled by "ethtool -{}-show-offload {\it{ifname}}"
+"ethtool -{}-set-channels {\it{ifname}} rx {\it{num}}", beware that RSS can only address IRQ to power of 2 CPUs
+\item set the number of TX queues the same as RX queues by "ethtool -{}-set-channels {\it{ifname}} tx {\it{num}}"
+\item disable {\it{irqbalance}} daemon and assign IRQs manually
+\item disable all daemons such as avahi, dbus, NetworkManager, etc.
+\item check for disabled offloads by "ethtool -{}-show-offload {\it{ifname}}" and enable all of them
 \item disable SELinux in /etc/sysconfig/selinux (and reboot to apply)
-\item disable netfilter completely or at least disable connection tracking
+\item disable Netfilter completely or at least disable connection tracking
 \item set {\it{performance}} scaling governor for all CPUs
-\item disable {\it{rp\_filter}} on all forwarding interfaces by writing "0" to /proc/sys/net/ipv4/conf/{\it{ifname}}/rp\_filter
-%TODO \item disable C-states using the kernel parameter intel\_idle.max\_cstate=0
-\item disable irqbalance daemon and assign IRQs manually
-\item if the NIC does not support RSS, configure RPS
+\item disable {\it{rp\_filter}} on all forwarding interfaces by writing "0" to /proc/sys/net/ipv4/conf/{\it{ifname}}/rp\_filter,
+beware that this might be required to set at boot time using the /etc/sysctl.conf file (use {\it{perf top}} to check)
+\item avoid using DHCP and ARP/ND protocols and use static addressing and neighboring configuration
 %TODO \item disable XPS to avoid passing the TX packet processing to a different CPU
 \end{itemize}

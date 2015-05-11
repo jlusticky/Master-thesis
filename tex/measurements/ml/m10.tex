@@ -1,40 +1,32 @@
 %=========================================================================
 % (c) 2014, 2015 Josef Lusticky
 
-% FINAL
-%TODO - premerit - tabulka s IRQ
-\subsection{32 IPv4 flows on 8 queues}
-
+%FINAL
+\subsection{1 IPv4 flow}
 \begin{tabular}{ | l | l | l | l | }
 \hline
 Frame size & \% of link & bandwidth & frame rate \\
 \hline
-64     &  5.29\% &  2.12~Gb/s & 3~150~000 \\ %DONE 2
-594    & 43.59\% & 17.44~Gb/s & 3~550~000 \\ %DONE 2
-1518   & 99.50\% & 39.80~Gb/s & 3~234~720 \\ %DONE 2
-AMS-IX & 54.77\% & 21.91~Gb/s & 3~600~000 \\ %DONE 2
+AMS-IX & 15.22\% &  6.09~Gb/s & 1~000~000 \\
 \hline
 \end{tabular}
+\\
+\\
+Routing performance of the Linux kernel version 4.0 on a single core is the same as the CentOS~7 distribution kernel 3.10.0-123.
 
 
 \begin{lstlisting}
- 119:393804          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-0
- 120:     0     397112          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-1
- 121:     0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-2
- 122:     0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-3
- 123:     0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-4
- 124:     0          0          0          0          0          3          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-5
- 125:     0          0          0          0          0          0     268338          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-6
- 126:     0          0          0          0          0          0          0     263689          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      enp129s0-7
- 127:     8          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      eth1-0
- 128:     0          3          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      eth1-1
- 129:     0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      eth1-2
- 130:     0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      eth1-3
- 131:     0          0          0          0     157003          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      eth1-4
- 132:     0          0          0          0          0     154495          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      eth1-5
- 133:     0          0          0          0          0          0     118030          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      eth1-6
- 134:     0          0          0          0          0          0          0     114088          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0          0  IR-PCI-MSI-edge      eth1-7
-\end{lstlisting}
+perf top -C 10
+  11.25%  [kernel]            [k] _raw_spin_lock
+   9.69%  [kernel]            [k] fib_table_lookup
+   5.58%  [kernel]            [k] mlx4_en_xmit
+   4.87%  [kernel]            [k] __memcpy
+   4.65%  [kernel]            [k] mlx4_en_process_rx_cq
+   2.98%  [kernel]            [k] put_compound_page
+   2.73%  [kernel]            [k] __netif_receive_skb_core
+   2.64%  [kernel]            [k] mlx4_en_poll_tx_cq
+   2.43%  [kernel]            [k] ip_route_input_noref
+   2.15%  [kernel]            [k] ip_rcv
 
-Either the {\it{mlx4}} driver od the kernel itself has some serious problem with assigning IRQs.
-This limits the forwarding performance significantly.
+\end{lstlisting}
+FIB table lookup and locking take most of the time as in case of the CentOS~7 distribution kernel.

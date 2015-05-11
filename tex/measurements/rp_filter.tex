@@ -3,10 +3,12 @@
 
 %FINAL
 \subsection{Reverse path filter}
-Enable rp\_filter.
+The measurement run with Reverse path filter enabled, which can be done using {\it{procfs}}.
+The rp\_filter is described in section~\ref{sec:analysis-settings}.
 \begin{lstlisting}[language=TeX]
 echo 1 | tee /proc/sys/net/ipv4/conf/*/rp_filter
 \end{lstlisting}
+
 
 \begin{tabular}{ | l | l | l | l | }
 \hline
@@ -15,10 +17,12 @@ Frame size & \% of link & bandwidth & frame rate \\
 AMS-IX & 55.54\% & 22.21~Gb/s & 3~650~000 \\
 \hline
 \end{tabular}
-
-
-perf top -C 11
+\\
+\\
+The rp\_filter introduces a significant performance drop of about 37\%.
+The following listing shows the ouput of the {\it{perf}} utility.
 \begin{lstlisting}
+perf top -C 10
   39.88%  [kernel]  [k] fib_table_lookup
    8.35%  [kernel]  [k] check_leaf.isra.7
    6.43%  [kernel]  [k] _raw_spin_lock
@@ -29,12 +33,13 @@ perf top -C 11
    2.14%  [kernel]  [k] fib_validate_source
    1.40%  [kernel]  [k] ip_route_input_noref
 \end{lstlisting}
-The fib\_table\_lookup is performed twice for each packet
+The {\it{fib\_table\_lookup}} is performed twice for each packet
 and it is therefore taking much more of the CPU time.
-There is also new fib\_validate\_source function, which is perfoming calling
-the actual fib\_table\_lookup.
+There is also new {\it{fib\_validate\_source}} function, which is calls
+the actual {\it{fib\_table\_lookup}}.
 
-In bidirectional routing with reverse path filter enbaled,
-it may be worth changing the default RSS key to a symetric one.
+In bidirectional routing with Reverse path filter enbaled,
+it may be worth changing the default RSS hash key to a symetric one.
+The RSS hash key is a taken as input by the Toeplitz hash function, as described in section~\ref{sec:linux-scaling}.
 A symetric RSS key would lead to processing both directions of the same flow on the same CPU,
-therefore the result of the {\it{fib\_table\_lookup}} can be reached in the CPUs cache~\cite{symetric-rss}.
+therefore the result of the {\it{fib\_table\_lookup}} can be obtained from the CPU's cache~\cite{symetric-rss}.

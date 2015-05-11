@@ -40,7 +40,8 @@ The principle described above also applies to the receive queues in the Linux ke
 The multiqueue support allows to scale the network load in multiprocessor systems.
 Such scaling is provided by processing each queue by a different CPU~\cite{kernel-doc-scaling}.
 The NIC distributes packets to the queues by applying a filter that assigns each packet to one of the receive queues.
-The filter is a hash function (usually Toeplitz hash algorithm) over the network and transport layer headers of the packet.
+The filter is a hash function (usually Toeplitz hash algorithm) over the network and transport layer headers of the packet
+and a hash key, which is stored in the NIC's memory.
 This mechanism is generally known as Receive Side Scaling (RSS)
 and its goal is to increase performance uniformly~\cite{kernel-doc-scaling}.
 

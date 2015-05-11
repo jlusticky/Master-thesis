@@ -3,34 +3,28 @@
 
 % FINAL
 \subsection{Measurement 8 - single IPv6 flow}
-
-echo 0 > /proc/sys/net/ipv6/conf/all/disable\_ipv6
-echo 1 > /proc/sys/net/ipv6/conf/all/forwarding
-again, forwarding on only selected interfaces can be enabled.
-ip6tables -F
-ip6tables -X
-ip6tables -L
-
-ip -6 addr add 1::1/64 dev enp6s0d1
-ip -6 addr add 2::1/64 dev enp6s0
-
-
-%Single IPv6 flow.
-%To test the difference between IPv4 and IPv6 routing lookup performance.
-
-\begin{tabular}{ | l | l | l | l | }
+The measurement serves as a comparison between IPv4 and IPv6 processing performance.
+The measurement can be directly compared to Measurement~3.
+\\
+\\
+\begin{tabular}{ | l | l | l | l |}
 \hline
-Frame size & \% of link & frame rate \\
+Frame size & \% of link & bandwidth & frame rate \\
 \hline
-78     &  1.76\% &  0.71~Gb/s & 9~000~000 \\
-594    & 11.05\% &  4.42~Gb/s & 9~000~000 \\
-1518   & 27.68\% & 11.07~Gb/s & 9~000~000 \\
-AMS-IX & 13.69\% &  5.48~Gb/s & 9~000~000 \\
+78     &  1.76\% &  0.71~Gb/s & 900~000 \\
+594    & 11.05\% &  4.42~Gb/s & 900~000 \\
+1518   & 27.68\% & 11.07~Gb/s & 900~000 \\
+AMS-IX & 13.69\% &  5.48~Gb/s & 900~000 \\
 \hline
 \end{tabular}
-
-perf top -C 14
+\\
+\\
+The IPv6 processing performance is 10\% (100~000 frames per second) lower than the IPv4 processing performance
+when forwarding traffic on a single core.
+\\
+The following listing shows the output of the {\it{perf}} utility:
 \begin{lstlisting}
+perf top -C 10
   11.75%  [kernel]  [k] ip6t_do_table
   10.37%  [kernel]  [k] _raw_spin_lock
    8.43%  [kernel]  [k] fib6_lookup
@@ -44,3 +38,4 @@ perf top -C 14
    2.65%  [kernel]  [k] mlx4_en_process_rx_cq
    2.62%  [kernel]  [k] dst_release
 \end{lstlisting}
+As in the case of IPv4, the CPU spends most of the time on the actual lookup and locking.

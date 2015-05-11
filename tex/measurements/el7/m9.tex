@@ -2,38 +2,50 @@
 % (c) 2014, 2015 Josef Lusticky
 
 % FINAL
-\subsection{Measurement 9 - 32 independent IPv6 flows with irqbalance}
-
+\subsection{Measurement 9 - 32 IPv6 flows with manual IRQ affinity mappings}
+The measurement can be directly compared to Measurement 7.
+%Since the previous measurement reported 10\% performance drop against IPv4, it is expected....
+\\
+\\
 \begin{tabular}{ | l | l | l | l | }
 \hline
 Frame size & \% of link & bandwidth & frame rate \\
 \hline
-78     &  4.90\% &  1.96~Gb/s & 2~500~000 \\
-594    & 31.32\% & 12.53~Gb/s & 2~550~000 \\
-1518   & 98.00\% & 39.20~Gb/s & 3~185~955 \\
-AMS-IX & 48.69\% & 19.48~Gb/s & 3~200~000 \\
+78     &  5.88\% &  2.35~Gb/s & 3~000~000 \\
+594    & 36.84\% & 14.74~Gb/s & 3~550~000 \\
+1518   & 98.50\% & 39.40~Gb/s & 3~202~210 \\
+AMS-IX & 54.77\% & 21.91~Gb/s & 3~600~000 \\
 \hline
 \end{tabular}
-
-The scaling mechanisms are sensitive to frame size.
-
-Spin lock.
-
+\\
+\\
+The measurement featuring 1518~octet frames was configured to use 98.50\% of the link bandwidth.
+The results show a significant performance drop when routing multiple IPv6 flows.
+\\
+This performance drop can be investigated by changing the number of flows to 8
+and observing the interrupt distribution.
+The following listing shows the partial output of the /proc/interrupts file when routing 8 flows.
 \begin{lstlisting}
-  17.70%  [kernel]          [k] ip6_pol_route.isra.46
-   8.18%  [kernel]          [k] _raw_spin_lock
-   8.17%  [kernel]          [k] fib6_lookup
-   6.43%  [kernel]          [k] _raw_read_lock_bh
-   5.60%  [kernel]          [k] _raw_read_unlock_bh
-   5.39%  [kernel]          [k] fib6_get_table
-   4.79%  [kernel]          [k] dst_release
-   3.37%  [kernel]          [k] ip6_finish_output2
-   2.48%  [kernel]          [k] mlx4_en_xmit
-   2.11%  [kernel]          [k] __netif_receive_skb_core
-   2.08%  [kernel]          [k] memcpy
-   2.04%  [kernel]          [k] mlx4_en_process_rx_cq
-   1.32%  [kernel]          [k] mlx4_en_poll_tx_cq
-   1.27%  [kernel]          [k] local_bh_enable_ip
-   1.26%  [kernel]          [k] __pskb_pull_tail
-   1.19%  [kernel]          [k] put_compound_page
+      ... CPU12 CPU13 CPU14 CPU15 CPU16 CPU17 CPU18 ...
+ 178: ...     0     0     0     0     0     0     0 ... enp129s0d1-0
+ 179: ...     0     0     0     0     0     0     0 ... enp129s0d1-1
+ 180: ...     0     0     0     0     0     0     0 ... enp129s0d1-2
+ 181: ...     0 32513     0     0     0     0     0 ... enp129s0d1-3
+ 182: ...     0     0     0     0     0     0     0 ... enp129s0d1-4
+ 183: ...     0     0     0     0     0     0     0 ... enp129s0d1-5
+ 184: ...     0     0     0     0     0     0     0 ... enp129s0d1-6
+ 185: ...     0     0     0     0     0 33543     0 ... enp129s0d1-7
+ 186: ...     0     0     0     0     0     0     0 ... enp129s0-0
+ 187: ...     0     0     0     0     0     0     0 ... enp129s0-1
+ 188: ...     0     0     0     0     0     0     0 ... enp129s0-2
+ 189: ...     0 19384     0     0     0     0     0 ... enp129s0-3
+ 190: ...     0     0     0     0     0     0     0 ... enp129s0-4
+ 191: ...     0     0     0     0     0     0     0 ... enp129s0-5
+ 192: ...     0     0     0     0     0     0     0 ... enp129s0-6
+ 193: ...     0     0     0     0     0 19576     0 ... enp129s0-7
 \end{lstlisting}
+In contrast to IPv4, the RSS does not distribute IPv6 packets uniformly.
+As a result of this, the routing performance of IPv6 protocol is lower than in case of IPv4.
+The traffic is also not distributed uniformly when routing 32 flows,
+however, this issue cannot be detected from reading the /proc/interrupts file due to
+interrupt mitigation mechanism used by NAPI, as described in section~\ref{sec:linux-ingress}.

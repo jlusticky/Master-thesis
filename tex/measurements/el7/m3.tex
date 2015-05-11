@@ -56,7 +56,8 @@ cat /proc/irq/193/smp_affinity_list
 The {\it{lscpu}} utility or the Intel Performance Counter Monitor can be used to
 verify that the CPUs 10-19 and 30-39 are logical cores of the CPU in Socket 1.
 The CPU in this socket is directly connected to the PCI-Express link, as shown in figure~\ref{fig:setup-supermicro-board}.
-
+\\
+\\
 The {\it{perf}} utility can be used to list the functions utilising the CPU 10.
 \begin{lstlisting}
 perf top -C 10
@@ -72,7 +73,9 @@ perf top -C 10
    2.89%  [kernel]  [k] put_compound_page
    2.72%  [kernel]  [k] dev_queue_xmit
 \end{lstlisting}
-The kernel spends most of the time on FIB lookup and locking.
+The kernel spends most of the time on FIB lookup, which is performed by the {\it{fib\_table\_lookup}} function described
+in section~\ref{sec:linux-routing}, and on locking.
+\\
 \\
 The following listing shows the cache utilisation on all CPUs present in the system.
 \begin{lstlisting}[language=TeX]
@@ -83,7 +86,6 @@ The following listing shows the cache utilisation on all CPUs present in the sys
  L3CLK : ratio of CPU cycles lost due to L3 cache misses (0.00-1.00), in some cases could be >1.0 due to a higher memory latency
  L2CLK : ratio of CPU cycles lost due to missing L2 cache but still hitting  L3 cache (0.00-1.00)
  L3OCC : L3 occupancy (in KBytes)
-
 
  Core (SKT) | L3MISS | L2MISS | L3HIT | L2HIT | L3CLK | L2CLK |  L3OCC
 
@@ -133,7 +135,6 @@ The following listing shows the cache utilisation on all CPUs present in the sys
 -------------------------------------------------------------------------
  TOTAL  *     8995     2664 K    1.00    0.87    0.00    0.04      N/A
 \end{lstlisting}
-
 The CPU 10 is performing the work related to TCP/IP processing.
 Most of the cache misses are L2 miss, but there are also necessary L3 misses.
 The L2 hit ratio is 88\%, while L3 hit ration is almost 100\%.

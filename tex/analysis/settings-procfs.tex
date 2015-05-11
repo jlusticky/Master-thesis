@@ -41,7 +41,7 @@ The number of IPv6 prefixes announced in the Internet is approx.~22~000 at the t
 
 The source IPv4 address validation is enabled by default in CentOS 7.
 This feature is called Reverse path filtering ({\it{rp\_filter}}) in the Linux kernel and it prevents IP spoofing.
-However, it introduces additonal processing and thus it should be disabled during the experiments.
+However, it introduces additional processing and thus it should be disabled during the experiments.
 The {\it{rp\_filter}} can be disabled on a particular interface
 by writing "0" to /proc/sys/net/ipv4/conf/{\it{ifname}}/rp\_filter~\cite{kernel-doc-ip-sysctl}.
 The {\it{rp\_filter}} for IPv6 is implemented in the netfilter subsystem of the Linux kernel and
