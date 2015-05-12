@@ -2,7 +2,7 @@ TODO:
 doplnit zaver o bgp
 dopsat prilohu general steps
 projit citace a todo
--doplnit adaptive interrupts MLX
+- doplnit adaptive interrupts MLX
 - doplnit kartu MLX s 16 frontami
 - evenly -> uniformly
 - projet aspellem: find . -name "*.tex" -exec aspell --lang=en_GB --mode=tex check "{}" \;
