@@ -1,7 +1,7 @@
 %=========================================================================
 % (c) 2014, 2015 Josef Lusticky
 
-\subsection{Procfs settings}\label{subsec:analysis-settings-procfs}
+\subsection{Procfs settings}\label{sub:analysis-settings-procfs}
 The variables exported via procfs are accessible as files under /proc in CentOS~7.
 The variables in the /proc/sys directory can be manipulated by the sysctl utility as well.
 The files in the /proc/sys/net directory are of interest for the experiments.
@@ -58,7 +58,7 @@ This is the case of the mlx4 driver as well, which imposes the limit to 64 packe
 The /proc/sys/net/core/netdev\_budget file sets the
 maximum number of packets taken from all interfaces by a single {\it{net\_rx\_action()}} run.
 The interfaces which are registered to polling are
-probed in a round-robin manner, as described in subsection~\ref{subsec:linux-ingress-napi}.
+probed in a round-robin manner, as described in subsection~\ref{sub:linux-ingress-napi}.
 To allow the kernel to spend more time on packet processing, the {\it{netdev\_budget}} value can be increased.
 
 The proc filesystem further provides access to the IRQ settings and statistics.
