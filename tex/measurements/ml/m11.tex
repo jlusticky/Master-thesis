@@ -2,8 +2,10 @@
 % (c) 2014, 2015 Josef Lusticky
 
 \subsection{32 IPv4 flows}
-
-% FINAL
+The measurement uses manual IRQ affinity mappings
+and it can be directly compared to Measurement~7.
+\\
+\\
 \begin{tabular}{ | l | l | l | l | }
 \hline
 Frame size & \% of link & bandwidth & frame rate \\
@@ -11,3 +13,6 @@ Frame size & \% of link & bandwidth & frame rate \\
 AMS-IX & 86.73\% & 34.70~Gb/s & 5~700~000 \\
 \hline
 \end{tabular}
+\\
+\\
+The upstream kernel 4.0.2 performs approx.~2\% slower than the CentOS~7 distribution kernel.

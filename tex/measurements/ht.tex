@@ -3,7 +3,7 @@
 
 % FINAL
 \subsection{Disabled Hyper-Threading}
-Routing of a single IPv4 flow was tested with the Hyper-Threading technology disabled.
+The measurement features routing of a single IPv4 flow with the Hyper-Threading technology disabled.
 \\
 \\
 \begin{tabular}{ | l | l | l | l | }
@@ -18,7 +18,7 @@ AMS-IX & 17.50\% &  7.00~Gb/s & 1~150~000 \\
 \end{tabular}
 \\
 \\
-A single core routing performance increased by 15\% with disabled Hyper-Threading.
+A single core routing performance increases by 15\% with disabled Hyper-Threading.
 \\
 Routing of 32 IPv4 flows with manual IRQ affinity mappings was tested to investiage
 how is the routing performance influenced when the networking code runs
@@ -38,5 +38,5 @@ AMS-IX & 89.77\% & 35.91~Gb/s & 5~900~000 \\
 \\
 \\
 Disabled Hyper-Threading provides only 2\% performance increase when routing the AMS-IX traffic on multiple cores.
-The logical cores which are not utilised do not decrease performance significantly.
-Hyper-Threading is highly optimised on Intel Xeon E5-2660 v3.
+The logical cores which are not utilised do not decrease performance significantly,
+which means that Hyper-Threading is highly optimised on Intel Xeon E5-2660 v3.

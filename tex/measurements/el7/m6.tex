@@ -68,7 +68,6 @@ The listing bellow shows the cache use.
  L3CLK : ratio of CPU cycles lost due to L3 cache misses (0.00-1.00), in some cases could be >1.0 due to a higher memory latency
  L2CLK : ratio of CPU cycles lost due to missing L2 cache but still hitting L3 cache (0.00-1.00)
 
-
  Core (SKT) | L3MISS | L2MISS | L3HIT | L2HIT | L3CLK | L2CLK |  L3OCC
 
    0    0     1076       11 K    0.91    0.17    0.01    0.01      120
@@ -129,8 +128,4 @@ Skt | PCIe Rd (B) | PCIe Wr (B)
 The PCI-Express link could be saturated when forwarding bidirectional traffic
 - the PCI-Express 3.0 x8 throughput is 7~876.8~MB/s as calculated in section~\ref{sec:40gbe-throughput}.
 Note, that there seems to be a bug in Intel PCM related to displaying
-the PCIe Read bandwidth - it always shows double the expected value (reading 11~Gigabytes does not make sense).
-
-%Irqbalance moves the interrupts between CPUs.
-%Heavily depends on the dynamic IRQ mappings.
-%Executing the hardware interrupt handler on new CPU that has not served the interrupt yet causes cache miss.
+the PCIe Read bandwidth - it always shows double the expected value (11~Gigabytes does not make sense).

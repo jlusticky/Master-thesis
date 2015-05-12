@@ -3,6 +3,9 @@
 
 % FINAL
 \subsection{Single IPv6 flow}
+The measurement can be directly compared to Measurement 8.
+\\
+\\
 \begin{tabular}{ | l | l | l | l | }
 \hline
 Frame size & \% of link & bandwidth & frame rate \\
@@ -10,7 +13,10 @@ Frame size & \% of link & bandwidth & frame rate \\
 AMS-IX & 13.69\% &  5.48~Gb/s & 900~000 \\
 \hline
 \end{tabular}
-
+\\
+\\
+The single flow routing performance is the same as in case of the CentOS~7 distribution kernel.
+The following listing shows output of the {\it{perf}} tool.
 \begin{lstlisting}
 perf top -C 10
    9.43%  [kernel]  [k] _raw_spin_lock

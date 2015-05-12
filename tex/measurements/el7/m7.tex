@@ -10,7 +10,12 @@ to unpredictable perfomance drops.
 The following listing shows the interrupt mapping scheme used during this measurement.
 Unlike the mapping assigned by the {\it{irqbalance}} daemon,
 this mapping targets both RX and TX interrupts to 8 CPUs only.
+Additionally, Transmission Packet Steering (XPS) mechanism was configured
+to maps each exclusively to a single CPUs, as described in section~\ref{sec:linux-scaling}.
 \begin{lstlisting}[language=TeX]
+echo 1 > /proc/irq/default_smp_affinity     # mask for new registered irqs
+echo 0 | tee /proc/irq/*/smp_affinity_list  # assign all IRQs to CPU 0
+
 echo 18 > /proc/irq/177/smp_affinity_list   # assign mlx4-async IRQ to CPU 18
 
 echo 10 > /proc/irq/178/smp_affinity_list   # enp129s0-0 IRQ to CPU 10
@@ -72,20 +77,21 @@ AMS-IX & 88.25\% & 35.30~Gb/s & 5~800~000 \\
 \\
 \\
 The throughput performance with manual IRQ mappings is equal to the mappings set by the {\it{irqbalance}} daemon.
-The measurement was also configured to use 128, 256, 512, 768, 1024 and 1280~byte sized frames.
+The measurement was also configured to use 128, 256, 512, 768, 1024 and 1280~byte sized frames
+and the following graph presents the results.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=12cm,keepaspectratio]{fig/frames.png}
 \end{figure}
-The following listing shows the actual mappings.
-
+\noindent
+The system is able to perform forwarding at nearly line rate speed with frames 1024~B and larger.
+The following listing shows the actual interrupt mappings obtained from the /proc/interrupts file.
 \newpage
-
+%177:       0          0          0          0          0          0          0          0       1655  mlx4-async
 \begin{landscape}
 \vspace*{\fill}
 \begin{lstlisting}
        CPU10      CPU11      CPU12      CPU13      CPU14      CPU15      CPU16      CPU17      CPU18
-177:       0          0          0          0          0          0          0          0       1655  mlx4-async
 178:  298717          0          0          0          0          0          0          0          0  enp129s0-0
 179:       0     294264          0          0          0          0          0          0          0  enp129s0-1
 180:       0          0     291502          0          0          0          0          0          0  enp129s0-2
@@ -110,19 +116,17 @@ The following listing shows the actual mappings.
 The RX and TX interrupts are spread across 8 CPUs.
 The advantage of this mapping against the mapping done by the {\it{irqbalance}} daemon
 is that it requires half the CPUs and the IRQ serving should cause fewer cache misses as well.
-\\
 The listing bellow shows the cache statistics.
 \begin{lstlisting}[language=TeX]
  L3MISS: L3 cache misses 
  L2MISS: L2 cache misses (including other core's L2 cache *hits*) 
  L3HIT : L3 cache hit ratio (0.00-1.00)
  L2HIT : L2 cache hit ratio (0.00-1.00)
- L3CLK : ratio of CPU cycles lost due to L3 cache misses (0.00-1.00), in some cases could be >1.0 due to a higher memory latency
- L2CLK : ratio of CPU cycles lost due to missing L2 cache but still hitting L3 cache (0.00-1.00)
-
-
+ L3CLK : ratio of CPU cycles lost due to L3 cache misses (0.00-1.00)
+ L2CLK : ratio of CPU cycles lost due to missing L2 cache (0.00-1.00)
+ L3OCC : L3 occupancy (in KBytes)
+ 
  Core (SKT) | L3MISS | L2MISS | L3HIT | L2HIT | L3CLK | L2CLK |  L3OCC
-
    0    0     5799       33 K    0.82    0.24    0.19    0.18        0
    1    0      122     2488      0.95    0.15    0.03    0.14        0
    2    0      374     3928      0.90    0.19    0.00    0.00        0
@@ -170,13 +174,6 @@ The listing bellow shows the cache statistics.
  TOTAL  *       92 K     48 M    1.00    0.52    0.00    0.14     N/A
 \end{lstlisting}
 As expected, the total cache miss count is lower with the manual IRQ mappings.
-
+\\
 The manual mappings are the best IRQ affinity settings in terms of number of CPUs used,
 cache use and predictability.
-%The routing perfomance is the same as in the case of dynamically settings the IRQ mappings using the {\it{irqbalance}} daemon.
-On a system with a single processor, it may be worth to assign other interrupts
-to a CPU not serving the interrupts from the network adapter.
-\begin{lstlisting}[language=TeX]
-echo 1 > /proc/irq/default_smp_affinity     # mask for new registered irqs
-echo 0 | tee /proc/irq/*/smp_affinity_list  # assign all IRQs to CPU 0
-\end{lstlisting}

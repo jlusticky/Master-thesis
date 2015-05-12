@@ -2,12 +2,15 @@
 % (c) 2014, 2015 Josef Lusticky
 
 \subsection{Firewall}
-10~000 rules
+The measurement features enabled Netfilter and 10~000 filtering rules inserted.
+The following commands were used to setup the measurement.
 \begin{lstlisting}
 systemctl start firewalld
 iptables -F
 %for i in `seq 10001 20000`; do iptables -A INPUT -p udp --dport $i -j DROP; done
-
+\end{lstlisting}
+The {\it{firewalld}} loads Netfilter modules automatically.
+\begin{lstlisting}
 lsmod | grep nf
 nf_conntrack_ipv6      18738  5 
 nf_defrag_ipv6         34651  1 nf_conntrack_ipv6
@@ -18,7 +21,7 @@ nf_nat_ipv4            13263  1 iptable_nat
 nf_nat                 21798  4 nf_nat_ipv4,nf_nat_ipv6,ip6table_nat,iptable_nat
 nf_conntrack          101024  8 nf_nat,nf_nat_ipv4,nf_nat_ipv6,xt_conntrack,ip6table_nat,iptable_nat,nf_conntrack_ipv4,nf_conntrack_ipv6
 \end{lstlisting}
-
+The following table shows the results.
 \begin{tabular}{ | l | l | l | l | }
 \hline
 Frame size & \% of link & bandwidth & frame rate \\
@@ -26,8 +29,10 @@ Frame size & \% of link & bandwidth & frame rate \\
 AMS-IX & \% & ~Gb/s & 5~800~000 \\
 \hline
 \end{tabular}
-No impact.
-
+\\
+\\
+The table above shows that 10~000 filtering rules has no impact on throughput.
+The following listing shows output of the {\it{perf}} utility.
 \begin{lstlisting}
 perf top -C 10
   16.37%  [kernel]  [k] fib_table_lookup
@@ -40,5 +45,4 @@ perf top -C 10
    2.57%  [kernel]  [k] mlx4_en_xmit
    2.42%  [kernel]  [k] mlx4_en_alloc_frags
 \end{lstlisting}
-
-{\it{ipt\_do\_table}}
+The {\it{ipt\_do\_table}} function is responsible for the actual filtering.

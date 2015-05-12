@@ -12,7 +12,7 @@ AMS-IX & 15.22\% &  6.09~Gb/s & 1~000~000 \\
 \end{tabular}
 \\
 \\
-Routing performance of the Linux kernel version 4.0 on a single core is the same as the CentOS~7 distribution kernel 3.10.0-123.
+Routing performance of the Linux kernel version 4.0.2 on a single core is the same as the CentOS~7 distribution kernel 3.10.0-123.
 
 
 \begin{lstlisting}
@@ -29,4 +29,5 @@ perf top -C 10
    2.15%  [kernel]            [k] ip_rcv
 
 \end{lstlisting}
-FIB table lookup and locking take most of the time as in case of the CentOS~7 distribution kernel.
+FIB table lookup and locking take most of the time,
+which is the same result as in case of the CentOS~7 distribution kernel.

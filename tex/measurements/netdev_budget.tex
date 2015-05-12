@@ -3,9 +3,9 @@
 
 %FINAL
 \subsection{Netdev\_budget}
-The measurement increases the {\it{netdev\_budget}} NAPI parameter from its default 300 to 3~000.
+The measurement features increased {\it{netdev\_budget}} NAPI parameter from its default value of 300 to 3~000.
 The parameter is described in section~\ref{sec:linux-ingress}.
-The {\it{netdev\_budget}} can be configured using {\it{procfs}}
+The {\it{netdev\_budget}} can be configured using {\it{procfs}}.
 \begin{lstlisting}
 echo 3000 > /proc/sys/net/core/netdev_budget
 \end{lstlisting}

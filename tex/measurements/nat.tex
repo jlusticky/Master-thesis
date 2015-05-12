@@ -2,7 +2,8 @@
 % (c) 2014, 2015 Josef Lusticky
 
 \subsection{NAT}
-
+The measurement features Network Address Translation using Netfilter's {\it{MASQUERADE}},
+which was configured using {\it{iptables}}.
 \begin{lstlisting}
 iptables -t nat -A POSTROUTING -o enp129s0 -j MASQUERADE
 
@@ -13,7 +14,7 @@ lsmod | grep nf
   nf_nat                 21798  3 ipt_MASQUERADE,nf_nat_ipv4,iptable_nat
   nf_conntrack          101024  5 ipt_MASQUERADE,nf_nat,nf_nat_ipv4,iptable_nat,nf_conntrack_ipv4
 \end{lstlisting}
-
+The following table shows the results.
 \begin{tabular}{ | l | l | l | l | }
 \hline
 Frame size & \% of link & bandwidth & frame rate \\
@@ -21,18 +22,21 @@ Frame size & \% of link & bandwidth & frame rate \\
 AMS-IX & 65.43\% & 26.17~Gb/s & 4~300~000 \\
 \hline
 \end{tabular}
-
+\\
+\\
+The performance decreased by approx.~25\% when performing Network Address Translation.
+The following listing shows output of the {\it{perf}} tool.
+\begin{lstlisting}
 perf top -C 10
   12.71%  [kernel]  [k] fib_table_lookup
+  10.84%  [kernel]  [k] _raw_spin_lock
    6.05%  [kernel]  [k] memcpy
    5.13%  [kernel]  [k] nf_xfrm_me_harder
-   4.84%  [kernel]  [k] _raw_spin_lock
    4.19%  [kernel]  [k] mlx4_en_process_rx_cq
    2.71%  [kernel]  [k] mlx4_en_xmit
    2.43%  [kernel]  [k] ip_route_input_noref
    2.14%  [kernel]  [k] nf_iterate
    2.07%  [kernel]  [k] check_leaf.isra.7
    2.02%  [kernel]  [k] __netif_receive_skb_core
-
-{\it{nf\_xfrm\_me\_harder}}
-{\it{nf\_iterate}}
+\end{lstlisting}
+The {\it{nf\_xfrm\_me\_harder}} function is responsible for the actual address translation.
