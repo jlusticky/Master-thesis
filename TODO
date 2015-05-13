@@ -1,17 +1,11 @@
 TODO:
-- analysis-settings reference lze zpresnit
 doplnit zaver o bgp
 dopsat prilohu general steps
-projit citace a todo
-- doplnit adaptive interrupts MLX
-- doplnit kartu MLX s 16 frontami
-- evenly -> uniformly
-- projet aspellem: find . -name "*.tex" -exec aspell --lang=en_GB --mode=tex check "{}" \;
-- změnit random v BGP
+projit citace
 - dopsat Firewall,NAT
-- XPS
 - direct cache access
-- boot menu select
+- vzit xml ze Soave
+- doplnit data v tabulkach
 
 Kernel networking:
  - http://www.cubrid.org/blog/dev-platform/understanding-tcp-ip-network-stack/

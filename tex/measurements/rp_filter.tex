@@ -3,7 +3,7 @@
 
 %FINAL
 \subsection{Reverse path filter}
-The measurement features Reverse path filter enabled, which is described in section~\ref{sec:analysis-settings}.
+The measurement features Reverse path filter enabled, which is described in subsection~\ref{sub:analysis-settings-procfs}.
 The rp\_filter can be enabled via {\it{procfs}}.
 \begin{lstlisting}[language=TeX]
 echo 1 | tee /proc/sys/net/ipv4/conf/*/rp_filter
@@ -19,7 +19,7 @@ AMS-IX & 55.54\% & 22.21~Gb/s & 3~650~000 \\
 \\
 \\
 The rp\_filter introduces a significant performance drop of about 37\%.
-The following listing shows the ouput of the {\it{perf}} utility.
+The following listing shows the output of the {\it{perf}} utility.
 \begin{lstlisting}
 perf top -C 10
   39.88%  [kernel]  [k] fib_table_lookup
@@ -37,8 +37,8 @@ and it is therefore taking much more of the CPU time.
 There is also new {\it{fib\_validate\_source}} function, which calls
 the actual {\it{fib\_table\_lookup}}.
 
-In bidirectional routing with Reverse path filter enbaled,
-it may be worth changing the default RSS hash key to a symetric one.
+In bidirectional routing with Reverse path filter enabled,
+it may be worth changing the default RSS hash key to a symmetric one.
 The RSS hash key is a taken as input by the Toeplitz hash function, as described in section~\ref{sec:linux-scaling}.
-A symetric RSS key would lead to processing both directions of the same flow on the same CPU,
+A symmetric RSS key would lead to processing both directions of the same flow on the same CPU,
 therefore the result of the {\it{fib\_table\_lookup}} could be fetched from the CPU's cache~\cite{symetric-rss}.

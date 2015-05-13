@@ -5,12 +5,12 @@
 Base CentOS 7 was installed on the server.
 The operating system features Linux kernel based on version 3.10 -
 the installed version is 3.10.0-123.20.1.el7.x86\_64.
-The operating system was updated with all updates avaliable as of 1st May 2015.
+The operating system was updated with all updates available as of 1st May 2015.
 The upstream kernel version 4.0.2 was additionally installed from the ELRepo repository~\cite{elrepo-kernel-ml}.
 
 The Linux kernel detects the Mellanox ConnectX-3 EN card automatically and loads the mlx4\_core and mlx4\_en module.
 The mlx4\_core module prints the detected PCI-Express link parameters to the kernel's message buffer.
-The buffer can be viewed using the dmesg utility and its partial output is shown bellow:
+The buffer can be viewed using the {\it{dmesg}} utility and its partial output is shown bellow:
 \begin{lstlisting}[language=TeX]
 mlx4_core 0000:06:00.0: PCIe link speed is 8.0GT/s, device supports 8.0GT/s
 mlx4_core 0000:06:00.0: PCIe link width is x8, device supports x8
@@ -40,6 +40,6 @@ Listing~\ref{lst:setup-lspci} shows that the system supports MSI-X and the adapt
 				...
 \end{lstlisting}
 
-Apart from the NIC driver, the Mellanox ConnectX-3 adpater uses its own proprietary firmware.
+Apart from the NIC driver, the Mellanox ConnectX-3 adapter uses its own proprietary firmware.
 The firmware was updated to version 2.32.5100, which is the latest version available as of 10th January 2015.
 The firmware is not part of the Linux kernel and its update procedure is described in appendix~\ref{app:firmware}.

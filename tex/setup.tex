@@ -5,12 +5,12 @@
 The basic setup consists of plugging the Mellanox ConnectX-3 NIC to the PCI-Express slot of the server's motherboard,
 cabling the server with the Spirent packet generator,
 installing the CentOS~7 GNU/Linux distribution, assigning IP adresses on all interconnected interfaces
-and allowing IP forwarding (i.e. disabling netfilter).
+and allowing IP forwarding.
 Afterwards, the CentOS~7 routing performance can be measured, with the default configuration.
 
 Further setup includes setting the {\it{performance}} scaling governor for better CPU utilisation,
-disabling SELinux, disabling netfilter,
-disabling the irqbalance daemon and assigning IRQ affinity manually.
+disabling SELinux, disabling Netfilter and Reverse path filter,
+disabling the {\it{irqbalance}} daemon and assigning IRQ affinity manually.
 These steps are focused on maximum performance in frames per second statistic
 and on maximum CPU utilisation.
 

@@ -19,5 +19,5 @@ using the files exported in /sys/class/net/{\it{ifname}}/queues.
 Each rx-{\it{xx}} subdirectory represents a single hardware receive queue.
 The rx-{\it{xx}}/rps\_cpus file can be used to set a mask of CPUs serving interrupt requests from a particular hardware queue.
 Since the Mellanox ConnectX-3 NIC supports RSS, the RPS feature is disabled by default - each rps\_cpus is set to 0.
-
-%XPS
+Similary, the XPS feature can be configured via tx-{\it{xx}}/xps\_cpus.
+The XPS configuration should be always checked to reflect the IRQ affinity mappings configured via proc.

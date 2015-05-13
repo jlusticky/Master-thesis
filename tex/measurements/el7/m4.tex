@@ -22,7 +22,7 @@ AMS-IX & 15.22\% &  6.09~Gb/s & 800~000 \\
 When forwarding IP packets from multiple IPv4 flows on a single CPU,
 the routing performance of the Linux kernel drops by 20\% against forwarding a single IPv4 flow.
 The following listing shows that
-the packets are evenly distributed among all hardware queues.
+the packets are uniformly distributed among all hardware queues.
 However, the interrupts are not distributed among CPUs.
 \begin{lstlisting}
       ... CPU8  CPU9   CPU10 CPU11 CPU12  ...

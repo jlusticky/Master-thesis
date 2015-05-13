@@ -1,7 +1,7 @@
 %=========================================================================
 % (c) 2014, 2015 Josef Lusticky
 
-\subsection{Traffic generation}
+\subsection{Traffic generation}\label{sub:analysis-metodology-generation}
 The RFC~2544 specifies the following frame sizes to be used on Ethernet:
 64, 128, 256, 512, 1024, 1280 and 1518~\cite{rfc2544}.
 However, at least 66~B frame size must be used in case of transmitting UDP over IPv6 - the size of L2 header is 14,
@@ -15,6 +15,14 @@ Figure~\ref{fig:analysis-amsix-frame-size} shows yearly frame size distribution 
 This distribution can be configured in the Spirent TestCenter Application, however,
 to use the same iMix for both IPv4 and IPv6, the minimum frame size must be increased to 66 as described above.
 To avoid an unfair packet scheduling by the server, all packets should be assigned the same Type of Service flag.
+
+Unfortunately,
+the provided Spirent TestCenter Application does not contain license to configure a device participating in TCP streaming.
+This constraint could be workarounded by sending TCP packets with no flags set,
+however such configuration is also not possible.
+The generated TCP packets always contain TCP SYN flag,
+which bypasses the Generic Receive Offload described in subsection~\ref{sub:linux-ingress-offloads}.
+Therefore, the TCP packet processing is the same as in case of UDP.
 
 The Spirent TestCenter Application allows to configure exact frame rate or bandwidth use.
 The measurements should distinguish at least between 50~000 frames per second or 1\% of bandwidth use.

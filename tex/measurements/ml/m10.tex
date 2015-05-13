@@ -13,8 +13,7 @@ AMS-IX & 15.22\% &  6.09~Gb/s & 1~000~000 \\
 \\
 \\
 Routing performance of the Linux kernel version 4.0.2 on a single core is the same as the CentOS~7 distribution kernel 3.10.0-123.
-
-
+The following listing shows the output of the {\it{perf}} tool.
 \begin{lstlisting}
 perf top -C 10
   11.25%  [kernel]            [k] _raw_spin_lock
@@ -27,7 +26,6 @@ perf top -C 10
    2.64%  [kernel]            [k] mlx4_en_poll_tx_cq
    2.43%  [kernel]            [k] ip_route_input_noref
    2.15%  [kernel]            [k] ip_rcv
-
 \end{lstlisting}
-FIB table lookup and locking take most of the time,
-which is the same result as in case of the CentOS~7 distribution kernel.
+As in case of the CentOS~7 distribution kernel,
+the FIB table lookup and locking take most of the CPU's time.
