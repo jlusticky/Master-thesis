@@ -12,13 +12,18 @@ The system features Linux kernel based on version 3.10.
 Additionally, upstream kernel 3.19.2 was installed.
 The Linux kernel routing performance was measured under different scenarios, including
 simulation of a real internet traffic, based on the data provided by the Amsterdam Internet Exchange.
-Custom frame-size distribution was configured for this purpose and used in the experiments.
-%TODO BGP
+A custom frame-size distribution was configured for this purpose and used in the experiments.
+
 The overall routing performance of the Linux kernel is sufficient for routing 35.91~Gbps
-of the simulated Internet traffic on Intel Xeon CPU.
+of the simulated Internet traffic on Intel Xeon CPU, that is 5.9~million frames per second.
 The CPU features 8~physical cores and the HyperThreading technology (16~ logical cores).
-The Mellanox ConnectX-3 EN adapter is able to scale the packet processing to 8~cores.%TODO
-The Linux kernel is able to route 5.9~millions frames per second on 8~physical cores.
+The Mellanox ConnectX-3 EN adapter is able to scale the packet processing up to 16~cores,
+however, the measurements show that utilising 8~cores performs slightly better.
+Since the packet processing is highly optimised in terms of cache hit ratio,
+this may be a constraint of the Hyper-Threading technology.
+The measurement involving the Internet BGP routes shows,
+that the Linux kernel is sufficient for routing 30.95~Gbps of the simulated Internet traffic,
+that is 5.1~millions frames per second.
 
 40Gbit software router with GNU/Linux may provide a reasonable alternative to proprietary hardware-based routers.
 The main bottleneck of the default installation is the {\it{irqbalance}} daemon, which
