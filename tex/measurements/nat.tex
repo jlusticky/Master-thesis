@@ -2,7 +2,7 @@
 % (c) 2014, 2015 Josef Lusticky
 
 \subsection{NAT}
-The measurement features Network Address Translation using Netfilter's {\it{MASQUERADE}},
+The measurement features a simple Network Address Translation using Netfilter's {\it{MASQUERADE}},
 which was configured using {\it{iptables}}.
 \begin{lstlisting}
 iptables -t nat -A POSTROUTING -o enp129s0 -j MASQUERADE
@@ -15,6 +15,8 @@ lsmod | grep nf
   nf_conntrack          101024  5 ipt_MASQUERADE,nf_nat,nf_nat_ipv4,iptable_nat,nf_conntrack_ipv4
 \end{lstlisting}
 The following table shows the results.
+\\
+\\
 \begin{tabular}{ | l | l | l | l | }
 \hline
 Frame size & \% of link & bandwidth & frame rate \\

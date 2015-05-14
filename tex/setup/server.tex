@@ -14,6 +14,7 @@ If the system uses DHCP to obtain IP address, the {\it{/etc/rc.local}} script ca
 Simply append {\it{dhclient}} to the end of the file and make the file executable by running {\it{chmod +x /etc/rc.local}},
 but kill the {\it{dhclient}} daemon after it obtained IP address to avoid sending DHCP Request packets on other interfaces.
 The services can be disable using {\it{systemctl}} command, as the following listing shows.
+\newpage
 \begin{lstlisting}
 systemctl disable postfix avahi-daemon tuned crond polkit NetworkManager auditd dbus cron rsyslog
 reboot

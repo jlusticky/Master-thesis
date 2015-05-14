@@ -136,6 +136,8 @@ The following listing shows the cache utilisation on all CPUs present in the sys
  TOTAL  *     8995     2664 K    1.00    0.87    0.00    0.04      N/A
 \end{lstlisting}
 The CPU 10 is performing the work related to TCP/IP processing.
-Most of the cache misses are L2 miss, but there are also necessary L3 misses.
+Most of the cache misses are L2 miss, but there are also L3 misses.
+The number of L3 misses is greatly reduced by the Intel Data Direct I/O technology,
+as described in section~\ref{sec:analysis-hardware}.
 The L2 hit ratio is 88\%, while L3 hit ration is almost 100\%.
 Other CPUs are in idle state, except for CPU~0, which is running the Intel PCM and prints the output.

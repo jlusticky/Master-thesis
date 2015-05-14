@@ -1,11 +1,5 @@
 TODO:
-doplnit zaver o bgp
-dopsat prilohu general steps
-projit citace
-- dopsat Firewall,NAT
-- direct cache access
 - vzit xml ze Soave
-- doplnit data v tabulkach
 
 Kernel networking:
  - http://www.cubrid.org/blog/dev-platform/understanding-tcp-ip-network-stack/
