@@ -1,6 +1,6 @@
 Unless stated otherwise (kernel, intel-pcm), the source code is distributed under the following license:
 
-Copyright (c) 2015, Josef Lusticky
+Copyright (c) 2014-2015, Josef Lusticky
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

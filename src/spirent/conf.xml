@@ -15,7 +15,7 @@
    TableViewData=""
    TestMode="L2L3"
    SelectedTechnologyProfiles=""
-   ConfigurationFileName="C:\Documents and Settings\xlusti00\My Documents\DP\nEw-addr.xml"
+   ConfigurationFileName="C:\Documents and Settings\xlusti00\My Documents\DP\conf.xml"
    Active="TRUE"
    LocalActive="TRUE"
    Name="Project 1">
@@ -684,10 +684,6 @@
      Active="TRUE"
      LocalActive="TRUE"
      Name="Basic Traffic Results">
-      <Relation type="ResultChild" target="2712"/>
-      <Relation type="ResultChild" target="2713"/>
-      <Relation type="ResultChild" target="2714"/>
-      <Relation type="ResultChild" target="2715"/>
       <ResultQuery id="2069" 
        ConfigClassId="generator"
        ResultClassId="generatorportresults"
@@ -2452,23 +2448,25 @@
      Active="TRUE"
      LocalActive="TRUE"
      Name="Perspective 1">
-      <PerspectiveNode id="1243" 
+      <PerspectiveNode id="1263" 
        Guid="8CF0ABC3-9F7C-46bd-A22E-00D88A8376D3"
        Data="&lt;NodeData Name=&quot;resultFrame.1&quot; FrameId=&quot;8CF0ABC3-9F7C-46bd-A22E-00D88A8376D3&quot; Active=&quot;true&quot; RowCount=&quot;1&quot; ColumnCount=&quot;2&quot; /&gt;"
-       ContentData="&lt;ContentData&gt;&lt;NodeContentData FrameName=&quot;frame://core/Port/ResultQuery:(1, 0, 0)&quot; ResultDataSetId=&quot;Port Traffic\Basic Traffic Results&quot; Column=&quot;0&quot; Row=&quot;0&quot; DockPanelNumber=&quot;1&quot; /&gt;&lt;NodeContentData FrameName=&quot;frame://core/DynamicResultView/ResultQuery:(1, 0, 1)&quot; ResultDataSetId=&quot;Port Traffic and Counters\Aggregate Port L1 Tx Rate&quot; Column=&quot;1&quot; Row=&quot;0&quot; DockPanelNumber=&quot;1&quot; /&gt;&lt;/ContentData&gt;&#xD;&#xA;"
+       ContentData="&lt;ContentData&gt;&lt;NodeContentData FrameName=&quot;frame://core/Port/ResultQuery:(1, 0, 0)&quot; ResultDataSetId=&quot;Port Traffic\Basic Traffic Results&quot; Column=&quot;0&quot; Row=&quot;0&quot; DockPanelNumber=&quot;1&quot; /&gt;&lt;NodeContentData FrameName=&quot;frame://core/DynamicResultView/ResultQuery:(1, 0, 1)&quot; ResultDataSetId=&quot;Port Traffic and Counters\Aggregate Port L1 Tx Rate&quot; Column=&quot;1&quot; Row=&quot;0&quot; DockPanelNumber=&quot;1&quot; /&gt;&lt;/ContentData&gt;
+&#xD;&#xA;"
        Active="TRUE"
        LocalActive="TRUE"
-       Name="PerspectiveNode 5">
+       Name="PerspectiveNode 7">
         <Relation type="PerspectiveChild" target="2068"/>
         <Relation type="PerspectiveChild" target="2219"/>
       </PerspectiveNode>
-      <PerspectiveNode id="1245" 
+      <PerspectiveNode id="1265" 
        Guid="1F412EE6-760C-4937-9644-ACFA463EA44E"
        Data="&lt;NodeData Name=&quot;resultFrame.2&quot; FrameId=&quot;1F412EE6-760C-4937-9644-ACFA463EA44E&quot; Active=&quot;false&quot; RowCount=&quot;1&quot; ColumnCount=&quot;2&quot; /&gt;"
-       ContentData="&lt;ContentData /&gt;&#xD;&#xA;"
+       ContentData="&lt;ContentData /&gt;
+&#xD;&#xA;"
        Active="TRUE"
        LocalActive="TRUE"
-       Name="PerspectiveNode 6">
+       Name="PerspectiveNode 8">
         <Relation type="PerspectiveChild" target="2068"/>
         <Relation type="PerspectiveChild" target="2219"/>
       </PerspectiveNode>
@@ -2550,7 +2548,7 @@
      TestModuleProfile="Default"
      Active="TRUE"
      LocalActive="TRUE"
-     Name="Port //11/1">
+     Name="Port //11/1 (offline)">
       <Relation type="AffiliationPort" source="2538"/>
       <Relation type="AffiliationPort" source="2544"/>
       <Relation type="ActivePhy" target="2344"/>
@@ -2730,7 +2728,6 @@
        Active="TRUE"
        LocalActive="TRUE"
        Name="Traffic Generator 5">
-        <Relation type="ResultChild" target="2712"/>
         <GeneratorConfig id="2234" 
          SchedulingMode="PORT_BASED"
          AdvancedInterleaving="FALSE"
@@ -2761,7 +2758,6 @@
        Active="TRUE"
        LocalActive="TRUE"
        Name="Traffic Analyzer 5">
-        <Relation type="ResultChild" target="2714"/>
         <AnalyzerConfig id="2236" 
          TimestampLatchMode="START_OF_FRAME"
          SigMode="ENHANCED_DETECTION"
@@ -4234,7 +4230,7 @@
        EnableResolveDestMacAddress="TRUE"
        AdvancedInterleavingGroup="0"
        DisableTunnelBinding="FALSE"
-       FrameConfig="&lt;frame&gt;&lt;config&gt;&lt;pdus&gt;&lt;pdu name=&quot;ipv4_3680&quot; pdu=&quot;ipv4:IPv4&quot;&gt;&lt;totalLength&gt;20&lt;/totalLength&gt;&lt;ttl&gt;255&lt;/ttl&gt;&lt;checksum&gt;14288&lt;/checksum&gt;&lt;sourceAddr&gt;192.0.2.2&lt;/sourceAddr&gt;&lt;destAddr&gt;192.0.2.6&lt;/destAddr&gt;&lt;prefixLength&gt;30&lt;/prefixLength&gt;&lt;destPrefixLength&gt;30&lt;/destPrefixLength&gt;&lt;gateway&gt;192.0.2.1&lt;/gateway&gt;&lt;tosDiffserv name=&quot;anon_2665&quot;&gt;&lt;tos name=&quot;anon_2666&quot;&gt;&lt;precedence&gt;0&lt;/precedence&gt;&lt;dBit&gt;0&lt;/dBit&gt;&lt;tBit&gt;0&lt;/tBit&gt;&lt;rBit&gt;0&lt;/rBit&gt;&lt;mBit&gt;0&lt;/mBit&gt;&lt;reserved&gt;0&lt;/reserved&gt;&lt;/tos&gt;&lt;/tosDiffserv&gt;&lt;/pdu&gt;&lt;pdu name=&quot;proto1&quot; pdu=&quot;udp:Udp&quot;&gt;&lt;length&gt;0&lt;/length&gt;&lt;/pdu&gt;&lt;/pdus&gt;&lt;/config&gt;&lt;/frame&gt;"
+       FrameConfig="&lt;frame&gt;&lt;config&gt;&lt;pdus&gt;&lt;pdu name=&quot;ipv4_3680&quot; pdu=&quot;ipv4:IPv4&quot;&gt;&lt;totalLength&gt;20&lt;/totalLength&gt;&lt;ttl&gt;255&lt;/ttl&gt;&lt;checksum&gt;14288&lt;/checksum&gt;&lt;sourceAddr&gt;192.0.2.2&lt;/sourceAddr&gt;&lt;destAddr&gt;192.0.2.6&lt;/destAddr&gt;&lt;prefixLength&gt;30&lt;/prefixLength&gt;&lt;destPrefixLength&gt;30&lt;/destPrefixLength&gt;&lt;gateway&gt;192.0.2.1&lt;/gateway&gt;&lt;tosDiffserv name=&quot;anon_2573&quot;&gt;&lt;tos name=&quot;anon_2574&quot;&gt;&lt;precedence&gt;0&lt;/precedence&gt;&lt;dBit&gt;0&lt;/dBit&gt;&lt;tBit&gt;0&lt;/tBit&gt;&lt;rBit&gt;0&lt;/rBit&gt;&lt;mBit&gt;0&lt;/mBit&gt;&lt;reserved&gt;0&lt;/reserved&gt;&lt;/tos&gt;&lt;/tosDiffserv&gt;&lt;/pdu&gt;&lt;pdu name=&quot;proto1&quot; pdu=&quot;udp:Udp&quot;&gt;&lt;length&gt;0&lt;/length&gt;&lt;/pdu&gt;&lt;/pdus&gt;&lt;/config&gt;&lt;/frame&gt;"
        Active="TRUE"
        LocalActive="TRUE"
        Name="IP4_1flow">
@@ -4273,7 +4269,7 @@
        EnableResolveDestMacAddress="TRUE"
        AdvancedInterleavingGroup="0"
        DisableTunnelBinding="FALSE"
-       FrameConfig="&lt;frame&gt;&lt;config&gt;&lt;pdus&gt;&lt;pdu name=&quot;ipv4_7527&quot; pdu=&quot;ipv4:IPv4&quot;&gt;&lt;totalLength&gt;20&lt;/totalLength&gt;&lt;ttl&gt;255&lt;/ttl&gt;&lt;checksum&gt;14288&lt;/checksum&gt;&lt;sourceAddr&gt;192.0.2.2&lt;/sourceAddr&gt;&lt;destAddr&gt;192.0.2.6&lt;/destAddr&gt;&lt;prefixLength&gt;30&lt;/prefixLength&gt;&lt;destPrefixLength&gt;30&lt;/destPrefixLength&gt;&lt;gateway&gt;192.0.2.1&lt;/gateway&gt;&lt;tosDiffserv name=&quot;anon_2677&quot;&gt;&lt;tos name=&quot;anon_2678&quot;&gt;&lt;precedence&gt;0&lt;/precedence&gt;&lt;dBit&gt;0&lt;/dBit&gt;&lt;tBit&gt;0&lt;/tBit&gt;&lt;rBit&gt;0&lt;/rBit&gt;&lt;mBit&gt;0&lt;/mBit&gt;&lt;reserved&gt;0&lt;/reserved&gt;&lt;/tos&gt;&lt;/tosDiffserv&gt;&lt;/pdu&gt;&lt;pdu name=&quot;proto1&quot; pdu=&quot;udp:Udp&quot;&gt;&lt;sourcePort&gt;1024&lt;/sourcePort&gt;&lt;destPort override=&quot;true&quot; &gt;1024&lt;/destPort&gt;&lt;length&gt;0&lt;/length&gt;&lt;/pdu&gt;&lt;/pdus&gt;&lt;/config&gt;&lt;/frame&gt;"
+       FrameConfig="&lt;frame&gt;&lt;config&gt;&lt;pdus&gt;&lt;pdu name=&quot;ipv4_7527&quot; pdu=&quot;ipv4:IPv4&quot;&gt;&lt;totalLength&gt;20&lt;/totalLength&gt;&lt;ttl&gt;255&lt;/ttl&gt;&lt;checksum&gt;14288&lt;/checksum&gt;&lt;sourceAddr&gt;192.0.2.2&lt;/sourceAddr&gt;&lt;destAddr&gt;192.0.2.6&lt;/destAddr&gt;&lt;prefixLength&gt;30&lt;/prefixLength&gt;&lt;destPrefixLength&gt;30&lt;/destPrefixLength&gt;&lt;gateway&gt;192.0.2.1&lt;/gateway&gt;&lt;tosDiffserv name=&quot;anon_2392&quot;&gt;&lt;tos name=&quot;anon_2393&quot;&gt;&lt;precedence&gt;0&lt;/precedence&gt;&lt;dBit&gt;0&lt;/dBit&gt;&lt;tBit&gt;0&lt;/tBit&gt;&lt;rBit&gt;0&lt;/rBit&gt;&lt;mBit&gt;0&lt;/mBit&gt;&lt;reserved&gt;0&lt;/reserved&gt;&lt;/tos&gt;&lt;/tosDiffserv&gt;&lt;/pdu&gt;&lt;pdu name=&quot;proto1&quot; pdu=&quot;udp:Udp&quot;&gt;&lt;sourcePort&gt;1024&lt;/sourcePort&gt;&lt;destPort override=&quot;true&quot; &gt;1024&lt;/destPort&gt;&lt;length&gt;0&lt;/length&gt;&lt;/pdu&gt;&lt;/pdus&gt;&lt;/config&gt;&lt;/frame&gt;"
        Active="FALSE"
        LocalActive="TRUE"
        Name="IP4_32flows">
@@ -4450,20 +4446,18 @@
        EnableResolveDestMacAddress="TRUE"
        AdvancedInterleavingGroup="0"
        DisableTunnelBinding="FALSE"
-       FrameConfig="&lt;frame&gt;&lt;config&gt;&lt;pdus&gt;&lt;pdu name=&quot;eth1&quot; pdu=&quot;ethernet:EthernetII&quot;&gt;&lt;preamble minByteLength=&quot;8&quot; &gt;fb555555555555d5&lt;/preamble&gt;&lt;dstMac&gt;F4:52:14:5E:6C:71&lt;/dstMac&gt;&lt;srcMac&gt;00:10:94:00:00:01&lt;/srcMac&gt;&lt;/pdu&gt;&lt;pdu name=&quot;ip_1&quot; pdu=&quot;ipv4:IPv4&quot;&gt;&lt;totalLength&gt;20&lt;/totalLength&gt;&lt;checksum&gt;63701&lt;/checksum&gt;&lt;sourceAddr&gt;192.0.2.2&lt;/sourceAddr&gt;&lt;destAddr&gt;1.0.0.1&lt;/destAddr&gt;&lt;gateway&gt;192.0.2.1&lt;/gateway&gt;&lt;tosDiffserv name=&quot;anon_2694&quot;&gt;&lt;tos name=&quot;anon_2695&quot;&gt;&lt;/tos&gt;&lt;/tosDiffserv&gt;&lt;/pdu&gt;&lt;pdu name=&quot;proto1&quot; pdu=&quot;udp:Udp&quot;&gt;&lt;length&gt;0&lt;/length&gt;&lt;/pdu&gt;&lt;/pdus&gt;&lt;/config&gt;&lt;/frame&gt;"
+       FrameConfig="&lt;frame&gt;&lt;config&gt;&lt;pdus&gt;&lt;pdu name=&quot;eth1&quot; pdu=&quot;ethernet:EthernetII&quot;&gt;&lt;preamble minByteLength=&quot;8&quot; &gt;fb555555555555d5&lt;/preamble&gt;&lt;dstMac&gt;F4:52:14:5E:6C:71&lt;/dstMac&gt;&lt;srcMac&gt;00:10:94:00:00:01&lt;/srcMac&gt;&lt;/pdu&gt;&lt;pdu name=&quot;ip_1&quot; pdu=&quot;ipv4:IPv4&quot;&gt;&lt;totalLength&gt;20&lt;/totalLength&gt;&lt;checksum&gt;63701&lt;/checksum&gt;&lt;sourceAddr&gt;192.0.2.2&lt;/sourceAddr&gt;&lt;destAddr&gt;1.0.0.1&lt;/destAddr&gt;&lt;gateway&gt;192.0.2.1&lt;/gateway&gt;&lt;tosDiffserv name=&quot;anon_2862&quot;&gt;&lt;tos name=&quot;anon_2863&quot;&gt;&lt;/tos&gt;&lt;/tosDiffserv&gt;&lt;/pdu&gt;&lt;pdu name=&quot;proto1&quot; pdu=&quot;udp:Udp&quot;&gt;&lt;length&gt;0&lt;/length&gt;&lt;/pdu&gt;&lt;/pdus&gt;&lt;/config&gt;&lt;/frame&gt;"
        Active="FALSE"
        LocalActive="TRUE"
        Name="IP4_BGP">
         <Relation type="ExpectedRx" target="2418"/>
         <Relation type="AffiliationFrameLengthDistribution" target="2558"/>
         <Relation type="AffiliationStreamBlockLoadProfile" target="2569"/>
-        <RangeModifier id="2408" 
-         ModifierMode="INCR"
+        <RandomModifier id="1252" 
          Mask="255.255.255.255"
-         StepValue="0.1.0.0"
          RecycleCount="100"
          RepeatCount="0"
-         Data="1.0.0.1"
+         Seed="0"
          DataType="NATIVE"
          EnableStream="FALSE"
          Offset="0"
@@ -4471,7 +4465,7 @@
          Active="TRUE"
          LocalActive="TRUE"
          Name="IPv4 Modifier">
-        </RangeModifier>
+        </RandomModifier>
       </StreamBlock>
     </Port>
     <Port id="2418" 
@@ -4483,7 +4477,7 @@
      TestModuleProfile="Default"
      Active="TRUE"
      LocalActive="TRUE"
-     Name="Port //11/2">
+     Name="Port //11/2 (offline)">
       <Relation type="AffiliationPort" source="2541"/>
       <Relation type="AffiliationPort" source="2554"/>
       <Relation type="ActivePhy" target="2496"/>
@@ -4663,7 +4657,6 @@
        Active="TRUE"
        LocalActive="TRUE"
        Name="Traffic Generator 6">
-        <Relation type="ResultChild" target="2713"/>
         <GeneratorConfig id="2428" 
          SchedulingMode="PORT_BASED"
          AdvancedInterleaving="FALSE"
@@ -4694,7 +4687,6 @@
        Active="TRUE"
        LocalActive="TRUE"
        Name="Traffic Analyzer 6">
-        <Relation type="ResultChild" target="2715"/>
         <AnalyzerConfig id="2430" 
          TimestampLatchMode="START_OF_FRAME"
          SigMode="ENHANCED_DETECTION"
