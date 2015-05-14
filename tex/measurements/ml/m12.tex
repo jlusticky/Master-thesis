@@ -3,7 +3,10 @@
 
 % FINAL
 \subsection{32 IPv4 flows on 16 queues}
-%TODO
+The measurement uses the {\it{ethtool}} utility to configure the Mellanox ConnectX-3 EN adapter to use
+16 receive queues per each port.
+The network adapter supports up to 16 receive queues per port with RSS,
+as described in section~\ref{sec:analysis-hardware}.
 \begin{lstlisting}
 ethtool -L enp129s0 rx 16
 ethtool -L enp129s0d1 rx 16
@@ -20,6 +23,6 @@ AMS-IX & 81.40\% & 32.56~Gb/s & 5~350~000 \\
 \end{tabular}
 \\
 \\
-Although the networking code runs on 16 logical CPUs simultenously,
+Although the networking code runs on 16 logical CPUs simultaneously,
 the performance is lower than in case of using 8 queues only.
 This may be caused by the overhead of the Hyper-Threading technology.

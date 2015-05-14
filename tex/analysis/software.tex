@@ -7,7 +7,7 @@ the kernel based on upstream version 3.10~\cite{rhel-7-announce}.
 To avoid licensing fees, CentOS 7 can be installed.
 CentOS 7 provides support for the 40 Gigabit Ethernet protocol and a binary compatible kernel with RHEL 7~\cite{centos-7-announce}.
 Since the kernel version 3.10 was released in 2013, the latest upstream kernel can be installed
-to provide additional comparision.
+to provide additional comparison.
 The latest upstream kernel can be either compiled directly from the source code or downloaded from a third party repository.
 The ELRepo repository contains the {\it{kernel-ml}} package
 with the latest upstream kernel version, which is 4.0.2 at the time of writing~\cite{elrepo-kernel-ml}.
@@ -15,15 +15,14 @@ with the latest upstream kernel version, which is 4.0.2 at the time of writing~\
 Mellanox ConnectX-3 EN is supported by the mlx4 driver found in the
 {\it{drivers/net/ethernet/mellanox/mlx4}} directory of the Linux kernel source code.
 It is the low level driver implementation for the Connect-X adapters designed by Mellanox Technologies.
-Some Connect-X adpaters can operate as an InfiniBand adapter and as an Ethernet NIC.
+Some Connect-X adapters can operate as an InfiniBand adapter and as an Ethernet NIC.
 To accommodate the two flavors, the driver is split into modules mlx4\_core, mlx4\_en and mlx4\_ib.
 The mlx4\_core module handles low-level functions like device initialisation and firmware commands processing.
 The mlx4\_en module handles Ethernet specific functions and
 plugs into the network device layer of the Linux kernel.
-Similarly, the mlx4\_ib module handles Infiniband specific functions~\cite{mellanox-user-manual}.
-%TODO By default, the driver uses adaptive interrupt moderation for the receive path,
-%which adjusts the moderation time to the traffic pattern~\cite{mellanox-user-manual}.
-% To inform the kernel about many ingress packets, interrupts even when NAPI - adaptive interrupt moderation.
+Similarly, the mlx4\_ib module handles InfiniBand specific functions~\cite{mellanox-user-manual}.
+By default, the driver uses adaptive interrupt moderation for the receive path,
+which adjusts the interrupt moderation to the traffic pattern~\cite{mellanox-user-manual}.
 
 Spirent TestCenter Application version 4.46 is provided to use the Spirent hardware packet generator.
 The application allows to create virtual devices connected to selected ports.

@@ -3,12 +3,13 @@
 
 \section{Software settings}\label{sec:analysis-settings}
 The CentOS 7 operating system features various components that influence forwarding performance.
-The performance of the CentOS~7 dsitribution kernel is measured in this thesis.
+The performance of the CentOS~7 distribution kernel is measured in this thesis.
 Further measurements also take the latest upstream kernel 3.19.2 into account~\cite{kernel-source}.
 
 To measure a bare routing performance of the Linux kernel,
 the Netfilter and SELinux components should be disabled.
-If disabling the Netfilter is not appropriate, the iptables utility must be used to configure the Netfilter to allow IP forwarding,
+If disabling the Netfilter is not appropriate,
+the {\it{iptables}} utility must be used to configure the Netfilter to allow IP forwarding,
 because the default rules do not allow packet forwarding in CentOS~7.
 Additionally, SELinux should be disabled to prevent performance decrease.
 SELinux in CentOS~7 uses enforcing policy by default.
@@ -18,14 +19,14 @@ The Linux kernel features dynamic CPU frequency scaling.
 The CPUFreq governors are policies that decide what frequency should be used.
 The CPUfreq governor {\it{performance}} should be used during the measurements.
 The {\it{performance}} governor sets the CPU statically to the
-highest frequency avaliable. %, which is 2.6~GHz in case of Intel Xeon E5-2630 v2.
+highest frequency available. %, which is 2.6~GHz in case of Intel Xeon E5-2630 v2.
 The default governor is {\it{powersave}} in CentOS~7,
 which sets the CPU statically to the lowest frequency~\cite{cpufreq-governors}.
 
 To change the Linux kernel compile-time configuration, the kernel must be recompiled.
 The CentOS~7 kernel provides a fair amount of features that could break existing setups when disabled.
 The default kernel compile-time configuration does not have to provide the best routing performance,
-however, it is usually used in most scenarious and hence its benchmark results are of interests for most people.
+however, it is usually used in most scenarios and hence its benchmark results are of interests for most people.
 
 \input{analysis/settings-compile.tex}
 

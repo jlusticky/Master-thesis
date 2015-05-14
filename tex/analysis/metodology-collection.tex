@@ -13,14 +13,14 @@ If the server forwards packets without a single loss, the transmit rate can be i
 
 The proc filesystem provides access to several statistics as well.
 The network statistics exported via proc filesystem can be found in the /proc/net directory.
-The files in this directory are read-only and cannot be manipulated using the sysctl utility.
+The files in this directory are read-only and cannot be manipulated using the {\it{sysctl}} utility.
 There are 2 important files for the measurements - the {\it{fib\_trie}} and {\it{fib\_triestat}}.
 The {\it{fib\_trie}} file exports the kernel's Forwarding Information Base overview.
 The file describes both the Main and Local FIBs, as described in section~\ref{sec:linux-routing}.
 The {\it{fib\_triestat}} file exports metadata of the FIB trie structures,
 such as average depth, maximum depth, number of leaves, etc~\cite{kernel-source}.
 
-The CPU utilisation can be observed using the perf utility,
+The CPU utilisation can be observed using the {\it{perf}} utility,
 which can be found in the tools/perf directory of the Linux kernel source code.
 Although perf is included in the Linux kernel source code,
 it must be installed separately on most GNU/Linux distributions, including CentOS~7.

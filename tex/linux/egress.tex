@@ -49,7 +49,7 @@ The packet is inserted to the hardware transmit queue by the driver and transmit
 The hardware transmit queue is implemented as a ring buffer (TX ring)
 and the DMA controller of the device uses it to fetch the egress frames~\cite{kernel-source}.
 
-The adpater uses interrupts to notify the kernel when the transmission fails or succeeds.
+The adapter uses interrupts to notify the kernel when the transmission fails or succeeds.
 Similarly to NET\_RX\_SOFTIRQ, which performs an interrupt-related work for incoming traffic,
 the NET\_TX\_SOFTIRQ softirq handles the interrupt-related work for outgoing traffic.
 The transmission code uses the softirq to mitigate interrupts in a similar fashion as the reception code.

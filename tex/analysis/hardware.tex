@@ -8,8 +8,17 @@ The card was provided by the Faculty of Information Technology, Brno University 
 Mellanox ConnectX-3 EN is an adapter that can run 10~Gigabit Ethernet and 40~Gigabit Ethernet.
 It also supports nonstandard 56~Gbps link speed when connected to Mellanox switches.
 The card is PCI-Express 3.0 x8 compatible with support of previous PCI-Express versions.
-Mellanox ConnectX-3 EN is a multiqueue NIC with MSI-X support %TODO up to 16 receive queues per port
-and it features Receive Side Scaling with hashing support for both IPv4/IPv6 and TCP/UDP flows~\cite{mellanox-user-manual}.
+Mellanox ConnectX-3 EN is a multiqueue NIC with MSI-X support up to 16 receive queues per port
+featuring Receive Side Scaling with hashing support for both IPv4/IPv6 and TCP/UDP flows~\cite{mellanox-silicon, mellanox-user-manual}.
+Figure~\ref{fig:setup-mlx-block-diagram} the block diagram of the network interface card.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=7.5cm,keepaspectratio]{fig/mlx-block-diagram.png}
+	\caption{Mellanox ConnectX-3 EN block diagram (source:~\cite{mellanox-silicon})}
+	\label{fig:setup-mlx-block-diagram}
+	\bigskip
+\end{figure}
 
 The Mellanox NIC requires PCI-Express 3.0 x8 slot to take full advantage of its speed.
 Brno University of Technology provided a server with
@@ -23,7 +32,7 @@ There are various software frameworks for high-speed packet generation,
 such as pktgen\footnote{\url{https://www.kernel.org/doc/Documentation/networking/pktgen.txt}}
 or Netmap\footnote{\url{http://info.iet.unipi.it/~luigi/netmap/}}.
 Pktgen is an upstream component of the Linux kernel, but
-at the time of wrting it is not capable of generating even full 10~GbE frame rate~\cite{netmap}.
+at the time of writing it is not capable of generating even full 10~GbE frame rate~\cite{netmap}.
 However, it can be combined with other frameworks for fast packet processing, such as
 Intel's Data Plane Development Kit\footnote{\url{http://dpdk.org/}}.
 Netmap provides patches to the Linux kernel.

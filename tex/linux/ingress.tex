@@ -10,7 +10,7 @@ The handlers could interrupt other potentially important code, therefore they ne
 Interrupt handlers immediately respond to hardware and perform time-critical actions,
 however, other less critical work should be deferred to a later point when interrupts are enabled~\cite{lkd2}.
 
-Upon frame reception, the hardware interrupt handler of the network adpater
+Upon frame reception, the hardware interrupt handler of the network adapter
 performs the following immediate tasks:~\cite{understanding-internals}
 \begin{enumerate}
 \item Copies the frame into an {\it{sk\_buff}} data structure.

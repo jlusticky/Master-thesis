@@ -45,7 +45,7 @@ and a hash key, which is stored in the NIC's memory.
 This mechanism is generally known as Receive Side Scaling (RSS)
 and its goal is to increase performance uniformly~\cite{kernel-doc-scaling}.
 
-Network adpaters that do not support RSS but have multiple receive queues can still benefit from multiprocessor scaling
+Network adapters that do not support RSS but have multiple receive queues can still benefit from multiprocessor scaling
 by using Receive Packet Steering (RPS), which is a software implementation of RSS~\cite{kernel-doc-scaling}.
 However, there are some disadvantages of RPS against the hardware-based RSS.
 The calculation of the hash requires accessing data from the packet header.

@@ -26,9 +26,9 @@ AMS-IX &  9.89\% &  3.96~Gb/s & 650~000 \\
 \end{tabular}
 \\
 \\
-The routing perfomance drops by 35\% when it is performed by
+The routing performance drops by 35\% when it is performed by
 a CPU not directly connected to the PCI-Express link with the NIC.
-This is a significant perfomance drop.
+This is a significant performance drop.
 \\
 Moreover, the following listing shows that the CPU~10 must be also involved, as
 it communicates with the CPU~9 over the QPI.
@@ -92,7 +92,7 @@ it communicates with the CPU~9 over the QPI.
 CPU~9 performs the actual forwarding, while CPU~10
 is busy with the QPI communication overhead.
 As a result of this, performing the actual forwarding
-by a CPU connected over the QPI decreases the routing perfomance significantly.
+by a CPU connected over the QPI decreases the routing performance significantly.
 \\
 \\
 The use of QPI links is shown by the listing bellow.
@@ -107,7 +107,7 @@ Intel(r) QPI data traffic estimation in bytes (data traffic coming to CPU/socket
 Total QPI incoming data traffic:  323 M
 QPI data traffic/Memory controller traffic: 0.39
 \end{lstlisting}
-The following listings shows the ouput of the {\it{perf}} utility for CPU~9 and CPU~10.
+The following listings shows the output of the {\it{perf}} utility for CPU~9 and CPU~10.
 \begin{lstlisting}
 perf top -C 9
   21.25%  [kernel]  [k] _raw_spin_lock

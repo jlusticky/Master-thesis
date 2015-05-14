@@ -3,7 +3,7 @@
 
 \subsection{Procfs settings}\label{sub:analysis-settings-procfs}
 The variables exported via procfs are accessible as files under /proc in CentOS~7.
-The variables in the /proc/sys directory can be manipulated by the sysctl utility as well.
+The variables in the /proc/sys directory can be manipulated by the {\it{sysctl}} utility as well.
 The files in the /proc/sys/net directory are of interest for the experiments.
 This directory includes the following subdirectories:
 \begin{itemize}
@@ -67,7 +67,9 @@ Each registered interrupt has its own IRQ number.
 On a multiprocessor system the interrupt can be served by any of the present CPU if the physical bus supports it.
 This is the case of the PCI-Express MSI-X feature, which allows to deliver an interrupt to a specified CPU,
 as described in section~\ref{sec:40gbe-throughput}.
-%TODO QPI
+The /proc/interrupts file even allows to assign IRQ to a CPU which is not directly connected to
+the PCI-Express, however this would lead to additional overhead due to inter-processor interrupts and
+QPI communication. Routing performance of such configuration can be measured.
 
 Section~\ref{sec:linux-scaling} described how a network adapter with multiple queues
 allows to scale the network traffic processing on a multi-processor system.
