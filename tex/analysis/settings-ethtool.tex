@@ -61,32 +61,7 @@ For example, the rx-checksumming feature is turned on by ethtool -{}-offload eth
 Similarly, the scatter-gather feature is turned on by ethtool -{}-offload eth0 {\it{sg}} on.
 For more information about using ethtool, the man page of ethool(8) should be consulted.
 
-Listing~\ref{lst:analysis-ethtool-offload} shows that all supported offload features not marked as [fixed] are enabled.
-
-
-%Interrupt coalescence tunning:
-%-C eth0 rx-usecs 50
-
-%Ring buffer tunning:
-%-G eth0 rx 1024
-
-%\subsection{Neighboring}
-%The destination link layer address must be present in the ARP cache to avoid aditional delay of packet transmission.
-%The description of the neighboring implementation is outside the scope of this thesis.
-%The amount of ARP and Neighbor Discovery messages is negligible compared to the
-%amount of the actual traffic and it is not considered by the measurements.
-%However, their processing is not.
-
-
-%MLX4 driver -  mlx4_en_add - rounddown_pow_of_two
-% num_tx_rings_p_up , MLX4_EN_MAX_TX_RING_P_UP
-% pocet_TX_rings = pocet_cpu * pocet_RX_rings
-
-
-%TX,RX RING buffer sizes:
-%Bufferbloat is a phenomenon in packet-switched networks generally,
-%in which excess buffering of packets causes high latency and packet delay variation (also known as jitter),
-%as well as reducing the overall network throughput.
-%When a router device is configured to use excessively large buffers,
-%even very high-speed networks can become practically unusable for many interactive applications like voice calls,
-%chat, and even web surfing. %cite http://en.wikipedia.org/wiki/Network_scheduler
+Listing~\ref{lst:analysis-ethtool-offload} shows that all supported offload features not marked as [fixed] are enabled,
+except the {\it{loopback}} option.
+However, the option is not used when processing network traffic between two hosts~\cite{kernel-source}.
+This is the default configuration in the CentOS~7 operating system with the Mellanox ConnectX-3 EN adapter.
