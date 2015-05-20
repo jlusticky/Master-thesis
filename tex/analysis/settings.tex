@@ -12,12 +12,12 @@ If disabling the Netfilter is not appropriate,
 the {\it{iptables}} utility must be used to configure the Netfilter to allow IP forwarding,
 because the default rules do not allow packet forwarding in CentOS~7.
 Additionally, SELinux should be disabled to prevent performance decrease.
-SELinux in CentOS~7 uses enforcing policy by default.
+SELinux in CentOS~7 uses Enforcing policy by default.
 An influence of both the components on forwarding performance can be measured.
 
 The Linux kernel features dynamic CPU frequency scaling.
 The CPUFreq governors are policies that decide what frequency should be used.
-The CPUfreq governor {\it{performance}} should be used during the measurements.
+The {\it{performance}} governor should be used during the measurements.
 The {\it{performance}} governor sets the CPU statically to the
 highest frequency available. %, which is 2.6~GHz in case of Intel Xeon E5-2630 v2.
 The default governor is {\it{powersave}} in CentOS~7,

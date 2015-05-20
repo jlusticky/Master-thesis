@@ -19,7 +19,7 @@ There are several settings of the default installation which negatively impact r
 The thesis describes how to adjust the settings for the purpose of maximum throughput.
 
 The overall routing performance of the Linux kernel is sufficient for routing 35.91~Gbps
-of the simulated Internet traffic on Intel Xeon CPU, that is 5.9~million frames per second.
+of the simulated Internet traffic on a general purpose Intel Xeon CPU, that is 5.9~million frames per second.
 The CPU features 8~physical cores and the Hyper-Threading technology (16~ logical cores).
 The Mellanox ConnectX-3 EN adapter is able to scale the packet processing up to 16~cores,
 however, the measurements show that utilising 8~cores performs slightly better.
@@ -27,12 +27,12 @@ Since the packet processing is highly optimised in terms of cache hit ratio,
 this may be a constraint of the Hyper-Threading technology.
 The measurement involving the Internet BGP routes shows,
 that the Linux kernel is sufficient for routing 30.95~Gbps of the simulated Internet traffic,
-that is 5.1~millions frames per second.
+that is 5.1~million frames per second.
 
 The Linux kernel uses advantage of its scaling mechanisms to perform well in network processing,
 however, a single-core packet processing must be improved to achieve better results.
 The Linux kernel is able to route approx.~1~150~000
-frames per second utilising a single physical core.
+frames per second using a single physical core.
 This is also the limitation of a single network flow processing,
 since the scaling mechanisms implemented in the Linux kernel and network adapters
 are based on processing each flow by a different CPU.
