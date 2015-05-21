@@ -69,3 +69,16 @@ The influence of some the most interesting settings is demonstrated by the follo
 \section{BGP routes}
 
 	\input{measurements/bgp.tex}
+
+\section{Summary}
+The system used in the measurements is able to forward up to 5.9~million frames per second
+using run-time configuration only.
+Further performance improvement may require Linux kernel recompilation.
+Figure~\ref{fig:measurements-overview} shows the presented results.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=12cm,keepaspectratio]{fig/settings.png}
+		\caption{Measurements overview}
+		\label{fig:measurements-overview}
+	\end{figure}
+
