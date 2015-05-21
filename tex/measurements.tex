@@ -71,13 +71,19 @@ The influence of some the most interesting settings is demonstrated by the follo
 	\input{measurements/bgp.tex}
 
 \section{Summary}
-The system used in the measurements is able to forward up to 5.9~million frames per second
-using run-time configuration only.
-Further performance improvement may require Linux kernel recompilation.
+The Linux kernel is able to forward up to 5.8~million frames per second
+with the system settings used in the measurements,
+while the default configuration limits the performance to 1.6~million frames per second.
+The most significant performance drop is caused by the Reverse path filtering feature,
+which requires to perform the FIB lookup twice for each packet.
+Disabling the Hyper-Threading technology provides a negligable performance improvement.
+The FIB lookup with imported prefixes from the BGP table does not introduce a large performance drop
+thanks to the CPU's 20~MB L3 cache.
 Figure~\ref{fig:measurements-overview} shows the presented results.
+Further performance improvement may require Linux kernel recompilation.
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=12cm,keepaspectratio]{fig/settings.png}
+		\includegraphics[width=11.5cm,keepaspectratio]{fig/settings.png}
 		\caption{Measurements overview}
 		\label{fig:measurements-overview}
 	\end{figure}
