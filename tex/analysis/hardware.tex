@@ -7,7 +7,7 @@ Mellanox ConnectX-3 EN QSPF dual-port PCI-E 3.0 x8 MCX314A-BCBT~\cite{mellanox-p
 The card was provided by the Faculty of Information Technology, Brno University of Technology.
 Mellanox ConnectX-3 EN is an adapter that can run 10~Gigabit Ethernet and 40~Gigabit Ethernet.
 It also supports nonstandard 56~Gbps link speed when connected to Mellanox switches.
-The card is PCI-Express 3.0 x8 compatible with support of previous PCI-Express versions.
+The card is PCI-Express 3.0 x8 compatible with support for previous PCI-Express versions.
 Mellanox ConnectX-3 EN is a multiqueue NIC with MSI-X support up to 16 receive queues per port
 featuring Receive Side Scaling with hashing support for both IPv4/IPv6 and TCP/UDP flows~\cite{mellanox-silicon, mellanox-user-manual}.
 Figure~\ref{fig:setup-mlx-block-diagram} shows the block diagram of the network interface card.
@@ -41,7 +41,7 @@ Netmap is not an upstream component, but it provides patches to the Linux kernel
 Netmap claims to generate 14.88~million frames per second, which is a full frame rate of 10~Gigabit Ethernet~\cite{netmap}.
 However, Netmap was not tested against 40~GbE full frame rate of 59.5~million frames per second,
 as calculated in section~\ref{sec:40gbe-frame-rates}.
-Although both the frameworks seem promising, their benchmarking and description
+Although both frameworks seem promising, their benchmarking and description
 are outside the scope of this thesis.
 Moreover, to perform the measurements with a software-based packet generator,
 another GNU/Linux server and a 40~GbE NIC is needed.

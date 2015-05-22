@@ -18,6 +18,14 @@ The {\it{Respond to ping}} option was enabled to test the connection.
 
 Two traffic patterns were configured for each IP version - one generates a single L4 flow and the other
 generates 32 L4 flows.
+The single flow traffic pattern uses IP addresses according the scheme described in section~\ref{sec:setup-hardware}
+and UDP source and destination port 1024.
+Each flow within the traffic pattern with 32 L4 flows uses different UDP source and destination ports
+within range from 1024 up to 1055.
+The source and destination ports are the same for each flow.
+The scheme is used for both IPv4 and IPv6 traffic patterns.
+The purpose of the scheme is to use Receive Side Scaling to distribute the traffic to all CPUs uniformly.
+
 To test the routing performance of the Linux kernel with full BGP table, 
 another traffic pattern was configured.
 The pattern uses randomly generated IP destination address for each packet

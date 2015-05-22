@@ -7,12 +7,15 @@ consists of disabling Netfilter, disabling SELinux, changing the scaling governo
 configuring the IP addresses according to the scheme described in section~\ref{sec:setup-hardware}.
 Additionally, the system should run no unused services - CentOS~7 runs Postfix, Avahi daemon, Polkitd, Tuned, Crond,
 NetworkManger, dbus, crond, rsyslogd and auditd by default.
-It is recommended to disable all of the services for the performance reasons.
+It is recommended to disable all of these services for the performance reasons.
 Note that dbus may still be activated if required by any of the user-space application the system runs.
 Beware that disabling NetworkManager may cause no network connectivity.
-If the system uses DHCP to obtain IP address, the {\it{/etc/rc.local}} script can be used for this purpose.
-Simply append {\it{dhclient}} to the end of the file and make the file executable by running {\it{chmod +x /etc/rc.local}},
-but kill the {\it{dhclient}} daemon after it obtained IP address to avoid sending DHCP Request packets on other interfaces.
+If the system uses DHCP to obtain an IP address, the {\it{ifcfg}} network scripts or
+the {\it{/etc/rc.local}} script can be used for this purpose.
+Execution of {\it{dhclient}} can be added to the {\it{/etc/rc.local}} file and
+the file must be made executable by running {\it{chmod +x /etc/rc.local}}.
+The {\it{dhclient}} daemon should be killed after it obtained an IP address
+to avoid sending DHCP Request packets on other interfaces.
 The services can be disable using {\it{systemctl}} command, as the following listing shows.
 \newpage
 \begin{lstlisting}

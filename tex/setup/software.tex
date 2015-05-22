@@ -27,7 +27,7 @@ mlx4_core 0000:06:00.0: irq 90 for MSI/MSI-X
 The driver uses either MSI or MSI-X feature of the PCI-Express bus, as described in section~\ref{sec:40gbe-throughput}.
 The MSI-X feature is used automatically if the system supports it, otherwise the adapter uses MSI.
 The {\it{lspci -vv}} command can be used to check whether MSI-X is used.
-Listing~\ref{lst:setup-lspci} shows partial output of lspci for the Mellanox ConnectX-3 EN adapter.
+Listing~\ref{lst:setup-lspci} shows a partial output of lspci for the Mellanox ConnectX-3 EN adapter.
 The MSI-X capability is followed by an Enable flag which is followed with either "+" (enabled)
 or "-" (disabled).
 Listing~\ref{lst:setup-lspci} shows that the system supports MSI-X and the adapter is configured to use it.
@@ -42,4 +42,4 @@ Listing~\ref{lst:setup-lspci} shows that the system supports MSI-X and the adapt
 
 Apart from the NIC driver, the Mellanox ConnectX-3 adapter uses its own proprietary firmware.
 The firmware was updated to version 2.32.5100, which is the latest version available as of 10th January 2015.
-The firmware is not part of the Linux kernel and its update procedure is described in appendix~\ref{app:firmware}.
+The firmware is not a part of the Linux kernel and its update procedure is described in appendix~\ref{app:firmware}.

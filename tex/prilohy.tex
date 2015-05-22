@@ -4,7 +4,7 @@
 \chapter{Populating kernel's FIB with BGP routes}\label{app:bgp}
 RIPE Network Coordination Centre provides BGP data on its
 website.\footnote{{\url{http://www.ripe.net/data-tools/stats/ris/ris-raw-data}}}
-For the measurements in this thesis the data of RIPE NCC Amsterdam from 9th December 2014
+The BGP measurement presented in this thesis uses the data of RIPE NCC Amsterdam from 9th December 2014.
 The actual data can be obtained from the RIPE NCC's
 site.\footnote{{\url{http://data.ris.ripe.net/rrc00/latest-bview.gz}}}
 
@@ -14,7 +14,7 @@ using {\it{dump bgp routes}} command.
 RIPE NCC provides bgpdump utility to parse this file to a human-readable text file.
 To build bgpdump on CentOS 7 issue the following commands:
 \begin{lstlisting}[language=TeX]
-yum install bzip2-devel zlib-devel    # dependecies
+yum install bzip2-devel zlib-devel    # dependencies
 wget http://www.ris.ripe.net/source/bgpdump/libbgpdump-1.4.99.13.tgz
 tar xf libbgpdump-1.4.99.13.tgz
 cd libbgpdump-1.4.99.13
@@ -24,10 +24,10 @@ make example     # needed prior make install
 make install
 \end{lstlisting}
 Note that make example is required prior to make install.
-Afterwards, bgpdump command should be avaliable (installed to /usr/local/bin/bgpdump).
+Afterwards, bgpdump command should be available (installed to /usr/local/bin/bgpdump).
 The Makefile also supports make rpm target to generate rpm package (a wrong date in specfile needs to be corrected).
 
-The bgpdump utility can parse the downloaded latest-bview.gz file directly (even wihout extracting first).
+The bgpdump utility can parse the downloaded latest-bview.gz file directly (even without extracting first).
 The following command extracts individual destination networks from the BGP data file and writes them to {\it{destinations}} file.
 \begin{lstlisting}[language=TeX]
 bgpdump latest-bview.gz | grep 'PREFIX' | grep '\.' | sed 's/PREFIX: \(.*\)/\1/' | uniq > destinations
@@ -41,7 +41,7 @@ The local routes can be displayed using the following command.
 ip route show table local | grep '^local'
 \end{lstlisting}
 If you are connected remotely, such as through SSH,
-you must also remove routes to your local PC, which would break existing connection when misconfigured.
+you must also remove routes to your local PC, which would break the existing connection when misconfigured.
 In case of the provided server's connection, the {\it{destinations}} file must not contain 195.113.0.0/16 prefix
 The {\it{destinations}} file was obtained by running the following command:
 \begin{lstlisting}[language=TeX]

@@ -26,8 +26,10 @@ AMS-IX & 65.43\% & 26.17~Gb/s & 4~300~000 \\
 \end{tabular}
 \\
 \\
-The performance decreased by approx.~25\% when performing Network Address Translation.
-The following listing shows output of the {\it{perf}} tool.
+The performance decreased by approx.~25\% when performing Network Address Translation using {\it{MASQUERADE}}.
+Additionally, Netfilter provides other types of Network Address Translation such as {\it{SNAT}} or {\it{SAME}},
+however, their description and performance comparison are outside the scope of this thesis.
+The following listing shows the output of the {\it{perf}} tool.
 \begin{lstlisting}
 perf top -C 10
   12.71%  [kernel]  [k] fib_table_lookup

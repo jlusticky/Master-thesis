@@ -8,8 +8,10 @@ was installed on the server with two Intel Xeon E5-2660 v3 CPUs
 and Mellanox ConnectX-3 EN 40~Gbps Ethernet adapter, as described in section~\ref{sec:analysis-hardware}.
 Each measurement put the server under 60~seconds of constant unidirectional traffic load,
 as described in section~\ref{sec:analysis-metodology}.
-Unless stated otherwise,
-the bandwidth use is configured in frames per second with a unit of margin 50~000.
+The bandwidth use is configured in frames per second with a unit of margin 50~000.
+If the bandwidth use reaches 39.40~Gbps (98.50\%) then the link is considered as saturated.
+The measurements with 32 flows use different UDP source and destination ports for each flow,
+as described in section~\ref{sec:setup-spirent}.
 
 \section{CentOS~7 distribution kernel 3.10.0-123}
 The CentOS~7 distribution kernel version 3.10.0-123.20.1.el7.x86\_64
@@ -76,7 +78,7 @@ with the system settings used in the measurements,
 while the default configuration limits the performance to 1.6~million frames per second.
 The most significant performance drop is caused by the Reverse path filtering feature,
 which requires to perform the FIB lookup twice for each packet.
-Disabling the Hyper-Threading technology provides a negligable performance improvement.
+Disabling the Hyper-Threading technology provides a negligible performance improvement.
 The FIB lookup with imported prefixes from the BGP table does not introduce a large performance drop
 thanks to the CPU's 20~MB L3 cache.
 Figure~\ref{fig:measurements-overview} shows the presented results.
