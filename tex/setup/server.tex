@@ -17,7 +17,6 @@ the file must be made executable by running {\it{chmod +x /etc/rc.local}}.
 The {\it{dhclient}} daemon should be killed after it obtained an IP address
 to avoid sending DHCP Request packets on other interfaces.
 The services can be disable using {\it{systemctl}} command, as the following listing shows.
-\newpage
 \begin{lstlisting}
 systemctl disable postfix avahi-daemon tuned crond polkit NetworkManager auditd dbus cron rsyslog
 reboot
@@ -72,6 +71,7 @@ IPv4 neighbours were set:
 ip neigh add 192.0.2.2 lladdr 00:10:94:00:00:01 dev enp6s0d1
 ip neigh add 192.0.2.6 lladdr 00:10:94:00:00:02 dev enp6s0
 \end{lstlisting}
+\newpage
 IPv6 neighbours were set:
 \begin{lstlisting}
 ip -6 neigh add 2001:db8:1::2 lladdr 00:10:94:00:00:03 dev enp6s0d1
