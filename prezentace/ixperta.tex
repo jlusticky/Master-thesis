@@ -206,7 +206,7 @@
 	\begin{lstlisting}
 		ethtool --offload eth0 rx on
 	\end{lstlisting}
-	Ovladač implementuje ethtool\_ops
+	Ovladač implementuje rozhraní struct ethtool\_ops
 \end{frame}
 
 \begin{frame}{Růst výkonu sítí a CPU}
@@ -214,7 +214,7 @@
 	\includegraphics[width=9cm,keepaspectratio]{fig/performance-gap.png}
 \end{frame}
 
-\begin{frame}{Vícejádrové CPU - škálování - kernel 2.6.35}
+\begin{frame}{Vícejádrové CPU - škálování - Linux 2.6.35}
 	\begin{itemize}
 		\item Škálování založeno různých síťových tocích - Hash nad hlavičkami
 		\item Každé CPU může zpracovávat jiné toky
